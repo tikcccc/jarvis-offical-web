@@ -1,0 +1,18 @@
+{
+    "kind": "singleType",
+    "collectionName": "application_settings",
+    "info": {
+        "singularName": "application-setting",
+        "pluralName": "application-settings",
+        "displayName": "申请设置",
+        "description": ""
+    },
+    "options": {},
+    "pluginOptions": {},
+    "attributes": {
+        "url": {
+            "type": "string",
+            "required": true
+        }
+    }
+}

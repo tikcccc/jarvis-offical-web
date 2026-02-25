@@ -1,0 +1,23 @@
+@layer base {
+  :root {
+    --services-bg: #050505;
+    --services-text: #ffffff;
+    --services-muted: #9ca3af; /* gray-400 */
+    --services-muted-strong: #e5e7eb; /* gray-200 */
+    --services-border: rgba(255, 255, 255, 0.1);
+    --services-accent: #10b981; /* emerald 500 */
+    --services-accent-strong: #34d399; /* emerald 400 */
+    --services-accent-muted: rgba(16, 185, 129, 0.3); /* emerald 500 /30 */
+    --services-selection-text: #a7f3d0; /* emerald 200 */
+    --services-badge-bg: rgba(6, 78, 59, 0.3); /* emerald 900/30 */
+    --services-badge-border: rgba(16, 185, 129, 0.2);
+  }
+}
+
+@layer components {
+  .services-page {
+    @apply min-h-screen w-full relative overflow-x-hidden;
+    background: var(--services-bg);
+    color: var(--services-text);
+  }
+}

@@ -1,0 +1,114 @@
+/* =========================================
+   4-THEMES: HOME PAGE
+   Only unique tokens specific to home page
+   All common tokens come from semantic layer
+   ========================================= */
+
+.home-page {
+  /* ═══════════════════════════════════════════
+     HERO SECTION
+     ═══════════════════════════════════════════ */
+  --hero-gradient: linear-gradient(
+    to bottom right,
+    #18181b 0%,
+    #0b0b0f 60%,
+    #000000 100%
+  );
+  --hero-overlay: rgba(0, 0, 0, 0.5);
+  --hero-subtitle-color: var(--text-inverse-muted);
+
+  /* Hero Animation Timings */
+  --hero-title-duration: 1.2s;
+  --hero-title-stagger: 0.2s;
+  --hero-subtitle-duration: 1s;
+  --hero-subtitle-delay: 1s;
+  --scroll-prompt-appear: 0.6s;
+  --scroll-prompt-delay: 1.5s;
+  --scroll-prompt-bounce: 1.5s;
+
+  /* ═══════════════════════════════════════════
+     CAROUSEL SECTION
+     ═══════════════════════════════════════════ */
+
+  /* Carousel Surface */
+  --carousel-surface: var(--surface-muted);
+
+  /* Carousel Cards */
+  --carousel-card-bg: var(--color-ink-900);
+  --carousel-card-border: rgba(255, 255, 255, 0.1);
+  --carousel-border-strong: rgba(255, 255, 255, 0.2);
+  --carousel-overlay: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0)
+  );
+
+  /* Carousel Tabs */
+  --carousel-tab-bg: var(--color-white);
+  --carousel-tab-border: #d4d4d8;
+  --carousel-tab-bg-hover: #fafafa;
+  --carousel-tab-text: var(--text-base);
+  --carousel-tab-text-active: var(--text-strong);
+  --carousel-progress: rgba(24, 24, 27, 0.2);
+
+  /* Carousel Navigation */
+  --carousel-arrow-bg: var(--button-primary-bg);
+  --carousel-arrow-hover: var(--button-primary-hover);
+  --carousel-dot: var(--color-ink-300);
+  --carousel-dot-hover: var(--color-ink-500);
+  --carousel-dot-active: var(--color-slate-950);
+  --carousel-dots-offset: clamp(1.5rem, 3vw, 2.5rem);
+  --carousel-btn-radius: var(--radius-btn);
+  --carousel-media-radius: var(--radius-none);
+  --carousel-video-radius: var(--radius-none);
+
+  /* Carousel Animation */
+  --carousel-transition: 0.6s;
+  --carousel-hidden-duration: 0.5s;
+  --carousel-arrow-fade: 0.3s;
+  --carousel-stiffness: 80;
+  --carousel-damping: 20;
+
+  /* ═══════════════════════════════════════════
+     PLATFORM LIST SECTION
+     ═══════════════════════════════════════════ */
+  --platform-divider: rgba(var(--color-black-rgb), 0.05);
+  --platform-video-radius: var(--radius-none);
+
+  /* ═══════════════════════════════════════════
+     CTA SECTION
+     ═══════════════════════════════════════════ */
+  --cta-bg: var(--surface-subtle);
+  --cta-border: var(--color-slate-200);
+  --cta-image-radius: var(--radius-media-rounded);
+  --cta-button-radius: var(--radius-btn-rounded);
+  --cta-hover-bg: var(--button-primary-bg);
+  --cta-hover-text: var(--text-inverse-strong);
+  --cta-media-shadow: var(--shadow-2xl);
+  --cta-overlay: linear-gradient(
+    to top right,
+    rgba(var(--shadow-tone), 0.2),
+    transparent 60%,
+    transparent 100%
+  );
+
+  /* CTA Animation */
+  --cta-image-duration: 1.2s;
+  --cta-text-duration: 0.8s;
+  --cta-text-stagger: 0.15s;
+  --cta-button-transition: 0.3s;
+
+  /* ═══════════════════════════════════════════
+     MISC HOME-SPECIFIC TOKENS
+     ═══════════════════════════════════════════ */
+  --media-muted: var(--media-placeholder);
+  --pill-radius: var(--radius-chip);
+
+  /* ═══════════════════════════════════════════
+     BASE STYLES
+     ═══════════════════════════════════════════ */
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  background: var(--surface-base);
+}

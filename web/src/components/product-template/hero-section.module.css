@@ -1,0 +1,283 @@
+.hero {
+  background: var(--product-surface-dark);
+  color: var(--text-inverse-strong);
+}
+
+.heroPadding {
+  padding-inline: var(--product-container-padding);
+  padding-bottom: var(--product-hero-padding-y);
+}
+
+@media (min-width: 48em) {
+  .heroPadding {
+    padding-inline: var(--product-container-padding-md);
+  }
+}
+
+@media (min-width: 64em) {
+  .heroPadding {
+    padding-inline: var(--product-container-padding-lg);
+    padding-bottom: var(--product-hero-padding-y-lg);
+  }
+}
+
+@media (min-width: 80em) {
+  .heroPadding {
+    padding-inline: var(--product-container-padding-xl);
+  }
+}
+
+/* 字體定義已移至 font-types-product.css:
+   - .font-product-hero-title
+   - .font-product-hero-subtitle
+   - .font-product-meta
+   - .font-product-meta-mobile
+*/
+
+.overlayVertical {
+  background: var(--product-hero-overlay-vertical);
+  transition: opacity var(--motion-base) var(--ease-smooth);
+}
+
+.overlayHorizontal {
+  background: var(--product-hero-overlay-horizontal);
+  transition: opacity var(--motion-base) var(--ease-smooth);
+}
+
+.foreground {
+  color: var(--text-inverse-strong);
+  transition: transform 0.18s ease-out;
+}
+
+/* ============================================
+ * Hero 內容垂直偏移控制
+ * 調整這個值可以讓整體內容上下移動
+ * 正值 = 向下移動，負值 = 向上移動
+ * ============================================ */
+.heroContentOffset {
+  --hero-offset-y: 2rem; /* 調整這個值！ */
+  transform: translateY(var(--hero-offset-y));
+}
+
+@media (min-width: 48em) {
+  .heroContentOffset {
+    --hero-offset-y: 3rem; /* md 斷點 */
+  }
+}
+
+@media (min-width: 64em) {
+  .heroContentOffset {
+    --hero-offset-y: 4rem; /* lg 斷點 */
+  }
+}
+
+.metadataLine {
+  color: var(--text-inverse-base);
+}
+
+.metaLine {
+  position: relative;
+}
+
+.metaLine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 1px;
+  background: var(--product-meta-line);
+  opacity: 0.8;
+}
+
+.gapLg {
+  gap: var(--product-gap);
+}
+
+.gapSm {
+  gap: var(--product-gap-sm);
+}
+
+.metaColor {
+  transition: color var(--motion-base) var(--ease-smooth);
+  color: var(--text-inverse-muted);
+}
+
+.metaChipWrap {
+  gap: var(--product-gap-sm);
+  color: var(--text-inverse-muted);
+}
+
+/* ============================================
+ * 底部邊框線
+ * ============================================ */
+.bottomBorder {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: var(--product-gap);
+}
+
+/* ============================================
+ * 左側裝飾竪線
+ * ============================================ */
+.leftDecoLine {
+  position: relative;
+}
+
+.leftDecoLine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: var(--product-gap);
+  height: 80%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+@media (max-width: 64em) {
+  .leftDecoLine::before {
+    display: none;
+  }
+}
+
+/* ============================================
+ * 副標題區域樣式
+ * ============================================ */
+.subtitleLine {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0.7;
+}
+
+.subtitleLine::before {
+  content: "";
+  width: 3rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+/* ============================================
+ * Metadata Icon 項目 (右側功能菜單)
+ * ============================================ */
+.metaIconItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  transition: transform 0.3s ease;
+}
+
+.metaIconItem:hover {
+  transform: translateX(-0.5rem);
+}
+
+.metaIconText {
+  text-align: right;
+}
+
+.metaIconTitle {
+  transition: color 0.3s ease;
+}
+
+.metaIconItem:hover .metaIconTitle {
+  color: var(--text-inverse-strong);
+}
+
+.metaIconSubtext {
+  color: rgba(156, 163, 175, 1); /* gray-400 - brighter than before */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.metaIconItem:hover .metaIconSubtext {
+  max-height: 2rem;
+  margin-top: 0.25rem;
+  opacity: 1;
+  color: rgba(209, 213, 219, 1); /* gray-300 - even brighter on hover */
+}
+
+.metaIconCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.metaIconItem:hover .metaIconCircle {
+  border-color: var(--text-inverse-soft);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.metaIconCircle svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 1.5;
+  transition: stroke 0.3s ease;
+}
+
+.metaIconItem:hover .metaIconCircle svg {
+  stroke: var(--text-inverse-strong);
+}
+
+/* ============================================
+ * Cyberpunk/HUD 產品名稱進場動畫
+ * 核心概念：「穩定錨點」與「故障補全」
+ * ============================================ */
+
+/* 故障閃爍 keyframes - 0.1s 完成 */
+@keyframes glitch-enter {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  30% { opacity: 0.2; }
+  50% { opacity: 1; }
+  70% { opacity: 0.2; }
+  90% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* 字母包裝器基礎樣式 */
+.glitchChar {
+  display: inline-block;
+  opacity: 0;
+}
+
+/* 故障閃爍動畫 - 0.15s 完成，fill-mode: both 確保等待期隱形 */
+.animGlitch {
+  animation: glitch-enter 0.15s ease-out both;
+}
+
+/* 穩定錨點 - 絕對不閃爍，瞬間出現 */
+.animInstant {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* 延遲工具類: 50ms - 350ms */
+.delay50 { animation-delay: 50ms; }
+.delay100 { animation-delay: 100ms; }
+.delay150 { animation-delay: 150ms; }
+.delay200 { animation-delay: 200ms; }
+.delay250 { animation-delay: 250ms; }
+.delay300 { animation-delay: 300ms; }
+.delay350 { animation-delay: 350ms; }
+
+/* 產品名稱容器 - 確保字母間距一致 */
+.glitchTitle {
+  display: flex;
+  align-items: baseline;
+}

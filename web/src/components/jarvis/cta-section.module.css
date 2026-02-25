@@ -1,0 +1,167 @@
+/* =========================================
+   JARVIS CTA Section
+   ========================================= */
+
+.section {
+  background-color: var(--jarvis-surface-dark);
+  padding: 8rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────
+   Grid Background
+   ───────────────────────────────────────── */
+.gridBg {
+  composes: jarvis-grid-bg from global;
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+}
+
+/* ─────────────────────────────────────────
+   Top Gradient Line
+   ───────────────────────────────────────── */
+.topLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 6rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* ─────────────────────────────────────────
+   Container
+   ───────────────────────────────────────── */
+.container {
+  max-width: var(--jarvis-container-max);
+  margin: 0 auto;
+  padding: 0 var(--jarvis-container-padding);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* ─────────────────────────────────────────
+   Status Label
+   ───────────────────────────────────────── */
+.status {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--jarvis-accent-neon);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   Heading
+   ───────────────────────────────────────── */
+.heading {
+  font-family: var(--font-heading);
+  font-size: 3.75rem;
+  font-weight: 500;
+  color: var(--text-inverse-strong);
+  margin-bottom: 3rem;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+}
+
+@media (min-width: 1024px) {
+  .heading {
+    font-size: 6rem;
+  }
+}
+
+.headingItalic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-gray-500);
+}
+
+/* ─────────────────────────────────────────
+   Button Wrapper
+   ───────────────────────────────────────── */
+.buttonWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ─────────────────────────────────────────
+   CTA Button
+   ───────────────────────────────────────── */
+.ctaButton {
+  position: relative;
+  padding: 1.5rem 3rem;
+  background: var(--jarvis-cta-bg);
+  border: 1px solid var(--jarvis-cta-border);
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: all var(--jarvis-motion-base) var(--jarvis-ease);
+  cursor: pointer;
+}
+
+.ctaButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: var(--jarvis-cta-hover-glow);
+}
+
+/* Button Gradient Overlay */
+.buttonGradient {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(138, 43, 226, 0.2), rgba(0, 255, 255, 0.2));
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.ctaButton:hover .buttonGradient {
+  opacity: 1;
+}
+
+/* Button Text */
+.buttonText {
+  position: relative;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--text-inverse-strong);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: color var(--jarvis-motion-base) ease;
+}
+
+.ctaButton:hover .buttonText {
+  color: var(--jarvis-accent-neon);
+}
+
+/* Pulsing Dot */
+.pulsingDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--jarvis-accent-neon);
+  border-radius: 9999px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

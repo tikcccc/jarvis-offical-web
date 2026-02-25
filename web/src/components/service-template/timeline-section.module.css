@@ -1,0 +1,212 @@
+@layer components {
+  .section {
+    position: relative;
+    z-index: 20;
+    background: var(--surface-base);
+    padding-top: calc(var(--service-section) * 1.1);
+    padding-bottom: calc(var(--service-section) * 0.9);
+  }
+
+  @media (min-width: 48em) {
+    .section {
+      padding-top: calc(var(--service-section-lg) * 1.35);
+      padding-bottom: calc(var(--service-section-lg) * 0.4);
+    }
+  }
+
+  .inlineWrapper {
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: 48em) {
+    .inlineWrapper {
+      margin-top: 3rem;
+    }
+  }
+
+  .heading {
+    margin-bottom: 3.5rem;
+  }
+
+  @media (min-width: 48em) {
+    .heading {
+      margin-bottom: 4.5rem;
+    }
+  }
+
+  .timelineWrapper {
+    position: relative;
+    padding-top: 1.5rem;
+  }
+
+  .desktopLine {
+    display: none;
+  }
+
+  @media (min-width: 48em) {
+    .desktopLine {
+      display: block;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+  }
+
+  .lineBase {
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    background: linear-gradient(90deg, var(--border-subtle), var(--border-subtle), transparent);
+  }
+
+  .lineActive {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #2f64ff, #4f7dff, #6f9aff);
+    transform-origin: left;
+    box-shadow: 0 0 8px rgba(47, 100, 255, 0.4);
+  }
+
+  .timelineGrid {
+    --timeline-gap: 3rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--timeline-gap);
+  }
+
+  @media (min-width: 48em) {
+    .timelineGrid {
+      --timeline-gap: 2rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--timeline-gap);
+    }
+  }
+
+  .timelineItem {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    align-items: start;
+    text-align: left;
+    padding-top: 0.25rem;
+    width: 100%;
+  }
+
+  @media (min-width: 48em) {
+    .timelineItem {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      padding-top: 3rem;
+      row-gap: 0;
+    }
+  }
+
+  .mobileConnector {
+    position: absolute;
+    left: 0.75rem;
+    top: 1.25rem;
+    bottom: calc(-1 * var(--timeline-gap) + 0.75rem);
+    width: 2px;
+    background: linear-gradient(to bottom, var(--border-subtle), transparent);
+  }
+
+  @media (min-width: 48em) {
+    .mobileConnector {
+      display: none;
+    }
+  }
+
+  .dot {
+    position: relative;
+    grid-row: 1;
+    grid-column: 1;
+    align-self: start;
+    justify-self: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #2f64ff, #1e4ed8);
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 8px rgba(47, 100, 255, 0.1);
+  }
+
+  @media (min-width: 48em) {
+    .dot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: none;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .dotNow {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 4px #ffffff, 0 0 0 12px rgba(47, 100, 255, 0.2), 0 0 16px rgba(47, 100, 255, 0.4);
+    }
+  }
+
+  .yearRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 48em) {
+    .yearRow {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .yearRow,
+  .title,
+  .desc {
+    grid-column: 2;
+  }
+
+  .yearLabel {
+    color: var(--text-sub);
+  }
+
+  .currentPill {
+    display: none;
+  }
+
+  @media (min-width: 48em) {
+    .currentPill {
+      display: inline-flex;
+      padding: 0.125rem 0.5rem;
+      color: #ffffff;
+      background: linear-gradient(90deg, #2f64ff, #4f7dff);
+      border-radius: 9999px;
+    }
+  }
+
+  .title {
+    margin-bottom: 0.75rem;
+    color: var(--text-strong);
+  }
+
+  .desc {
+    max-width: none;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48em) {
+    .desc {
+      max-width: 280px;
+    }
+  }
+
+  @media (min-width: 48em) {
+    .nowAccent {
+      color: #2f64ff;
+    }
+  }
+}

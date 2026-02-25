@@ -1,0 +1,155 @@
+/* ========================================
+   NEWSROOM UTILITIES
+   - Spacing, typography, color helpers
+   ======================================== */
+
+@layer utilities {
+  /* Spacing utilities */
+  .case-studies-mb-xs { margin-bottom: var(--case-studies-stack-xs); }
+  .case-studies-mb-sm { margin-bottom: var(--case-studies-stack-sm); }
+  .case-studies-mb { margin-bottom: var(--case-studies-stack); }
+  .case-studies-mb-lg { margin-bottom: var(--case-studies-stack-lg); }
+  .case-studies-mb-xl { margin-bottom: var(--case-studies-stack-xl); }
+  .case-studies-mt { margin-top: var(--case-studies-stack); }
+  .case-studies-mt-lg { margin-top: var(--case-studies-stack-lg); }
+  .case-studies-mt-xl { margin-top: var(--case-studies-stack-xl); }
+  .case-studies-pt-lg { padding-top: var(--case-studies-stack-lg); }
+  .case-studies-gap { gap: var(--case-studies-card-gap); }
+  .case-studies-gap-lg { gap: var(--case-studies-stack-lg); }
+
+  /* Newsroom font utilities (scoped) */
+  .case-font-hero {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 7vw,10rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  @media (max-width: 767px) {
+    .case-font-hero {
+      font-size: clamp(4.25rem, 12vw, 6rem);
+      line-height: 0.95;
+    }
+  }
+
+  .case-font-headline {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  .case-font-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1.125rem, 2.2vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .case-font-section {
+    font-family: var(--font-heading);
+    font-size: clamp(1.85rem, 2.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+.case-font-card-lg {
+  font-family: var(--font-body);
+  font-size: clamp(1.85rem, 2.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.case-font-card {
+  font-family: var(--font-body);
+  font-size: clamp(1.375rem, 2vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.case-font-body-lg {
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0em;
+}
+
+.case-font-body {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.6vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0em;
+}
+  .case-font-label {
+    font-family: var(--font-heading);
+    font-size: clamp(0.7rem, 1.1vw, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .case-font-label-lg {
+    font-family: var(--font-heading);
+    font-size: clamp(0.8rem, 1.2vw, 0.875rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .case-font-detail-title{
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 3vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+   
+   .case-font-detail-subtitle{
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0em;
+  }
+
+  
+ .case-font-detail-meta {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0em;
+ }
+  /* Color/surface/border helpers */
+  .case-studies-text-primary { color: var(--text-strong); }
+  .case-studies-text-body,
+  .case-studies-text-muted { color: var(--text-muted); }
+  .case-studies-text-subtle,
+  .case-studies-text-soft,
+  .case-studies-text-faint { color: var(--text-sub); }
+  .case-studies-text-inverse { color: var(--text-inverse-base); }
+  .case-studies-text-accent { color: var(--case-studies-accent-cta); }
+  .case-studies-text-inverse-strong { color: var(--text-inverse-strong); }
+  .case-studies-text-inverse-muted { color: var(--text-inverse-muted); }
+  .case-studies-text-inverse-sub { color: var(--text-inverse-sub); }
+
+  .case-studies-surface-card { background: var(--case-studies-surface-card); }
+  .case-studies-surface-muted { background: var(--case-studies-surface-muted); }
+  .case-studies-surface-quiet { background: var(--case-studies-surface-quiet); }
+
+  .case-studies-border { border: 1px solid var(--case-studies-border-subtle); }
+  .case-studies-border-subtle { border-color: var(--case-studies-border-subtle); }
+  .case-studies-border-soft { border-color: var(--case-studies-border-soft); }
+  .case-studies-border-strong { border-color: var(--case-studies-border-strong); }
+  .case-studies-divider { border-color: var(--case-studies-divider); }
+}

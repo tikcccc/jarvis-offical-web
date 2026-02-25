@@ -1,0 +1,75 @@
+/* =========================================
+   1-FOUNDATIONS: SPACING PRIMITIVES
+   Base spacing scale with responsive overrides
+   ========================================= */
+
+:root {
+  /* ─────────────────────────────────────────
+     Base Unit
+     ───────────────────────────────────────── */
+  --space-unit: 8px;
+
+  /* ─────────────────────────────────────────
+     Fluid Spacing Scale (clamp-based)
+     Used for gaps, margins that need to scale
+     ───────────────────────────────────────── */
+  --space-xs: clamp(0.5rem, 1vw, 0.75rem);
+  --space-sm: clamp(1rem, 2vw, 1.5rem);
+  --space-md: clamp(1.5rem, 3vw, 2.5rem);
+  --space-lg: clamp(2rem, 4vw, 3rem);
+  --space-xl: clamp(2.25rem, 4vw, 3rem);
+
+  /* ─────────────────────────────────────────
+     Fixed Spacing (tiny increments)
+     ───────────────────────────────────────── */
+  --spacing-tiny: 0.1666666667rem;
+  --spacing-xs: 0.5555555556rem;
+  --spacing-s: 1.1111111111rem;
+  --spacing-m: calc(var(--gutter) * 2);
+  --spacing-l: calc(var(--gutter) * 4);
+
+  /* ─────────────────────────────────────────
+     Container & Layout
+     ───────────────────────────────────────── */
+  --container-max: 1920px;
+  --container-inline: clamp(1.5rem, 3vw, 2.5rem);
+  --max-width: 80rem;
+  --height-nav: 86px;
+
+  /* ─────────────────────────────────────────
+     Grid System
+     ───────────────────────────────────────── */
+  --grid: repeat(12, minmax(10px, 1fr));
+  --gutter: 0.5555555556rem;
+  --v-gutter: 1.1111111111rem;
+  --h-spacing: 1.1111111111rem;
+  --section-v-spacing: 3.3333333333rem;
+
+  /* ─────────────────────────────────────────
+     Computed Containment
+     ───────────────────────────────────────── */
+  --h-contain: max(calc((100% - var(--max-width)) / 2), var(--h-spacing));
+  --h-contain-no-bleed: max(calc((100% - var(--max-width)) / 2), 0px);
+}
+
+/* ─────────────────────────────────────────
+   Responsive Overrides (Tablet)
+   ───────────────────────────────────────── */
+@media (min-width: 768px) {
+  :root {
+    --gutter: 0.8333333333rem;
+    --v-gutter: 1.6666666667rem;
+    --section-v-spacing: 4.4444444444rem;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Responsive Overrides (Desktop)
+   ───────────────────────────────────────── */
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 1.6666666667rem;
+    --h-spacing: 1.6666666667rem;
+    --section-v-spacing: 5.5555555556rem;
+  }
+}

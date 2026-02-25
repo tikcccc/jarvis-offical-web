@@ -1,0 +1,77 @@
+/* =========================================
+   1-FOUNDATIONS: COLOR PRIMITIVES
+   Pure color values - no semantic meaning
+   This is the single source of truth for all colors
+   ========================================= */
+
+:root {
+  /* ─────────────────────────────────────────
+     Core Neutrals (Gray Scale)
+     ───────────────────────────────────────── */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-soft-white: #fdfdfd;
+  --color-soft-gray: #fafafa;
+
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f3f3f3;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-500: #64748b;
+  --color-gray-700: #334155;
+  --color-gray-900: #1e2124;
+
+  /* ─────────────────────────────────────────
+     Extended Slate Palette
+     ───────────────────────────────────────── */
+  --color-slate-50: #f4f4f5;
+  --color-slate-200: #d1d5db;
+  --color-slate-300: #c5d2e1;
+  --color-slate-400: #9ca3af;
+  --color-slate-600: #1e2124;
+  --color-slate-800: #27272a;
+  --color-slate-850: #18181b;
+  --color-slate-950: #0f172a;
+
+  /* ─────────────────────────────────────────
+     Ink Palette (Deep Blacks)
+     ───────────────────────────────────────── */
+  --color-ink-300: #a1a1aa;
+  --color-ink-500: #52525b;
+  --color-ink-800: #27272a;
+  --color-ink-900: #09090b;
+
+  /* ─────────────────────────────────────────
+     Brand Colors
+     ───────────────────────────────────────── */
+  --color-blue-500: #4e8af7;
+  --color-green-700: #2b5945;
+
+  /* ─────────────────────────────────────────
+     Special Backgrounds
+     ───────────────────────────────────────── */
+  --color-tinted: #f4f7f6;      /* 帶綠調的白 */
+  --color-gray-bg: #efefef;     /* 淺灰背景 */
+
+  /* ─────────────────────────────────────────
+     Product Accent Colors
+     ───────────────────────────────────────── */
+  --color-cyan: #13c9ba;
+  --color-violet: #8A2BE2;
+  --color-violet-soft: rgba(138, 43, 226, 0.5);
+  --color-charcoal-900: #1e1f2b;
+
+  /* ─────────────────────────────────────────
+     JARVIS/Dark Mode Accent Colors
+     ───────────────────────────────────────── */
+  --color-neon-cyan: #00FFFF;           /* Neon Cyan 霓虹青 (深色模式高亮) */
+  --color-screen-bg: #0F1016;           /* Screen/Terminal 背景 */
+
+  /* ─────────────────────────────────────────
+     RGB Values (for rgba() usage)
+     ───────────────────────────────────────── */
+  --color-white-rgb: 255, 255, 255;
+  --color-black-rgb: 0, 0, 0;
+  --color-soft-white-rgb: 253, 253, 253;
+  --color-blue-500-rgb: 78, 138, 247;
+}

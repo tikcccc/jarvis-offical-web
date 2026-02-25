@@ -1,0 +1,639 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ArrowLeft, ArrowRight, Share2, 
+  LayoutGrid, List, AlignJustify, Loader2, Home
+} from 'lucide-react';
+
+// --- Types ---
+interface NewsPost {
+  id: string;
+  title: string;
+  subtitle?: string;
+  mainImage?: string;
+  publishedAt: string;
+  body: string;
+  readTime: string;
+  tags: string[];
+  category: 'Infrastructure' | 'AI Systems' | 'Capital' | 'Compliance';
+  author?: string;
+}
+
+type LayoutMode = 'grid' | 'feed' | 'magazine';
+type CategoryFilter = 'All' | 'Infrastructure' | 'AI Systems' | 'Capital' | 'Compliance';
+
+// --- Mock Data ---
+const NEWS_DATA: NewsPost[] = [
+  {
+    id: 'n1',
+    title: "JPM Powers Africa's Infrastructure Revolution",
+    subtitle: "HKD 13B+ agreements signed for Cameroon and Nigeria initiatives",
+    publishedAt: "2025-09-15",
+    mainImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
+    readTime: "5 MIN READ",
+    tags: ["JPM", "Global Expansion"],
+    category: "Infrastructure",
+    author: "Global Strategy Team",
+    body: "In a landmark move for global infrastructure, JARVIS Project Management (JPM) has signed agreements worth over HKD 13 billion in Africa. The initiative focuses on sustainable energy grids and smart city planning."
+  },
+  {
+    id: 'n2',
+    title: "JARVIS Pay Receives CIC R&D Fund",
+    subtitle: "First recipient fueling breakthroughs in payment orchestration",
+    publishedAt: "2025-08-20",
+    mainImage: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop",
+    readTime: "3 MIN READ",
+    tags: ["R&D", "FinTech"],
+    category: "Capital",
+    author: "Innovation Lab",
+    body: "isBIM is proud to announce that JARVIS Pay is the first recipient of the Hong Kong Construction Industry Council’s (CIC) R&D Fund. This grant will accelerate our blockchain-based settlement layer."
+  },
+  {
+    id: 'n3',
+    title: "Launch of JARVIS Air: Generative Design at Scale",
+    subtitle: "500K+ templates generating master plans in seconds",
+    publishedAt: "2025-07-10",
+    mainImage: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2070&auto=format&fit=crop",
+    readTime: "4 MIN READ",
+    tags: ["Product Launch", "AI"],
+    category: "AI Systems",
+    author: "Product Team",
+    body: "The wait is over. JARVIS Air is now live, offering a generative design copilot for nation-scale visions. By leveraging historical architectural data, Air can propose thousands of viable layouts in minutes."
+  },
+  {
+    id: 'n5',
+    title: "Strategic Partnership Announcement: Alibaba Cloud",
+    subtitle: "Joint development of LLMs for Construction Regulations in APAC Region",
+    publishedAt: "2025-06-28",
+    readTime: "2 MIN READ",
+    tags: ["Partnership", "Cloud"],
+    category: "AI Systems",
+    author: "Executive Office",
+    body: "isBIM and Alibaba Cloud have formalized a strategic partnership to co-develop Large Language Models specifically trained on Asian construction regulations. This collaboration aims to reduce compliance checking time by 90% across major markets including Hong Kong, Singapore, and Tokyo. The joint laboratory will be established in Science Park."
+  },
+  {
+    id: 'n6',
+    title: "Q2 2025 Compliance & Safety Report",
+    subtitle: "Internal data release showing 0% accident rate across JPM sites",
+    publishedAt: "2025-06-15",
+    readTime: "6 MIN READ",
+    tags: ["Report", "Safety"],
+    category: "Compliance",
+    author: "Safety Board",
+    body: "The Q2 2025 report highlights the efficacy of JARVIS SSSS. Across all monitored sites, incident rates have dropped to zero. The predictive algorithms identified 400+ potential hazards before they occurred, proving that AI-driven safety monitoring is no longer a luxury but a necessity for modern construction."
+  },
+  {
+    id: 'n4',
+    title: "Safety Mandate: JARVIS SSSS Implementation",
+    subtitle: "Meeting Development Bureau's Technical Circular No. 3/2023",
+    publishedAt: "2025-06-05",
+    mainImage: "https://images.unsplash.com/photo-1581094794329-cd1361ddee2d?q=80&w=2070&auto=format&fit=crop",
+    readTime: "4 MIN READ",
+    tags: ["Compliance", "Safety"],
+    category: "Compliance",
+    author: "Compliance Office",
+    body: "With the new Development Bureau mandates, JARVIS SSSS (Smart Site Safety System) ensures full compliance across all 10 modules. We are rolling out the update to all existing partners immediately."
+  }
+];
+
+// --- Utility Components ---
+
+const MonoLabel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <span className={`font-mono text-xs tracking-wider uppercase text-gray-500 ${className}`}>
+    {children}
+  </span>
+);
+
+const SkeletonCard = () => (
+  <div className="flex flex-col h-full border border-gray-100 bg-white p-6 animate-pulse">
+    <div className="flex justify-between mb-6">
+      <div className="h-3 bg-gray-200 w-24 rounded"></div>
+      <div className="h-3 bg-gray-200 w-16 rounded"></div>
+    </div>
+    <div className="h-6 bg-gray-200 w-3/4 mb-4 rounded"></div>
+    <div className="h-6 bg-gray-200 w-1/2 mb-6 rounded"></div>
+    <div className="flex-1 space-y-3">
+      <div className="h-3 bg-gray-200 w-full rounded"></div>
+      <div className="h-3 bg-gray-200 w-full rounded"></div>
+      <div className="h-3 bg-gray-200 w-5/6 rounded"></div>
+    </div>
+    <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between">
+      <div className="h-3 bg-gray-200 w-20 rounded"></div>
+      <div className="h-3 bg-gray-200 w-3 rounded"></div>
+    </div>
+  </div>
+);
+
+// --- Animation Variants ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
+
+// --- Main Page Component ---
+
+export default function NewsroomPage() {
+  const [activeRoute, setActiveRoute] = useState<string | null>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeRoute]);
+
+  const activePost = NEWS_DATA.find(p => p.id === activeRoute);
+
+  return (
+    <div className="min-h-screen bg-[#FDFDFD] text-gray-900 font-sans selection:bg-black selection:text-white pt-12">
+      <AnimatePresence mode="wait">
+        {!activeRoute ? (
+          <NewsListView key="list" onNavigate={setActiveRoute} />
+        ) : (
+          <DetailView key="detail" post={activePost!} onNavigate={setActiveRoute} onBack={() => setActiveRoute(null)} />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// --- List View Container ---
+
+function NewsListView({ onNavigate }: { onNavigate: (id: string) => void }) {
+  const [layout, setLayout] = useState<LayoutMode>('grid');
+  const [filter, setFilter] = useState<CategoryFilter>('All');
+  const [loading, setLoading] = useState(false);
+  const [displayCount, setDisplayCount] = useState(6); // Pagination start count
+
+  // Simulate Network Request when filter changes
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+      setDisplayCount(6); // Reset pagination on filter change
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [filter]);
+
+  const filteredData = filter === 'All' 
+    ? NEWS_DATA 
+    : NEWS_DATA.filter(post => post.category === filter);
+
+  const paginatedData = filteredData.slice(0, displayCount);
+  const hasMore = paginatedData.length < filteredData.length;
+
+  const handleLoadMore = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 3);
+      setLoading(false);
+    }, 500);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="max-w-7xl mx-auto px-6 pb-20"
+    >
+      {/* Header Area */}
+      <div className="mb-8 border-b border-gray-900 pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-gray-900">
+            News Feed
+          </h1>
+          
+          {/* Layout Controls */}
+          <div className="flex items-center gap-2 border border-gray-200 p-1 bg-white">
+            <button 
+              onClick={() => setLayout('grid')}
+              className={`p-2 transition-colors ${layout === 'grid' ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+              title="Headline View"
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+             <button 
+              onClick={() => setLayout('magazine')}
+              className={`p-2 transition-colors ${layout === 'magazine' ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+              title="Strategic Briefing"
+            >
+              <AlignJustify className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => setLayout('feed')}
+              className={`p-2 transition-colors ${layout === 'feed' ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+              title="Compact Feed"
+            >
+              <List className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Intelligence Filter */}
+        <div className="mt-8 flex flex-wrap items-center gap-2">
+          {['All', 'Infrastructure', 'AI Systems', 'Capital', 'Compliance'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat as CategoryFilter)}
+              className={`
+                px-3 py-1.5 text-[10px] md:text-xs font-mono uppercase tracking-wide border transition-all duration-200
+                ${filter === cat 
+                  ? 'bg-black text-white border-black' 
+                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-black'}
+              `}
+            >
+              {cat === 'All' ? 'View All' : cat}
+            </button>
+          ))}
+          
+          {filter !== 'All' && !loading && (
+             <motion.span 
+               initial={{ opacity: 0, x: -10 }}
+               animate={{ opacity: 1, x: 0 }}
+               className="ml-auto text-xs font-mono text-gray-400 hidden md:inline-block"
+             >
+               Showing {filteredData.length} Result{filteredData.length !== 1 ? 's' : ''}
+             </motion.span>
+          )}
+        </div>
+      </div>
+
+      {/* Layout Renderer with Staggered Animation & Skeleton */}
+      <div className="min-h-[500px]">
+        {loading && filteredData.length > 0 && paginatedData.length === 0 ? (
+          // Initial Loading State Skeleton
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonCard key={i} />)}
+          </div>
+        ) : filteredData.length === 0 && !loading ? (
+          <div className="py-20 text-center border border-dashed border-gray-200 bg-gray-50">
+            <p className="text-sm font-mono text-gray-400 uppercase">No Intelligence Found</p>
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+          >
+            {layout === 'grid' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                {paginatedData.map((post, index) => {
+                  if (index === 0) {
+                    return (
+                      <motion.div variants={itemVariants} key={post.id} className="col-span-1 md:col-span-2 lg:col-span-3">
+                        <FeaturedGridCard post={post} onClick={() => onNavigate(post.id)} />
+                      </motion.div>
+                    );
+                  }
+                  return (
+                    <motion.div variants={itemVariants} key={post.id}>
+                      <GridCard post={post} onClick={() => onNavigate(post.id)} />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+
+            {layout === 'magazine' && (
+              <div className="flex flex-col gap-12 max-w-5xl">
+                {paginatedData.map((post) => (
+                  <motion.div variants={itemVariants} key={post.id}>
+                    <MagazineCard post={post} onClick={() => onNavigate(post.id)} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
+            {layout === 'feed' && (
+              <div className="border-t border-gray-200">
+                {paginatedData.map((post) => (
+                  <motion.div variants={itemVariants} key={post.id}>
+                    <FeedRow post={post} onClick={() => onNavigate(post.id)} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+        
+        {/* Load More Button */}
+        {hasMore && !loading && (
+          <div className="mt-16 text-center">
+            <button 
+              onClick={handleLoadMore}
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 text-white text-xs font-mono uppercase tracking-widest hover:bg-gray-800 transition-colors"
+            >
+              Load More Intelligence
+            </button>
+          </div>
+        )}
+
+        {/* Loading Spinner for Pagination */}
+        {loading && paginatedData.length > 0 && (
+          <div className="mt-12 flex justify-center">
+            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// --- Cards & Components ---
+
+function FeaturedGridCard({ post, onClick }: { post: NewsPost; onClick: () => void }) {
+  const hasImage = !!post.mainImage;
+
+  return (
+    <div 
+      onClick={onClick} 
+      className={`group cursor-pointer border border-gray-200 bg-white hover:border-black transition-colors duration-300 overflow-hidden flex flex-col md:flex-row h-full`}
+    >
+      {hasImage && (
+        <div className="w-full md:w-1/2 aspect-[16/9] md:aspect-auto bg-gray-100 overflow-hidden relative border-b md:border-b-0 md:border-r border-gray-200">
+           <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" />
+        </div>
+      )}
+
+      <div className={`p-8 md:p-12 flex flex-col justify-center ${hasImage ? 'w-full md:w-1/2' : 'w-full'}`}>
+        <div className="flex justify-between items-start mb-6">
+           <div className="flex gap-2">
+             <MonoLabel className="text-gray-400 group-hover:text-black transition-colors">
+               [{post.category}]
+             </MonoLabel>
+           </div>
+           <MonoLabel>{post.publishedAt}</MonoLabel>
+        </div>
+
+        <h3 className="text-3xl md:text-5xl font-bold leading-tight text-gray-900 mb-6 group-hover:underline decoration-2 underline-offset-8">
+          {post.title}
+        </h3>
+        
+        {post.subtitle && (
+          <p className="text-xl text-gray-500 leading-relaxed font-light mb-8">
+            {post.subtitle}
+          </p>
+        )}
+        
+        {!hasImage && (
+           <p className="text-gray-600 leading-relaxed line-clamp-4 font-mono text-sm mb-6 border-l-2 border-gray-200 pl-4">
+             {post.body}
+           </p>
+        )}
+
+        <div className="mt-auto pt-4 flex items-center justify-between w-full border-t border-transparent group-hover:border-gray-100 transition-colors">
+          <span className="text-sm font-bold uppercase tracking-wide group-hover:text-blue-700 transition-colors">
+             Read Story
+          </span>
+          <ArrowRight className="w-4 h-4 group-hover:text-blue-700 group-hover:translate-x-1 transition-all" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GridCard({ post, onClick }: { post: NewsPost; onClick: () => void }) {
+  const hasImage = !!post.mainImage;
+
+  return (
+    <div onClick={onClick} className="group cursor-pointer flex flex-col h-full border-t border-gray-200 pt-6 hover:border-black transition-colors duration-300 relative bg-white">
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex gap-2">
+          <MonoLabel className="text-gray-400 group-hover:text-black transition-colors">[{post.category}]</MonoLabel>
+        </div>
+        <MonoLabel>{post.publishedAt}</MonoLabel>
+      </div>
+      
+      <div className="flex-1 flex flex-col">
+        <h3 className="text-xl font-bold leading-tight text-gray-900 mb-3 group-hover:underline decoration-1 underline-offset-4">
+          {post.title}
+        </h3>
+        
+        {post.subtitle && (
+          <p className="text-sm leading-relaxed text-gray-500 line-clamp-2 mb-4">
+            {post.subtitle}
+          </p>
+        )}
+
+        {hasImage && (
+           <div className="mt-auto mb-4">
+             <div className="relative w-full aspect-[3/2] bg-gray-100 overflow-hidden border border-gray-100">
+               <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover transition-all duration-500" />
+             </div>
+           </div>
+        )}
+
+        {!hasImage && (
+           <div className="relative mt-2 mb-4 flex-1">
+             <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-200 group-hover:bg-blue-500 transition-colors" />
+             <p className="text-xs text-gray-500 leading-relaxed pl-4 line-clamp-[10] font-mono">
+               {post.body}...
+             </p>
+           </div>
+        )}
+      </div>
+
+      <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between group-hover:bg-gray-50 -mx-0 px-2 pb-2 transition-colors rounded-b-sm">
+        <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 group-hover:text-blue-700 transition-colors">
+          Read Story
+        </span>
+        <ArrowRight className="w-3 h-3 text-gray-300 group-hover:text-blue-700 group-hover:translate-x-1 transition-all" />
+      </div>
+    </div>
+  );
+}
+
+function MagazineCard({ post, onClick }: { post: NewsPost; onClick: () => void }) {
+  const hasImage = !!post.mainImage;
+
+  return (
+    <div 
+      onClick={onClick} 
+      className={`group cursor-pointer grid gap-8 items-start border-t border-gray-200 pt-8 hover:border-black transition-colors duration-300
+        ${hasImage ? 'grid-cols-1 md:grid-cols-[2fr_3fr]' : 'grid-cols-1'}
+      `}
+    >
+      {hasImage && (
+        <div className="relative aspect-[4/3] md:aspect-[16/10] bg-gray-100 overflow-hidden border border-gray-100">
+          <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" />
+        </div>
+      )}
+
+      <div className="flex flex-col h-full justify-center">
+        <div className="flex items-center gap-4 mb-4">
+          <MonoLabel>{post.publishedAt}</MonoLabel>
+          <div className="h-px w-8 bg-gray-300"></div>
+          <MonoLabel className="text-gray-400 group-hover:text-black transition-colors">
+            [{post.category}]
+          </MonoLabel>
+        </div>
+        <h3 className={`font-bold leading-tight text-gray-900 mb-4 group-hover:text-blue-700 transition-colors
+          ${hasImage ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}
+        `}>
+          {post.title}
+        </h3>
+        <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3 md:line-clamp-none">
+          {post.body.substring(0, hasImage ? 180 : 300)}...
+        </p>
+        <span className="flex items-center gap-2 text-xs font-bold font-mono uppercase tracking-wide mt-auto group-hover:translate-x-2 transition-transform">
+          Read Full Briefing <ArrowRight className="w-3 h-3" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function FeedRow({ post, onClick }: { post: NewsPost; onClick: () => void }) {
+  return (
+    <div onClick={onClick} className="group cursor-pointer flex flex-col md:flex-row items-baseline gap-4 md:gap-12 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+      <div className="w-32 shrink-0">
+        <MonoLabel className="text-gray-500 group-hover:text-black transition-colors">{post.publishedAt}</MonoLabel>
+      </div>
+      <div className="flex-1">
+         <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+          {post.title}
+         </h3>
+      </div>
+      <div className="w-auto hidden md:block shrink-0">
+          <span className="text-[10px] font-mono text-gray-400">
+            {post.category}
+          </span>
+      </div>
+    </div>
+  );
+}
+
+// --- Detail View Component ---
+
+function DetailView({ post, onBack, onNavigate }: { post: NewsPost; onBack: () => void; onNavigate: (id: string) => void }) {
+  
+  // Find Related Articles Logic
+  const relatedPosts = NEWS_DATA
+    .filter(p => p.category === post.category && p.id !== post.id)
+    .slice(0, 2);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      className="bg-white pt-6 pb-20 relative"
+    >
+      <div className="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-md z-40 transition-all">
+        <div className="max-w-4xl mx-auto px-6 h-12 flex items-center justify-between">
+          <button 
+            onClick={onBack}
+            className="group flex items-center gap-2 text-xs font-mono uppercase text-gray-500 hover:text-black transition-colors"
+          >
+            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+            Back to Feed
+          </button>
+          <div className="flex gap-4">
+             <button className="text-gray-400 hover:text-black transition-colors"><Share2 className="w-4 h-4" /></button>
+          </div>
+        </div>
+      </div>
+
+      <article className="max-w-4xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 mb-12">
+          <div className="space-y-6 pt-2">
+            <div>
+              <MonoLabel className="block mb-1">Published</MonoLabel>
+              <div className="text-sm font-medium">{post.publishedAt}</div>
+            </div>
+            <div>
+               <MonoLabel className="block mb-1">Category</MonoLabel>
+               <div className="flex flex-wrap gap-2">
+                 {/* Modified: Removed gray container styling for simple text look */}
+                 <span className="text-xs font-mono uppercase tracking-wide text-black">
+                   [{post.category}]
+                 </span>
+               </div>
+            </div>
+             <div>
+              <MonoLabel className="block mb-1">Read Time</MonoLabel>
+              <div className="text-sm font-medium text-gray-400">{post.readTime}</div>
+            </div>
+          </div>
+
+          <div>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6 leading-tight">
+              {post.title}
+            </h1>
+            {post.subtitle && (
+              <p className="text-xl text-gray-500 leading-relaxed font-light border-l-2 border-gray-900 pl-6">
+                {post.subtitle}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {post.mainImage ? (
+           <div className="relative aspect-[21/9] w-full bg-gray-100 mb-16 overflow-hidden border border-gray-200">
+             <img src={post.mainImage} alt={post.title} className="w-full h-full object-cover transition-all duration-700" />
+           </div>
+        ) : (
+           <div className="w-full h-px bg-gray-200 mb-16" />
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
+           <div className="hidden md:block">
+              <div className="sticky top-32">
+                 <div className="w-8 h-px bg-black mb-4"></div>
+                 <MonoLabel>Section 01</MonoLabel>
+              </div>
+           </div>
+
+           <div className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-p:text-gray-700">
+             {/* Modified: Removed first-letter (Drop Cap) styling */}
+             <p className="lead">
+               {post.body}
+             </p>
+             <p>
+               In a data-driven environment, the integration of these systems is not merely an operational upgrade but a fundamental restructuring of how infrastructure assets are conceived, financed, and maintained. The <strong>JARVIS</strong> ecosystem represents a paradigm shift from reactive management to predictive orchestration.
+             </p>
+           </div>
+        </div>
+      </article>
+
+      {/* Related Intelligence Section */}
+      {relatedPosts.length > 0 && (
+        <div className="max-w-4xl mx-auto px-6 mt-20 pt-12 border-t border-gray-900">
+           <h3 className="text-sm font-mono uppercase tracking-widest text-gray-900 mb-8">
+             Related Intelligence
+           </h3>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             {relatedPosts.map(related => (
+               <div key={related.id} className="h-96">
+                 <GridCard post={related} onClick={() => onNavigate(related.id)} />
+               </div>
+             ))}
+           </div>
+        </div>
+      )}
+
+      {/* Mobile Sticky Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50 flex items-center justify-between pb-8">
+        <button onClick={onBack} className="p-2 text-gray-500 hover:text-black">
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <button onClick={onBack} className="flex items-center gap-2 font-mono text-xs uppercase font-bold tracking-widest text-black">
+          <Home className="w-4 h-4" />
+          News Feed
+        </button>
+        <button className="p-2 text-gray-500 hover:text-black">
+          <Share2 className="w-5 h-5" />
+        </button>
+      </div>
+    </motion.div>
+  );
+}

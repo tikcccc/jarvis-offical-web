@@ -1,0 +1,25 @@
+@layer components {
+  :root {
+    /* Global motion primitives (keep current timings) */
+    --motion-duration-fast: 0.3s;   /* e.g., button hover */
+    --motion-duration-base: 0.5s;   /* typical transitions */
+    --motion-duration-slow: 0.8s;   /* overlays, longer fades */
+    --motion-duration-page: 1.2s;   /* page/hero reveals */
+
+    --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --motion-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --motion-stagger-tight: 0.08s;
+    --motion-stagger-base: 0.12s;
+
+    /* Typewriter defaults (shared) */
+    --motion-typewriter-char-ms: 50;      /* per char ms */
+    --motion-typewriter-delay: 0;         /* s */
+    --motion-typewriter-line-gap: 0.1;    /* s between lines */
+    --motion-typewriter-blink: 0.5;       /* s */
+    --motion-typewriter-width-duration: 1.5; /* s for width-based */
+    --motion-typewriter-width-steps: 40;     /* steps for width-based */
+  }
+}

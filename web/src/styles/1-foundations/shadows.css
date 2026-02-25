@@ -1,0 +1,48 @@
+/* =========================================
+   1-FOUNDATIONS: SHADOW PRIMITIVES
+   Elevation system for depth perception
+   Optimized for white (#FFFFFF) & light gray (#EFEFEF) backgrounds
+   ========================================= */
+
+:root {
+  /* ─────────────────────────────────────────
+     Shadow Tone Base
+     Pure black for maximum compatibility
+     ───────────────────────────────────────── */
+  --shadow-tone: 0, 0, 0;
+
+  /* ─────────────────────────────────────────
+     Inner Border (Edge Definition)
+     Provides subtle edge on pure white backgrounds
+     Invisible on gray backgrounds
+     ───────────────────────────────────────── */
+  --inner-border: 0 0 0 1px rgba(var(--shadow-tone), 0.03);
+
+  /* ─────────────────────────────────────────
+     Shadow Scale (Elevation Levels)
+     ───────────────────────────────────────── */
+
+  /* Level 1: Subtle (List items, small images) */
+  --shadow-xs:
+    var(--inner-border),
+    0 1px 2px rgba(var(--shadow-tone), 0.06),
+    0 1px 3px rgba(var(--shadow-tone), 0.1);
+
+  /* Level 2: Default (Cards, regular video) */
+  --shadow-md:
+    var(--inner-border),
+    0 2px 4px rgba(var(--shadow-tone), 0.06),
+    0 4px 6px -1px rgba(var(--shadow-tone), 0.1);
+
+  /* Level 3: Hover/Emphasis */
+  --shadow-xl:
+    var(--inner-border),
+    0 4px 6px -1px rgba(var(--shadow-tone), 0.06),
+    0 10px 15px -3px rgba(var(--shadow-tone), 0.1);
+
+  /* Level 4: Strong Visual (Hero, Modal) */
+  --shadow-2xl:
+    var(--inner-border),
+    0 10px 15px -3px rgba(var(--shadow-tone), 0.06),
+    0 20px 25px -5px rgba(var(--shadow-tone), 0.1);
+}

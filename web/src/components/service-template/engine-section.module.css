@@ -1,0 +1,29 @@
+@layer components {
+  .engineList {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .engineItem {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border-subtle);
+    padding-block: 2.5rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .engineItem:first-child {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .engineItem:last-child {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  @media (min-width: 48em) {
+    .engineItem {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+@layer components {
+  /* Navigation (menu overlay) */
+  .layout-nav-link,
+  .layout-nav-link * {
+    font-family: var(--font-body-en);
+  }
+
+  .layout-nav-label,
+  .layout-nav-label * {
+    font-family: var(--font-body-en);
+  }
+
+  .layout-nav-heading,
+  .layout-nav-heading * {
+    font-family: var(--font-heading-en);
+  }
+
+  /* Footers */
+  .layout-footer-brand,
+  .layout-footer-brand * {
+    font-family: var(--font-heading-en);
+    color: var(--text-base);
+  }
+
+  .layout-footer-heading,
+  .layout-footer-heading * {
+    font-family: var(--font-heading-en);
+    color: var(--text-base);
+  }
+
+  .layout-footer-text,
+  .layout-footer-text * {
+    font-family: var(--font-body-en);
+    color: var(--text-base);
+  }
+
+  /* Override for charcoal footer LinkedIn button */
+  .footer-charcoal .footer-social-row a,
+  .footer-charcoal .footer-social-row a * {
+    color: inherit;
+  }
+
+  .layout-footer-label,
+  .layout-footer-label * {
+    font-family: var(--font-body-en);
+    color: var(--text-base);
+  }
+
+  /* Page-specific: hide default light footer on Jarvis pages that use dark footers */
+  .jarvis-page footer.footer-default {
+    display: none !important;
+  }
+
+  /* Ensure footer-charcoal bottom bar stays visible on dark backgrounds */
+  .footer-charcoal .footer-bottom,
+  .footer-charcoal .footer-bottom * {
+    color: #ffffff !important;
+  }
+
+}

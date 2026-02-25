@@ -1,0 +1,22 @@
+@layer components {
+  .methodGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 48em) {
+    .methodGrid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 3.5rem;
+    }
+  }
+
+  .methodDivider {
+    width: 1px;
+    height: 100%;
+    background: var(--border-strong);
+    margin: 0 auto;
+  }
+}

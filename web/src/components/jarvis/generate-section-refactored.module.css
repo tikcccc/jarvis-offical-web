@@ -1,0 +1,164 @@
+/* =========================================
+   JARVIS Generate Section (Light Theme)
+   Theme-specific styles only
+   ========================================= */
+
+/* Import shared styles */
+@import './jarvis-shared.module.css';
+
+/* ─────────────────────────────────────────
+   Section Background (Light)
+   ───────────────────────────────────────── */
+.section {
+  composes: section from './jarvis-shared.module.css';
+  background-color: var(--jarvis-surface-light);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container {
+  composes: container from './jarvis-shared.module.css';
+}
+
+/* ─────────────────────────────────────────
+   Header Theme (Light)
+   ───────────────────────────────────────── */
+.header {
+  composes: header from './jarvis-shared.module.css';
+  --header-border-color: rgba(0, 0, 0, 0.05);
+  --label-color: var(--jarvis-accent-primary);
+  --heading-color: var(--jarvis-text-strong);
+}
+
+.label {
+  composes: label from './jarvis-shared.module.css';
+}
+
+.heading {
+  composes: heading from './jarvis-shared.module.css';
+}
+
+.headingMuted {
+  color: var(--color-gray-300);
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout (List Left, Visual Right)
+   ───────────────────────────────────────── */
+.grid {
+  composes: grid from './jarvis-shared.module.css';
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 5fr 7fr; /* List smaller, Visual larger */
+  }
+}
+
+/* ─────────────────────────────────────────
+   Product List (Left Column)
+   ───────────────────────────────────────── */
+.listColumn {
+  composes: productColumn from './jarvis-shared.module.css';
+  order: 2;
+}
+
+@media (min-width: 1024px) {
+  .listColumn {
+    order: 1;
+  }
+}
+
+.listItem {
+  composes: productItem from './jarvis-shared.module.css';
+  --item-border-color: rgba(0, 0, 0, 0.05);
+  --item-title-color: var(--jarvis-text-strong);
+  --desc-color: var(--text-muted);
+}
+
+.listItemActive {
+  composes: productItemActive from './jarvis-shared.module.css';
+}
+
+/* Purple accent */
+.listItemPurple.listItemActive {
+  --item-border-active: var(--jarvis-item-border-active);
+  background: transparent;
+}
+
+.listItemPurple:hover .listItemTitle {
+  color: var(--jarvis-accent-primary);
+}
+
+.listItemPurple .arrow {
+  color: var(--jarvis-accent-primary);
+}
+
+/* Cyan accent */
+.listItemCyan.listItemActive {
+  --item-border-active: var(--jarvis-accent-secondary);
+  background: transparent;
+}
+
+.listItemCyan:hover .listItemTitle {
+  color: var(--jarvis-accent-secondary);
+}
+
+.listItemCyan .arrow {
+  color: var(--jarvis-accent-secondary);
+}
+
+.listItemHeader {
+  composes: productItemHeader from './jarvis-shared.module.css';
+}
+
+.listItemTitle {
+  composes: productItemTitle from './jarvis-shared.module.css';
+}
+
+.arrow {
+  composes: arrow from './jarvis-shared.module.css';
+}
+
+.listItemDesc {
+  composes: productItemDesc from './jarvis-shared.module.css';
+}
+
+.listItemActive .listItemDesc {
+  composes: productItemDesc from './jarvis-shared.module.css';
+}
+
+/* ─────────────────────────────────────────
+   Visual Column (Right)
+   ───────────────────────────────────────── */
+.visualColumn {
+  composes: visualColumn from './jarvis-shared.module.css';
+  order: 1;
+}
+
+@media (min-width: 1024px) {
+  .visualColumn {
+    order: 2;
+  }
+}
+
+.screenContainer {
+  composes: screenContainer from './jarvis-shared.module.css';
+  composes: jarvis-screen-container from global;
+  --screen-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15),
+    inset 0 0 20px rgba(0, 0, 0, 0.02);
+}
+
+.visualPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(19, 201, 186, 0.1));
+}
+
+.placeholderText {
+  composes: placeholderText from './jarvis-shared.module.css';
+  --placeholder-color: var(--text-inverse-muted);
+}

@@ -1,0 +1,248 @@
+/* =========================================
+   JARVIS Generate Section (Light)
+   ========================================= */
+
+.section {
+  position: relative;
+  background-color: var(--jarvis-surface-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content {
+  /* Match .jarvis-section-shell exactly to ensure alignment */
+  max-width: var(--jarvis-container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 10rem var(--jarvis-container-padding);
+}
+
+/* ─────────────────────────────────────────
+   Header
+   ───────────────────────────────────────── */
+.header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.label {
+  font-family: var(--font-heading);
+  color: var(--jarvis-accent-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .label {
+    font-size: 1rem;
+  }
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 4vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  color: var(--jarvis-text-strong);
+  line-height: 1.2;
+}
+
+.headingMuted {
+  color: var(--color-gray-300);
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout
+   ───────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  min-height: 760px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 5fr 7fr;
+    height: 760px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Product List Column
+   ───────────────────────────────────────── */
+.productColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  order: 2;
+}
+
+@media (min-width: 1024px) {
+  .productColumn {
+    order: 1;
+  }
+}
+
+/* Product Item */
+.productItem {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  padding-left: 0;
+  opacity: 0.5;
+}
+
+.productItem:hover {
+  opacity: 0.8;
+}
+
+.productItemActive {
+  opacity: 1;
+  padding-left: 1.5rem;
+}
+
+.productItemPurple.productItemActive {
+  border-left-color: var(--jarvis-item-border-active);
+}
+
+.productItemCyan.productItemActive {
+  border-left-color: var(--jarvis-accent-secondary);
+}
+
+.productItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.productItemTitle {
+  font-family: var(--font-heading);
+  font-size: 1.875rem;
+  font-weight: 500;
+  color: var(--jarvis-text-strong);
+  transition: color 0.3s ease;
+}
+
+.productItemPurple:hover .productItemTitle {
+  color: var(--jarvis-accent-primary);
+}
+
+.productItemCyan:hover .productItemTitle {
+  color: var(--jarvis-accent-secondary);
+}
+
+/* Arrow Icon */
+.arrow {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.productItemPurple .arrow {
+  color: var(--jarvis-accent-primary);
+}
+
+.productItemCyan .arrow {
+  color: var(--jarvis-accent-secondary);
+}
+
+.productItem:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Description */
+.productItemDesc {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  font-weight: 300;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.productItemActive .productItemDesc {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* ─────────────────────────────────────────
+   Visual Column (Right)
+   ───────────────────────────────────────── */
+.visualColumn {
+  order: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .visualColumn {
+    order: 2;
+  }
+}
+
+.screenContainer {
+  composes: jarvis-screen-container from global;
+  width: 100%;
+  height: 100%;
+  max-height: 560px;
+  min-height: 560px;
+  border-radius: var(--jarvis-panel-radius);
+  overflow: hidden;
+  position: relative;
+  border: var(--jarvis-panel-border-light);
+  box-shadow: var(--jarvis-panel-shadow-light);
+}
+
+.visualPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+}
+
+.placeholderText {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-inverse-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.placeholderText span {
+  font-size: 1.25rem;
+  opacity: 0.6;
+}

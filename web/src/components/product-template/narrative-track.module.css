@@ -1,0 +1,86 @@
+.section {
+  background: var(--surface-subtle, #f2f2f2);
+  color: var(--text-base);
+}
+
+.trackContainer {
+  max-width: var(--product-hero-max);
+  margin-inline: auto;
+  padding-inline: var(--product-track-padding);
+}
+
+@media (min-width: 48em) {
+  .trackContainer {
+    padding-inline: var(--product-track-padding-md);
+  }
+}
+
+@media (min-width: 64em) {
+  .trackContainer {
+    padding-inline: var(--product-track-padding-lg);
+  }
+}
+
+.sticky {
+  background: transparent;
+}
+
+/* Short viewport safeguard:
+   On smaller heights (e.g. 1366×768) the fixed Topbar can overlap the first narrative line.
+   Reserve vertical space inside the sticky stage without changing desktop behavior. */
+@media (max-height: 820px) {
+  .sticky {
+    top: 0 !important;
+    height: 100vh !important;
+    padding-top: calc(6rem + env(safe-area-inset-top));
+    padding-bottom: 2rem;
+  }
+}
+
+@supports (height: 100svh) {
+  @media (max-height: 820px) {
+    .sticky {
+      height: 100svh !important;
+    }
+  }
+}
+
+.titleLight {
+  font-family: var(--font-heading-en);
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  color: var(--text-muted);
+}
+
+.scrollPrompt {
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.scrollStack {
+  gap: clamp(0.35rem, 1vw, 0.6rem);
+}
+
+.chevron {
+  color: var(--text-strong);
+}
+
+.labelSm {
+  font-family: var(--font-body-en);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.stageDesc {
+  font-family: var(--font-body-en);
+  font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+  font-weight: var(--weight-light);
+  line-height: 1.7;
+}

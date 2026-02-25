@@ -1,0 +1,155 @@
+/* ========================================
+   NEWSROOM UTILITIES
+   - Spacing, typography, color helpers
+   ======================================== */
+
+@layer utilities {
+  /* Spacing utilities */
+  .newsroom-mb-xs { margin-bottom: var(--newsroom-stack-xs); }
+  .newsroom-mb-sm { margin-bottom: var(--newsroom-stack-sm); }
+  .newsroom-mb { margin-bottom: var(--newsroom-stack); }
+  .newsroom-mb-lg { margin-bottom: var(--newsroom-stack-lg); }
+  .newsroom-mb-xl { margin-bottom: var(--newsroom-stack-xl); }
+  .newsroom-mt { margin-top: var(--newsroom-stack); }
+  .newsroom-mt-lg { margin-top: var(--newsroom-stack-lg); }
+  .newsroom-mt-xl { margin-top: var(--newsroom-stack-xl); }
+  .newsroom-pt-lg { padding-top: var(--newsroom-stack-lg); }
+  .newsroom-gap { gap: var(--newsroom-card-gap); }
+  .newsroom-gap-lg { gap: var(--newsroom-stack-lg); }
+
+  /* Newsroom font utilities (scoped) */
+  .news-font-hero {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 7vw,10rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  @media (max-width: 767px) {
+    .news-font-hero {
+      font-size: clamp(4.25rem, 12vw, 6rem);
+      line-height: 0.95;
+    }
+  }
+
+  .news-font-headline {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  .news-font-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1.125rem, 2.2vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .news-font-section {
+    font-family: var(--font-heading);
+    font-size: clamp(1.85rem, 2.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+.news-font-card-lg {
+  font-family: var(--font-body);
+  font-size: clamp(1.85rem, 2.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.news-font-card {
+  font-family: var(--font-body);
+  font-size: clamp(1.375rem, 2vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.news-font-body-lg {
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0em;
+}
+
+.news-font-body {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.6vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0em;
+}
+  .news-font-label {
+    font-family: var(--font-heading);
+    font-size: clamp(0.7rem, 1.1vw, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .news-font-label-lg {
+    font-family: var(--font-heading);
+    font-size: clamp(0.8rem, 1.2vw, 0.875rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .news-font-detail-title{
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 3vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+   
+   .news-font-detail-subtitle{
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0em;
+  }
+
+  
+ .news-font-detail-meta {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0em;
+ }
+  /* Color/surface/border helpers */
+  .newsroom-text-primary { color: var(--text-strong); }
+  .newsroom-text-body,
+  .newsroom-text-muted { color: var(--text-muted); }
+  .newsroom-text-subtle,
+  .newsroom-text-soft,
+  .newsroom-text-faint { color: var(--text-sub); }
+  .newsroom-text-inverse { color: var(--text-inverse-base); }
+  .newsroom-text-accent { color: var(--newsroom-accent-cta); }
+  .newsroom-text-inverse-strong { color: var(--text-inverse-strong); }
+  .newsroom-text-inverse-muted { color: var(--text-inverse-muted); }
+  .newsroom-text-inverse-sub { color: var(--text-inverse-sub); }
+
+  .newsroom-surface-card { background: var(--newsroom-surface-card); }
+  .newsroom-surface-muted { background: var(--newsroom-surface-muted); }
+  .newsroom-surface-quiet { background: var(--newsroom-surface-quiet); }
+
+  .newsroom-border { border: 1px solid var(--newsroom-border-subtle); }
+  .newsroom-border-subtle { border-color: var(--newsroom-border-subtle); }
+  .newsroom-border-soft { border-color: var(--newsroom-border-soft); }
+  .newsroom-border-strong { border-color: var(--newsroom-border-strong); }
+  .newsroom-divider { border-color: var(--newsroom-divider); }
+}

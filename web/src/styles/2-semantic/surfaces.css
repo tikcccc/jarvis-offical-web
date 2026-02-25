@@ -1,0 +1,51 @@
+/* =========================================
+   2-SEMANTIC: SURFACE SEMANTICS
+   Background, border, and button mappings
+   ========================================= */
+
+:root {
+  /* ═══════════════════════════════════════════
+     BACKGROUND SURFACES
+     ═══════════════════════════════════════════ */
+
+  /* Primary Surfaces */
+  --surface-base: var(--color-white);              /* Main content background */
+  --surface-raised: var(--color-white);            /* Cards, panels */
+  --surface-subtle: var(--color-gray-50);          /* Slight differentiation */
+  --surface-muted: var(--color-gray-bg);           /* Gray sections (#efefef) */
+  --surface-tinted: var(--color-tinted);           /* Green-tinted white */
+  --surface-paper: var(--color-soft-white);        /* Soft off-white for articles */
+  --surfact-softgray:var(--color-soft-gray);
+  
+  /* Special Surfaces */
+  --surface-hero: var(--color-black);              /* Hero sections, dark areas */
+  --surface-dark: var(--color-charcoal-900);       /* Dark mode surfaces */
+  --surface-overlay: rgba(0, 0, 0, 0.5);           /* Video overlays */
+
+  /* RGB versions for opacity usage */
+  --surface-base-rgb: var(--color-white-rgb);
+  --surface-paper-rgb: var(--color-soft-white-rgb);
+
+  /* ═══════════════════════════════════════════
+     BORDERS
+     ═══════════════════════════════════════════ */
+  --border-subtle: var(--color-gray-200);
+  --border-strong: var(--color-slate-200);
+  --border-divider: var(--color-gray-bg);
+  --border-inverse-soft: rgba(255, 255, 255, 0.3);
+
+  /* ═══════════════════════════════════════════
+     BUTTON COLORS
+     Primary button system (dark style)
+     ═══════════════════════════════════════════ */
+  --button-primary-bg: var(--color-slate-850);
+  --button-primary-hover: var(--color-slate-800);
+  --button-primary-text: var(--color-white);
+  --button-primary-border: var(--color-slate-850);
+
+  /* ═══════════════════════════════════════════
+     MEDIA PLACEHOLDER
+     Fallback for unloaded images/videos
+     ═══════════════════════════════════════════ */
+  --media-placeholder: var(--color-gray-bg);
+}

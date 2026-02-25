@@ -1,0 +1,46 @@
+﻿.section {
+  background: var(--surface-base);
+  color: var(--text-base);
+}
+
+/* 字體樣式已移至 .font-container-title utility class */
+.title {
+  color: var(--text-base);
+}
+
+/* 字體樣式已移至 .font-body-lg utility class */
+.bodyLarge {
+  color: var(--text-muted);
+}
+
+/* 字體樣式已移至 .font-label utility class */
+.labelSm {
+  color: var(--text-soft);
+}
+
+/* 字體樣式已移至 .font-feature utility class */
+.platformTitle {
+  color: var(--text-base);
+}
+
+.divider {
+  border-color: var(--platform-divider);
+}
+
+.videoFrame {
+  overflow: hidden;
+  border-radius: var(--platform-video-radius);
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: border-color 180ms ease;
+}
+
+.videoFrame:hover {
+  border-color: transparent;
+  background: transparent;
+}
+
+.arrowIcon {
+  color: var(--text-soft);
+}

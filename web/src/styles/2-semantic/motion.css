@@ -1,0 +1,37 @@
+/* =========================================
+   2-SEMANTIC: MOTION SEMANTICS
+   Animation timing, easing, and physics
+   ========================================= */
+
+:root {
+  /* ═══════════════════════════════════════════
+     DURATION SCALE
+     ═══════════════════════════════════════════ */
+  --motion-instant: 0.15s;
+  --motion-fast: 0.3s;
+  --motion-base: 0.5s;
+  --motion-slow: 0.8s;
+  --motion-slower: 1.2s;
+
+  /* ═══════════════════════════════════════════
+     EASING FUNCTIONS
+     ═══════════════════════════════════════════ */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ═══════════════════════════════════════════
+     STAGGER VALUES
+     For sequenced animations
+     ═══════════════════════════════════════════ */
+  --stagger-base: 0.12s;
+  --stagger-slow: 0.2s;
+
+  /* ═══════════════════════════════════════════
+     SPRING PHYSICS
+     For Framer Motion spring animations
+     ═══════════════════════════════════════════ */
+  --spring-stiffness: 200;
+  --spring-damping: 20;
+}

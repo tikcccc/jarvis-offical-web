@@ -1,0 +1,201 @@
+/* =========================================
+   JARVIS Shared Styles
+   Common styles for both Generate & Sense sections
+   ========================================= */
+
+/* ─────────────────────────────────────────
+   Section Base
+   ───────────────────────────────────────── */
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────
+   Container
+   ───────────────────────────────────────── */
+.container {
+  max-width: var(--jarvis-container-max);
+  margin: 0 auto;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+  /* Left/right padding provided by .jarvis-section-shell */
+}
+
+/* ─────────────────────────────────────────
+   Header (Shared Structure)
+   ───────────────────────────────────────── */
+.header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--header-border-color); /* Theme-specific */
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.label {
+  font-family: var(--font-heading);
+  color: var(--label-color); /* Theme-specific */
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .label {
+    font-size: 1rem;
+  }
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 4vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -0.08em; /* Unified tight tracking */
+  color: var(--heading-color); /* Theme-specific */
+  line-height: 1.2;
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout
+   ───────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  min-height: 760px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    height: 760px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Product List Column (Shared)
+   ───────────────────────────────────────── */
+.productColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Product Item Base */
+.productItem {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  padding-left: 0;
+  opacity: 0.5;
+}
+
+.productItem:hover {
+  opacity: 0.8;
+}
+
+.productItemActive {
+  opacity: 1;
+  padding-left: 1.5rem;
+  border-left-color: var(--item-border-active); /* Theme-specific */
+}
+
+.productItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--item-border-color); /* Theme-specific */
+}
+
+.productItemTitle {
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* Unified size */
+  font-weight: 500;
+  color: var(--item-title-color); /* Theme-specific */
+  transition: color 0.3s ease;
+}
+
+/* Arrow Icon */
+.arrow {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--arrow-color); /* Theme-specific */
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.productItem:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Description */
+.productItemDesc {
+  font-size: 0.875rem; /* Unified size */
+  line-height: 1.75;
+  color: var(--desc-color); /* Theme-specific */
+  font-weight: 300;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.productItemActive .productItemDesc {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* ─────────────────────────────────────────
+   Visual Column (Shared)
+   ───────────────────────────────────────── */
+.visualColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screenContainer {
+  width: 100%;
+  height: 100%;
+  max-height: 560px; /* Unified height */
+  min-height: 560px; /* Unified height */
+  border-radius: 0.75rem; /* Unified radius */
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--screen-shadow); /* Theme-specific */
+}
+
+.placeholderText {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--placeholder-color); /* Theme-specific */
+  text-align: center;
+  line-height: 1.5;
+}
+
+.placeholderText span {
+  font-size: 1.25rem;
+  opacity: 0.6;
+}

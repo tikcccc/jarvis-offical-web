@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding: 寬幅敘事動畫</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #111827;
+            margin: 0;
+        }
+
+        .spacer {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            background-color: #ffffff;
+            z-index: 10;
+            position: relative;
+        }
+
+        .trigger-zone {
+            height: 130vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .text-content {
+            /* 問題修復：
+               原先 max-width: 1300px 限制了文字向左右延伸。
+               現在改為 90vw (視窗寬度的 90%)，並將最大寬度放寬至 1800px。
+            */
+            width: 90vw; 
+            max-width: 1800px; 
+            text-align: center;
+            visibility: hidden; 
+            
+            /* 移除 pretty，讓文字自然填滿整行，減少左右留白 */
+            /* text-wrap: pretty; */ 
+
+            will-change: line-height, opacity, transform;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="spacer">
+        <p class="text-sm mb-4">Vibe Coding Architecture</p>
+        <h2 class="text-2xl font-bold">寬幅修正</h2>
+        <p class="text-gray-400 mt-2 text-sm">放寬邊界 (1800px) · 填充優先</p>
+        <div class="mt-10 animate-bounce">↓</div>
+    </div>
+
+    <!-- Phase 3: 體驗層 -->
+    <div class="trigger-zone">
+        
+        <!-- 
+             保持大字體 (text-7xl)，但現在它有更多的空間橫向排列。
+        -->
+        <h1 class="text-content text-4xl md:text-7xl font-semibold text-black leading-tight">
+            Our software powers real-time, AI-driven decisions 
+            in critical government and commercial enterprises 
+            in the West, from the factory floors to the front lines.
+        </h1>
+
+    </div>
+
+    <div class="spacer">
+        <p>End of Experience</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <script>
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            gsap.set(".text-content", { autoAlpha: 1 });
+
+            gsap.fromTo(".text-content", 
+                {
+                    // --- FROM: 疏 ---
+                    lineHeight: "2.2",        
+                    opacity: 0.5,             
+                    y: 60,
+                },
+                {
+                    // --- TO: 密 ---
+                    lineHeight: "1.1", 
+                    opacity: 1,
+                    y: 0,
+                    
+                    ease: "power2.out",
+
+                    scrollTrigger: {
+                        trigger: ".trigger-zone",
+                        start: "top 65%",      
+                        end: "center center",     
+                        scrub: 1,               
+                        markers: false
+                    }
+                }
+            );
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+    </script>
+</body>
+</html>

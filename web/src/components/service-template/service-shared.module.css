@@ -1,0 +1,31 @@
+@layer components {
+  .sectionBase {
+    position: relative;
+    z-index: 20;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .sectionBaseLight {
+    background: var(--surface-base);
+  }
+
+  .sectionBaseSubtle {
+    background: var(--surface-subtle);
+  }
+
+  .sectionBaseDark {
+    background: var(--surface-dark);
+  }
+
+  .padLg {
+    padding-block: 4rem;
+  }
+
+  @media (min-width: 48em) {
+    .padLg {
+      padding-block: 6rem;
+    }
+  }
+}

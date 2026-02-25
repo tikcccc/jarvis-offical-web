@@ -1,0 +1,294 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { cn } from '@/lib/utils'; 
+
+// --- 常數定義 ---
+const AUTOPLAY_DURATION = 5000;
+
+// --- 數據結構 ---
+const SLIDES = [
+  {
+    id: 1,
+    category: 'MAVEN',
+    tabTitle: 'Defense Reformation',
+    title: 'AI Is Transforming the Battlefield',
+    bigText: 'Defense',
+    meta: ['Ontology', 'AIP', 'Industrial AI'],
+    description: 'Resurrecting the American Industrial Base',
+    imageUrl: 'https://images.unsplash.com/photo-1626262060366-a21b848f6b8d?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 2,
+    category: 'WARP SPEED',
+    tabTitle: 'Warp Speed',
+    title: 'The Manufacturing OS for American Re-Industrialization',
+    bigText: 'Warp Speed',
+    meta: ['Production', 'Supply Chain', 'Logistics'],
+    description: 'Enhances visibility and adaptability across the entire product lifecycle.',
+    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 3,
+    category: 'TITAN',
+    tabTitle: 'Titan Vehicle',
+    title: 'Deploying the AI Defined Vehicle',
+    bigText: 'Titan',
+    meta: ['Autonomous', 'Edge Compute', 'Sensors'],
+    description: 'Software defined manufacturing on AIP.',
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 4,
+    category: 'DEVCON',
+    tabTitle: 'DevCon 3',
+    title: 'Building the Future Stack',
+    bigText: 'DevCon',
+    meta: ['Community', 'Open Source', 'Builders'],
+    description: 'The modern operating system for software defined manufacturing.',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 5,
+    category: 'AIPCON',
+    tabTitle: 'AIPCon 8',
+    title: 'The AI Platform Conference',
+    bigText: 'AIPCon',
+    meta: ['Keynotes', 'Workshops', 'Networking'],
+    description: 'Where the future of AI is built.',
+    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2070&auto=format&fit=crop',
+  }
+];
+
+// --- 卡片動畫狀態 ---
+const cardVariants = {
+  center: {
+    x: "0%",
+    scale: 1,
+    zIndex: 10,
+    opacity: 1,
+    filter: "brightness(1)",
+    transition: { duration: 0.6, type: "spring", stiffness: 80, damping: 20 }
+  },
+  left: {
+    x: "-105%",
+    scale: 1,
+    zIndex: 5,
+    opacity: 0.6,
+    filter: "brightness(0.4)",
+    transition: { duration: 0.6, type: "spring", stiffness: 80, damping: 20 }
+  },
+  right: {
+    x: "105%",
+    scale: 1,
+    zIndex: 5,
+    opacity: 0.6,
+    filter: "brightness(0.4)",
+    transition: { duration: 0.6, type: "spring", stiffness: 80, damping: 20 }
+  },
+  hidden: {
+    x: "0%",
+    scale: 0.8,
+    zIndex: 0,
+    opacity: 0,
+    transition: { duration: 0.5 }
+  }
+};
+
+const PlaceholderSection = ({ title, color }: { title: string, color: string }) => (
+  <div className={`w-full h-[40vh] flex items-center justify-center ${color} text-white/20 text-4xl font-bold uppercase tracking-widest border-y border-white/5`}>
+    {title}
+  </div>
+);
+
+export default function HeroSlider() {
+  const [page, setPage] = useState(0);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    if (hovered) return;
+    const timer = setInterval(() => {
+      setPage((prev) => prev + 1);
+    }, AUTOPLAY_DURATION);
+    return () => clearInterval(timer);
+  }, [page, hovered]);
+
+  const nextSlide = () => setPage(page + 1);
+  const prevSlide = () => setPage(page - 1);
+  const jumpToSlide = (index: number) => setPage(index);
+
+  const getVariant = (index: number) => {
+    const total = SLIDES.length;
+    const activeIndex = (page % total + total) % total;
+    if (index === activeIndex) return "center";
+    const prevIndex = (activeIndex - 1 + total) % total;
+    if (index === prevIndex) return "left";
+    const nextIndex = (activeIndex + 1) % total;
+    if (index === nextIndex) return "right";
+    return "hidden";
+  };
+
+  const activeIndex = (page % SLIDES.length + SLIDES.length) % SLIDES.length;
+
+  return (
+    <div className="bg-black w-full min-h-screen flex flex-col font-sans">
+      <PlaceholderSection title="Previous Section" color="bg-[#0a0a0a]" />
+
+      <section 
+        className="relative w-full h-[80vh] md:h-[700px] bg-[#111111] overflow-hidden flex flex-col items-center py-12"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        
+        {/* --- 重構後的導航區域 (Grid Layout) --- */}
+        {/* 使用 flex-row 將 Tabs 和 See All 按鈕放在同一行，並確保對齊 */}
+        <div className="relative z-30 w-full max-w-[90%] md:max-w-[85%] flex flex-col md:flex-row gap-4 mb-8 items-stretch md:items-center">
+          
+          {/* 1. Tabs 容器：使用 Grid 佈局自動均分寬度 */}
+          {/* flex-1 讓它佔據剩餘所有空間 */}
+          {/* grid-cols-2 md:grid-cols-5 確保在桌面上平分為 5 等份 */}
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4">
+            {SLIDES.map((slide, index) => {
+              const isActive = index === activeIndex;
+              
+              return (
+                <button
+                  key={slide.id}
+                  onClick={() => jumpToSlide(index)}
+                  className={cn(
+                    "relative overflow-hidden h-10 md:h-12 flex items-center justify-center text-[10px] md:text-xs uppercase tracking-wider border transition-all duration-300",
+                    // 使用 w-full 確保佔滿 Grid 單元格
+                    "w-full bg-[#222] border-white/10 text-white/60",
+                    isActive ? "border-white/30 text-white" : "hover:bg-[#333] hover:text-white"
+                  )}
+                >
+                  {/* 進度填充層 */}
+                  {isActive && !hovered && (
+                    <motion.div
+                      layoutId="progress"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ 
+                        duration: AUTOPLAY_DURATION / 1000, 
+                        ease: "linear" 
+                      }}
+                      className="absolute inset-0 bg-white/20 z-0"
+                      style={{ transformOrigin: "left" }} // 確保從左側開始填充
+                    />
+                  )}
+                  
+                  {/* 文字層：使用 truncate 防止文字溢出換行 */}
+                  <span className="relative z-10 font-medium truncate px-2">
+                    {slide.tabTitle}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          
+          {/* 2. See All 按鈕：獨立於 Grid 之外，保持固定寬度 */}
+          <div className="hidden md:block w-auto shrink-0">
+             <button className="h-12 px-6 text-xs font-bold bg-white text-black hover:bg-gray-200 transition-colors uppercase tracking-wider border border-white">
+               See All
+             </button>
+          </div>
+          {/* Mobile Only See All (Optionally keep it separate or hidden) */}
+           <div className="md:hidden w-full">
+             <button className="w-full h-10 text-xs font-bold bg-white text-black hover:bg-gray-200 transition-colors uppercase tracking-wider">
+               See All
+             </button>
+          </div>
+
+        </div>
+
+        {/* Slider Track (保持不變) */}
+        <div className="relative w-full max-w-[90%] md:max-w-[85%] flex-grow flex items-center justify-center">
+          {SLIDES.map((slide, index) => {
+            const variant = getVariant(index);
+            const isCenter = variant === 'center';
+
+            return (
+              <motion.div
+                key={slide.id}
+                variants={cardVariants}
+                initial="hidden"
+                animate={variant}
+                className="absolute w-full h-full bg-[#1a1a1a] border border-white/10 shadow-2xl overflow-hidden"
+              >
+                <div className="absolute inset-0 z-0">
+                   <img 
+                      src={slide.imageUrl} 
+                      alt={slide.title} 
+                      className="w-full h-full object-cover opacity-40 mix-blend-overlay"
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-r from-[#111111] via-[#111111]/80 to-transparent" />
+                </div>
+
+                <div className="relative z-10 w-full h-full p-8 md:p-12 flex flex-col justify-between text-white">
+                  <div className="max-w-2xl">
+                    <div className="inline-flex items-center gap-2 mb-4">
+                       <span className="text-xs font-bold tracking-[0.15em] uppercase text-white/70">{slide.category}</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-light leading-tight tracking-tight mb-6">
+                      {slide.title} 
+                      <ArrowUpRight className="inline-block ml-2 w-6 h-6 md:w-8 md:h-8 opacity-50" />
+                    </h2>
+                  </div>
+
+                  <div className="flex-grow relative hidden md:block">
+                     <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-32 border-t border-b border-white/10 flex flex-col justify-between py-2 opacity-50">
+                        <div className="text-[10px] uppercase tracking-widest text-right">Defense</div>
+                        <div className="text-[10px] uppercase tracking-widest text-right">Commercial</div>
+                        <div className="text-[10px] uppercase tracking-widest text-right">Industrial</div>
+                     </div>
+                  </div>
+
+                  <div className="relative">
+                    <div className="border-t border-white/20 pt-6 flex flex-col md:flex-row items-end justify-between gap-8">
+                       <h1 className="text-[12vw] md:text-[7rem] font-medium leading-[0.8] tracking-tighter text-white select-none">
+                         {slide.bigText}
+                       </h1>
+                       
+                       <div className="hidden md:block max-w-xs text-[10px] leading-relaxed text-white/60 uppercase tracking-wider mb-4">
+                          <div className="flex gap-4 mb-2 text-white">
+                             <span>Built on:</span>
+                             <div className="flex flex-col">
+                                {slide.meta.map(m => <span key={m}>→ {m}</span>)}
+                             </div>
+                          </div>
+                          <p>{slide.description}</p>
+                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={cn(
+                  "absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-0 z-20 pointer-events-none transition-opacity duration-300",
+                  (isCenter && hovered) ? "opacity-100" : "opacity-0"
+                )}>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                      className="pointer-events-auto w-16 h-16 bg-[#222] hover:bg-[#333] flex items-center justify-center transition-colors text-white border-r border-y border-white/10"
+                    >
+                      <ArrowLeft className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                      className="pointer-events-auto w-16 h-16 bg-[#222] hover:bg-[#333] flex items-center justify-center transition-colors text-white border-l border-y border-white/10"
+                    >
+                      <ArrowRight className="w-5 h-5" />
+                    </button>
+                </div>
+
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      <PlaceholderSection title="Next Section" color="bg-[#0a0a0a]" />
+    </div>
+  );
+}

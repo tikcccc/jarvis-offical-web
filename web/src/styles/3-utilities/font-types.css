@@ -1,0 +1,228 @@
+/* =========================================
+   3-UTILITIES: FONT TYPE CLASSES
+   Grouped by size (largest → smallest)
+   ========================================= */
+
+@layer components {
+
+  
+  /*hero mega title*/
+  .font-hero-mega {
+    font-family: var(--font-heading-en);
+    /* Mobile: 4rem (64px) -> Desktop: 10rem (160px) */
+    font-size: clamp(4rem, 15vw, 10rem);
+    font-weight: var(--weight-bold); /* 700 - 最粗 */
+    line-height: 0.95; /* 字大到這個程度，行高必須壓到 1 以下 */
+    letter-spacing: -0.05em; /* 字距要非常緊，才有塊狀感 */
+  }
+
+  /* Page Header Title: Swiss-style large uppercase titles */
+  .font-page-header-title {
+    font-family: var(--font-heading-en);
+    font-size: clamp(4rem, 9vw, 9rem);
+    font-weight: var(--weight-bold); /* 700 */
+    line-height: 0.8;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+  }
+
+  /* Page Header Subtitle: Swiss-style light weight for contrast */
+  .font-page-header-subtitle {
+    font-family: var(--font-body-en);
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    font-weight: var(--weight-light); /* 300 */
+    line-height: 1.6;
+  }
+
+  .font-legal-header-title {
+    font-family: var(--font-heading-en);
+    font-size: clamp(3.15rem, 8vw, 7.5rem);
+    font-weight: var(--weight-semibold); /* 700 */
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+
+  .font-hero-title {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.75rem, 6vw, 6rem);
+    font-weight: var(--weight-semibold); /* 700 */
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  /* Newsroom masthead hero */
+  .font-news-hero {
+    font-family: var(--font-heading-en);
+    font-size: clamp(3rem, 7vw, 12rem);
+    font-weight: var(--weight-bold); /* 900 */
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Display Hero: largest hero headlines (max ~4.5rem), heading font */
+  .font-hero-headline {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: var(--weight-bold); /* 700 */
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }  
+  
+  /* Hero Subtitle: larger body text for hero sublines (max ~1.5rem) */
+  .font-hero-subtitle{
+    font-family: var(--font-body-en);
+    font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  .font-hero-tag {
+    font-family: var(--font-heading-en); /* Space Grotesk */
+    /* 讓它明顯小於副標的 24px，建立清晰階級 */
+    font-size: clamp(0.875rem, 1.5vw, 1.125rem); 
+    text-transform: uppercase;
+    font-weight: var(--weight-regular); /* 500 */
+    /* 修改 2: 字距適度 (Space Grotesk 本身就寬，0.2em 就很夠了) */
+    letter-spacing: 0.2em; 
+  }
+
+  /* narrtive : for narrative section use */
+  .font-narrative{
+    font-family: var(--font-body-en);
+    font-size: clamp(2.25rem, 7vw, 4.5rem);
+    font-weight: var(--weight-bold); /* 700 */
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+  
+  /* Display Feature: feature/platform titles, heading font (max ~5rem) */
+  .font-feature{
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: var(--weight-medium); /* 500 */
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  } 
+  
+
+  /* Section: primary section titles, heading font (max ~4.75rem) */
+  .font-container-title{
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    font-weight: var(--weight-semibold); /* 600 */
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* body font (max ~2.75rem) */
+  .font-container-subtitle{
+    font-family: var(--font-body-en);
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: var(--weight-semibold); /* 600 */
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  /* Heading: medium-sized headings for sections/accordions */
+  .font-body-xxlg {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  /* Body text (largest → base) */
+    .font-body-xlg
+  {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  .font-body-lg
+  {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.0625rem, 2vw, 1.375rem);
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  /* Body Base: default paragraphs, buttons, UI copy (max ~1.0625rem) */
+  .font-body-base
+  {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* Label lg: lg-sized label for chips/pills */
+  /* Label: uppercase label/meta text */
+  .font-label-lg {
+    font-family: var(--font-heading-en);
+    font-size: 0.875rem;
+    font-weight: var(--weight-semibold); /* 600 */
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .font-label-sm {
+    font-family: var(--font-heading-en);
+    font-size: 0.815rem;
+    font-weight: var(--weight-medium); /* 600 */
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+   
+  /* Caption: meta description*/
+  .font-caption {
+    font-family: var(--font-body-en);
+    font-size: 0.875rem;
+    font-weight: var(--weight-regular); /* 400 */
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  /* Legal / Utility: 12px usually */
+  .font-legal {
+  font-family: var(--font-body-en);
+  font-size: 0.75rem; /* 12px */
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+}
+
+/* Chinese locale: relax line-height and reset letter-spacing for tight glyphs */
+:lang(zh) .font-hero-headline,
+:lang(zh) .font-hero-title,
+:lang(zh) .font-container-title,
+:lang(zh) .font-feature,
+:lang(zh-HK) .font-hero-headline,
+:lang(zh-HK) .font-hero-title,
+:lang(zh-HK) .font-container-title,
+:lang(zh-HK) .font-feature,
+:lang(zh-CN) .font-hero-headline,
+:lang(zh-CN) .font-hero-title,
+:lang(zh-CN) .font-container-title,
+:lang(zh-CN) .font-feature,
+:lang(zh-TW) .font-hero-headline,
+:lang(zh-TW) .font-hero-title,
+:lang(zh-TW) .font-container-title,
+:lang(zh-TW) .font-feature {
+  line-height: 1.25;
+  letter-spacing: 0;
+}

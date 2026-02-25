@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI + BIM Font System Comparison</title>
+    
+    <!-- 引入所有 Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Manrope:wght@400;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&family=Sora:wght@600&family=Space+Grotesk:wght@500;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 全局变量 --- */
+        :root {
+            --bg-white: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-base: #475569;
+        }
+
+        /* --- 方案特定变量 (Scoped Styles) --- */
+        
+        /* 方案 A: 极客 (Space Grotesk + Inter) */
+        .scheme-a {
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+            --display-tracking: -0.03em;
+            --ui-nav-case: uppercase;
+            --ui-nav-tracking: 0.05em;
+            --ui-radius: 4px;
+        }
+
+        /* 方案 B: 愿景 (Sora + Public Sans) */
+        .scheme-b {
+            --font-display: 'Sora', sans-serif;
+            --font-body: 'Public Sans', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+            --display-tracking: 0em;
+            --ui-nav-case: capitalize;
+            --ui-nav-tracking: 0em;
+            --ui-radius: 100px; /* Pill shape */
+        }
+
+        /* 方案 C: 数据 (Manrope + Plus Jakarta) */
+        .scheme-c {
+            --font-display: 'Manrope', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+            --display-tracking: 0em;
+            --ui-nav-case: capitalize;
+            --ui-nav-tracking: 0em;
+            --ui-radius: 6px;
+        }
+
+        /* 方案 D: 结构 BIM (Outfit + Inter + Roboto Mono) */
+        .scheme-d {
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+            --display-tracking: -0.01em;
+            --ui-nav-case: uppercase;
+            --ui-nav-tracking: 0.08em;
+            --ui-nav-weight: 700;
+            --ui-radius: 8px;
+        }
+
+        /* 方案 E: 蓝图工程 (IBM Plex Sans + Mono) */
+        .scheme-e {
+            --font-display: 'IBM Plex Sans', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+            --display-tracking: 0em;
+            --ui-nav-case: uppercase;
+            --ui-nav-tracking: 0.05em;
+            --ui-radius: 0px; /* Industrial Sharpness */
+        }
+
+
+        /* --- 基础布局 --- */
+        body {
+            margin: 0;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 8rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* --- 头部 --- */
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+        header p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        /* --- 方案区块 --- */
+        .scheme-section {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 1. 方案头部 (Title Bar) */
+        .scheme-header {
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        @media(min-width: 768px) {
+            .scheme-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .scheme-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* 字体组合胶囊 */
+        .font-pairing-badge {
+            display: flex;
+            gap: 1px;
+            background: #cbd5e1;
+            padding: 1px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .fp-item {
+            background: #fff;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 600;
+        }
+        .fp-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-right: 4px;
+            font-weight: 500;
+        }
+
+        /* 2. 视觉展示区 (Visual Showcase) */
+        .visual-showcase {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+        @media(min-width: 768px) {
+            .visual-showcase { grid-template-columns: 1.2fr 1.2fr; }
+        }
+
+        /* 左侧：Dark Hero Card */
+        .hero-card {
+            background: #0f172a;
+            color: #fff;
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 320px;
+        }
+        .aurora-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.15;
+            background: radial-gradient(circle at top right, #6366f1, transparent 70%),
+                        radial-gradient(circle at bottom left, #06b6d4, transparent 70%);
+            z-index: 0;
+        }
+        .hero-content { position: relative; z-index: 1; }
+        
+        .demo-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-body);
+        }
+        
+        .demo-title {
+            font-family: var(--font-display);
+            letter-spacing: var(--display-tracking);
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin: 0 0 1.5rem 0;
+            font-weight: 700;
+        }
+        .demo-desc {
+            font-family: var(--font-body);
+            color: #94a3b8;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 90%;
+        }
+
+        /* 右侧：Content Context (文章排版模拟) */
+        .content-context {
+            padding: 3rem;
+            background: #fff;
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .context-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            display: block;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .article-preview h3 {
+            font-family: var(--font-display);
+            letter-spacing: var(--display-tracking);
+            font-size: 1.5rem;
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .article-preview p {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.75;
+            color: #475569;
+            margin-bottom: 1.5rem;
+        }
+        
+        .read-more-link {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 3. 策略工具箱 (Strategy Kit) */
+        .strategy-kit {
+            background: #f8fafc;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+        }
+        
+        .kit-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .kit-grid { grid-template-columns: 1fr; }
+        }
+
+        .strategy-item {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .strategy-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* 动态 UI 展示容器 */
+        .ui-demo-box {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            min-height: 40px;
+        }
+
+        /* --- 动态 UI 组件 (根据变量变化) --- */
+        
+        /* 1. Navigation */
+        .scheme-nav {
+            display: flex;
+            gap: 1.2rem;
+        }
+        .nav-link {
+            font-family: var(--font-display);
+            text-transform: var(--ui-nav-case);
+            letter-spacing: var(--ui-nav-tracking);
+            font-weight: var(--ui-nav-weight, 600);
+            font-size: 0.85rem;
+            color: #64748b;
+            cursor: pointer;
+            position: relative;
+        }
+        .nav-link.active {
+            color: #0f172a;
+        }
+        /* Active indicator varies slightly but keeping simple for comparison */
+        .nav-link.active::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: #3b82f6;
+        }
+
+        /* 2. Status Tags */
+        .scheme-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .status-tag {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: var(--ui-radius);
+            font-weight: 500;
+        }
+        .tag-primary { background: #dbeafe; color: #1e40af; }
+        .tag-neutral { background: #f1f5f9; color: #475569; }
+
+        /* 3. Input Label */
+        .scheme-input {
+            width: 100%;
+        }
+        .input-label {
+            font-family: var(--font-display); /* Using display font for label usually looks better for hierarchy */
+            font-size: 0.75rem;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            /* Adjusting case based on nav preference often aligns branding */
+            text-transform: var(--ui-nav-case); 
+            letter-spacing: 0.03em;
+        }
+        .input-field {
+            width: 100%;
+            height: 36px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--ui-radius);
+            background: #fff;
+            padding: 0 10px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            color: #334155;
+        }
+        /* Mono override for Schemes with heavy mono use */
+        .scheme-d .input-field, .scheme-e .input-field {
+            font-family: var(--font-mono);
+            background: #f8fafc;
+            font-size: 0.85rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Design System Strategy Comparison</h1>
+        <p>Identical Content rendered across 5 different Typography pairings.</p>
+    </header>
+
+    <!-- ==============================================================
+         SCHEME A: Tech-Forward
+         ============================================================== -->
+    <section class="scheme-section scheme-a">
+        <div class="scheme-header">
+            <div class="scheme-title">A. Tech-Forward (Standard)</div>
+            <div class="font-pairing-badge">
+                <div class="fp-item"><span class="fp-label">Head</span>Space Grotesk</div>
+                <div class="fp-item"><span class="fp-label">Body</span>Inter</div>
+            </div>
+        </div>
+
+        <div class="visual-showcase">
+            <div class="hero-card">
+                <div class="aurora-bg"></div>
+                <div class="hero-content">
+                    <span class="demo-tag">AI Solution</span>
+                    <div class="demo-title">Generative<br>Intelligence</div>
+                    <div class="demo-desc">
+                        Our neural engines optimize structural integrity through deep learning, bridging the gap between abstract design and physical reality.
+                    </div>
+                </div>
+            </div>
+            <div class="content-context">
+                <span class="context-label">Article Typography</span>
+                <div class="article-preview">
+                    <h3>The Architecture of Intelligence</h3>
+                    <p>
+                        Generative models have revolutionized how we conceive spatial design. By analyzing millions of data points, these systems bridge the gap between abstract creativity and structural engineering. The precision of the algorithm meets the intuition of the human mind, creating a new paradigm for the built environment.
+                    </p>
+                    <a href="#" class="read-more-link">Read Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-kit">
+            <div class="kit-title">UI Strategy Variants (Scheme A)</div>
+            <div class="kit-grid">
+                <!-- 1. Navigation -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Navigation</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-nav">
+                            <span class="nav-link active">Dashboard</span>
+                            <span class="nav-link">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Status Tags -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Status Tags</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-tags">
+                            <span class="status-tag tag-primary">v2.4.0 Beta</span>
+                            <span class="status-tag tag-neutral">Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Input Label -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Input Label</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-input">
+                            <span class="input-label">Project Name</span>
+                            <div class="input-field">Tower_Block_A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==============================================================
+         SCHEME B: Visionary
+         ============================================================== -->
+    <section class="scheme-section scheme-b">
+        <div class="scheme-header">
+            <div class="scheme-title">B. Visionary (Friendly)</div>
+            <div class="font-pairing-badge">
+                <div class="fp-item"><span class="fp-label">Head</span>Sora</div>
+                <div class="fp-item"><span class="fp-label">Body</span>Public Sans</div>
+            </div>
+        </div>
+
+        <div class="visual-showcase">
+            <div class="hero-card">
+                <div class="aurora-bg" style="background: radial-gradient(circle at top right, #8b5cf6, transparent 70%);"></div>
+                <div class="hero-content">
+                    <span class="demo-tag">AI Solution</span>
+                    <div class="demo-title">Generative<br>Intelligence</div>
+                    <div class="demo-desc">
+                        Our neural engines optimize structural integrity through deep learning, bridging the gap between abstract design and physical reality.
+                    </div>
+                </div>
+            </div>
+            <div class="content-context">
+                <span class="context-label">Article Typography</span>
+                <div class="article-preview">
+                    <h3>The Architecture of Intelligence</h3>
+                    <p>
+                        Generative models have revolutionized how we conceive spatial design. By analyzing millions of data points, these systems bridge the gap between abstract creativity and structural engineering. The precision of the algorithm meets the intuition of the human mind, creating a new paradigm for the built environment.
+                    </p>
+                    <a href="#" class="read-more-link">Read Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-kit">
+            <div class="kit-title">UI Strategy Variants (Scheme B)</div>
+            <div class="kit-grid">
+                <!-- 1. Navigation -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Navigation</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-nav">
+                            <span class="nav-link active">Dashboard</span>
+                            <span class="nav-link">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Status Tags -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Status Tags</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-tags">
+                            <span class="status-tag tag-primary">v2.4.0 Beta</span>
+                            <span class="status-tag tag-neutral">Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Input Label -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Input Label</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-input">
+                            <span class="input-label">Project Name</span>
+                            <div class="input-field">Tower_Block_A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==============================================================
+         SCHEME C: Data Engineered
+         ============================================================== -->
+    <section class="scheme-section scheme-c">
+        <div class="scheme-header">
+            <div class="scheme-title">C. Data Engineered (SaaS)</div>
+            <div class="font-pairing-badge">
+                <div class="fp-item"><span class="fp-label">Head</span>Manrope</div>
+                <div class="fp-item"><span class="fp-label">Body</span>Plus Jakarta</div>
+            </div>
+        </div>
+
+        <div class="visual-showcase">
+            <div class="hero-card">
+                <div class="aurora-bg" style="background: radial-gradient(circle at bottom right, #10b981, transparent 70%);"></div>
+                <div class="hero-content">
+                    <span class="demo-tag">AI Solution</span>
+                    <div class="demo-title">Generative<br>Intelligence</div>
+                    <div class="demo-desc">
+                        Our neural engines optimize structural integrity through deep learning, bridging the gap between abstract design and physical reality.
+                    </div>
+                </div>
+            </div>
+            <div class="content-context">
+                <span class="context-label">Article Typography</span>
+                <div class="article-preview">
+                    <h3>The Architecture of Intelligence</h3>
+                    <p>
+                        Generative models have revolutionized how we conceive spatial design. By analyzing millions of data points, these systems bridge the gap between abstract creativity and structural engineering. The precision of the algorithm meets the intuition of the human mind, creating a new paradigm for the built environment.
+                    </p>
+                    <a href="#" class="read-more-link">Read Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-kit">
+            <div class="kit-title">UI Strategy Variants (Scheme C)</div>
+            <div class="kit-grid">
+                <!-- 1. Navigation -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Navigation</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-nav">
+                            <span class="nav-link active">Dashboard</span>
+                            <span class="nav-link">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Status Tags -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Status Tags</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-tags">
+                            <span class="status-tag tag-primary">v2.4.0 Beta</span>
+                            <span class="status-tag tag-neutral">Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Input Label -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Input Label</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-input">
+                            <span class="input-label">Project Name</span>
+                            <div class="input-field">Tower_Block_A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==============================================================
+         SCHEME D: Structural BIM
+         ============================================================== -->
+    <section class="scheme-section scheme-d">
+        <div class="scheme-header">
+            <div class="scheme-title">D. Structural BIM (Construction)</div>
+            <div class="font-pairing-badge">
+                <div class="fp-item"><span class="fp-label">Head</span>Outfit</div>
+                <div class="fp-item"><span class="fp-label">Body</span>Inter</div>
+                <div class="fp-item" style="background:#fff7ed; color:#c2410c"><span class="fp-label">Mono</span>Roboto Mono</div>
+            </div>
+        </div>
+
+        <div class="visual-showcase">
+            <div class="hero-card">
+                <div class="aurora-bg" style="background: radial-gradient(circle at top left, #f97316, transparent 60%);"></div>
+                <div class="hero-content">
+                    <span class="demo-tag">AI Solution</span>
+                    <div class="demo-title">Generative<br>Intelligence</div>
+                    <div class="demo-desc">
+                        Our neural engines optimize structural integrity through deep learning, bridging the gap between abstract design and physical reality.
+                    </div>
+                </div>
+            </div>
+            <div class="content-context">
+                <span class="context-label">Article Typography</span>
+                <div class="article-preview">
+                    <h3>The Architecture of Intelligence</h3>
+                    <p>
+                        Generative models have revolutionized how we conceive spatial design. By analyzing millions of data points, these systems bridge the gap between abstract creativity and structural engineering. The precision of the algorithm meets the intuition of the human mind, creating a new paradigm for the built environment.
+                    </p>
+                    <a href="#" class="read-more-link">Read Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-kit">
+            <div class="kit-title">UI Strategy Variants (Scheme D)</div>
+            <div class="kit-grid">
+                <!-- 1. Navigation -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Navigation</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-nav">
+                            <span class="nav-link active">Dashboard</span>
+                            <span class="nav-link">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Status Tags -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Status Tags</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-tags">
+                            <span class="status-tag tag-primary">v2.4.0 Beta</span>
+                            <span class="status-tag tag-neutral">Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Input Label -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Input Label</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-input">
+                            <span class="input-label">Project Name</span>
+                            <div class="input-field">Tower_Block_A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==============================================================
+         SCHEME E: Industrial Blueprint
+         ============================================================== -->
+    <section class="scheme-section scheme-e">
+        <div class="scheme-header">
+            <div class="scheme-title">E. Industrial Blueprint (Engineering)</div>
+            <div class="font-pairing-badge">
+                <div class="fp-item"><span class="fp-label">Head</span>IBM Plex Sans</div>
+                <div class="fp-item"><span class="fp-label">Body</span>IBM Plex Sans</div>
+                <div class="fp-item" style="background:#e0f2fe; color:#0369a1"><span class="fp-label">Mono</span>IBM Plex Mono</div>
+            </div>
+        </div>
+
+        <div class="visual-showcase">
+            <div class="hero-card">
+                <div class="aurora-bg" style="background: radial-gradient(circle at bottom left, #2563eb, transparent 60%);"></div>
+                <div class="hero-content">
+                    <span class="demo-tag">AI Solution</span>
+                    <div class="demo-title">Generative<br>Intelligence</div>
+                    <div class="demo-desc">
+                        Our neural engines optimize structural integrity through deep learning, bridging the gap between abstract design and physical reality.
+                    </div>
+                </div>
+            </div>
+            <div class="content-context">
+                <span class="context-label">Article Typography</span>
+                <div class="article-preview">
+                    <h3>The Architecture of Intelligence</h3>
+                    <p>
+                        Generative models have revolutionized how we conceive spatial design. By analyzing millions of data points, these systems bridge the gap between abstract creativity and structural engineering. The precision of the algorithm meets the intuition of the human mind, creating a new paradigm for the built environment.
+                    </p>
+                    <a href="#" class="read-more-link">Read Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-kit">
+            <div class="kit-title">UI Strategy Variants (Scheme E)</div>
+            <div class="kit-grid">
+                <!-- 1. Navigation -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Navigation</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-nav">
+                            <span class="nav-link active">Dashboard</span>
+                            <span class="nav-link">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Status Tags -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Status Tags</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-tags">
+                            <span class="status-tag tag-primary">v2.4.0 Beta</span>
+                            <span class="status-tag tag-neutral">Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Input Label -->
+                <div class="strategy-item">
+                    <span class="strategy-label">Input Label</span>
+                    <div class="ui-demo-box">
+                        <div class="scheme-input">
+                            <span class="input-label">Project Name</span>
+                            <div class="input-field">Tower_Block_A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
+
+
+//https://gemini.google.com/share/6fe6a2c4633c

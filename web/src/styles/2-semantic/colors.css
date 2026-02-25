@@ -1,0 +1,53 @@
+/* =========================================
+   2-SEMANTIC: COLOR SEMANTICS
+   Purpose-based color mappings
+   Maps primitives to meaningful roles
+   ========================================= */
+
+:root {
+  /* ═══════════════════════════════════════════
+     TEXT COLORS
+     6-level hierarchy for text contrast
+     ═══════════════════════════════════════════ */
+
+  /* Text on Light Backgrounds */
+  --text-strong: var(--color-slate-850);           /* Level 1: H1, H2 headings */
+  --text-base: var(--color-gray-900);              /* Level 2: Body text */
+  --text-muted: var(--color-gray-700);             /* Level 3: Secondary text, subtitles */
+  --text-sub: #475569;                             /* Level 4: Captions, metadata */
+  --text-soft: #94a3b8;                            /* Level 5: Disabled, placeholders */
+  --text-vsoft: var(--color-slate-300);            /* Level 6: Decorative, borders */
+
+  /* Text on Dark Backgrounds (Inverse) */
+  --text-inverse-strong: rgba(255, 255, 255, 0.95);       /* Level 1: Headings on dark */
+  --text-inverse-base: rgba(255, 255, 255, 0.85);  /* Level 2: Body on dark */
+  --text-inverse-muted: rgba(255, 255, 255, 0.75); /* Level 3: Secondary on dark */
+  --text-inverse-sub: rgba(255, 255, 255, 0.65);   /* Level 4: Captions on dark */
+  --text-inverse-soft: rgba(255, 255, 255, 0.45);  /* Level 5: Disabled on dark */
+  --text-inverse-vsoft: rgba(255, 255, 255, 0.2);  /* Level 6: Decorative on dark */
+
+  /* Accent Text */
+  --text-accent: var(--color-slate-950);
+  --line-soft:var(--color-gray-300);
+
+  /* ═══════════════════════════════════════════
+     BRAND COLORS
+     ═══════════════════════════════════════════ */
+  --brand-primary: var(--color-green-700);         /* Forest green */
+  --brand-accent: var(--color-blue-500);           /* Action blue */
+
+  /* ═══════════════════════════════════════════
+     GRADIENT ACCENTS
+     Shared across Product & JARVIS pages
+     ═══════════════════════════════════════════ */
+  --gradient-accent: linear-gradient(93deg, var(--color-violet) 0%, var(--color-cyan) 100%);
+  --gradient-accent-text: linear-gradient(to right, var(--color-violet), var(--color-cyan));
+
+  /* ═══════════════════════════════════════════
+     SEMANTIC STATUS COLORS
+     ═══════════════════════════════════════════ */
+  --status-error: #ff4136;
+  --link-color: var(--brand-accent);
+  --link-hover: rgba(var(--color-blue-500-rgb), 0.33);
+  --hover-opacity: 0.33;
+}

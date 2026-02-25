@@ -1,0 +1,235 @@
+import React, { useState } from 'react';
+// 移除 next/link 引用以修復預覽錯誤，改用本地 Link 模擬
+// import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Facebook, Linkedin, Twitter, Youtube, Send, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+// --- 模擬 Next.js Link 組件 (修復預覽環境相容性) ---
+const Link = ({ href, children, className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+  <a href={href} className={className} {...props}>
+    {children}
+  </a>
+);
+
+// 模擬 UI 元件 (實際專案中應從 @/components/ui 導入)
+const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "default" | "outline" | "ghost" | "link", size?: "default" | "sm" | "icon", asChild?: boolean }>(
+  ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
+  const baseStyles = "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  const variants = {
+    default: "bg-slate-900 text-white hover:bg-slate-800", // Adjusted for light theme
+    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+    ghost: "hover:bg-slate-100 hover:text-slate-900", // Adjusted for light theme
+    link: "text-primary underline-offset-4 hover:underline",
+  };
+  const sizes = {
+    default: "h-10 px-4 py-2",
+    sm: "h-9 rounded-md px-3",
+    icon: "h-10 w-10",
+  };
+  // 簡單處理樣式合併
+  const combinedClassName = `${baseStyles} ${variants[variant] || variants.default} ${sizes[size] || sizes.default} ${className || ""}`;
+  return <button ref={ref} className={combinedClassName} {...props} />;
+});
+Button.displayName = "Button";
+
+const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, type, ...props }, ref) => {
+  return (
+    <input
+      type={type}
+      className={`flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${className}`}
+      ref={ref}
+      {...props}
+    />
+  );
+});
+Input.displayName = "Input";
+
+const Separator = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { orientation?: "horizontal" | "vertical", decorative?: boolean }>(
+  ({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
+  <div
+    ref={ref}
+    role={decorative ? "none" : "separator"}
+    aria-orientation={orientation}
+    className={`shrink-0 bg-slate-200 ${orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]"} ${className}`}
+    {...props}
+  />
+));
+Separator.displayName = "Separator";
+
+// --- Phase 5: 表單驗證與邏輯 (Zod Schema) ---
+const subscriptionSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+});
+
+type SubscriptionFormValues = z.infer<typeof subscriptionSchema>;
+
+export default function Footer() {
+  // --- Phase 5: 狀態管理與表單初始化 (React Hook Form) ---
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<SubscriptionFormValues>({
+    resolver: zodResolver(subscriptionSchema),
+  });
+
+  // --- Phase 5: 資料提交 (模擬 TanStack Query Mutation) ---
+  const onSubmit = async (data: SubscriptionFormValues) => {
+    // 模擬 API 請求延遲
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    console.log("Subscription Data:", data);
+    setIsSubmitted(true);
+    reset();
+    
+    // 3秒後重置狀態，允許再次提交
+    setTimeout(() => setIsSubmitted(false), 3000);
+  };
+
+  // 連結數據 (源自 Docx)
+  const productLinks = [
+    { name: "JARVIS Agent", href: "/products/agent" },
+    { name: "JARVIS Pay", href: "/products/pay" },
+    { name: "JARVIS Air", href: "/products/air" },
+    { name: "JARVIS Eagle Eye", href: "/products/eagle-eye" },
+    { name: "JARVIS SSSS", href: "/products/ssss" },
+    { name: "JARVIS Assets", href: "/products/assets" },
+  ];
+
+  const companyLinks = [
+    { name: "About Us", href: "/about" },
+    { name: "Newsroom", href: "/newsroom" },
+    { name: "Careers", href: "/careers" },
+    { name: "Project Finance", href: "/finance" },
+    { name: "Venture Investments", href: "/ventures" },
+    { name: "Contact Us", href: "/contact" },
+  ];
+
+  return (
+    <footer className="w-full bg-gray-50 text-slate-900 border-t border-slate-200 font-sans">
+      <div className="container mx-auto px-6 py-16 lg:py-24">
+        
+        {/* 主要 Grid 佈局 */}
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-16">
+          
+          {/* Column 1: Brand & Vision */}
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-center space-x-3">
+              {/* 簡單的 Logo 佔位符 */}
+              <div className="h-9 w-9 bg-slate-900 rounded-md flex items-center justify-center font-bold text-white shadow-sm">iB</div>
+              <span className="text-2xl font-bold tracking-tight text-slate-900">isBIM</span>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed font-medium">
+              AI That Predicts. Systems That Deliver. Results That Scale.
+              <br className="mt-2"/>
+              <span className="text-slate-500 font-normal">Construction AI Powering the Backbone of Global Economies.</span>
+            </p>
+            
+            {/* Social Icons */}
+            <div className="flex space-x-1 pt-2">
+              {[<Linkedin key="li"/>, <Twitter key="tw"/>, <Youtube key="yt"/>, <Facebook key="fb"/>].map((icon, index) => (
+                <Button key={index} variant="ghost" size="icon" className="h-9 w-9 text-slate-500 hover:text-slate-900 transition-colors">
+                  {icon}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 2: Solutions (JARVIS) */}
+          <div className="flex flex-col space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+              AI Platforms
+            </h3>
+            <ul className="space-y-3 text-sm font-medium text-slate-600">
+              {productLinks.map((link) => (
+                <motion.li 
+                  key={link.name}
+                  whileHover={{ x: 4 }} // Phase 3: Framer Motion 微互動
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link href={link.href} className="hover:text-blue-600 transition-colors block py-1">
+                    {link.name}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div className="flex flex-col space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+              Company
+            </h3>
+            <ul className="space-y-3 text-sm font-medium text-slate-600">
+              {companyLinks.map((link) => (
+                <motion.li 
+                  key={link.name}
+                  whileHover={{ x: 4 }} // Phase 3: Framer Motion 微互動
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link href={link.href} className="hover:text-blue-600 transition-colors block py-1">
+                    {link.name}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Newsletter (Phase 5 Logic) */}
+          <div className="flex flex-col space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+              Stay Connected
+            </h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Join our network to get the latest insights on Digital Twins and AI Infrastructure.
+            </p>
+            
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3">
+              <div className="flex space-x-2">
+                <Input 
+                  {...register("email")}
+                  placeholder="Enter your email" 
+                  type="email"
+                  className="flex-1"
+                />
+                <Button type="submit" disabled={isSubmitting || isSubmitted} className="px-3 shadow-md">
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
+              </div>
+              {errors.email && (
+                <p className="text-xs text-red-500 font-medium pl-1">{errors.email.message}</p>
+              )}
+              {isSubmitted && (
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-xs text-green-600 font-medium pl-1"
+                >
+                  Thank you for subscribing!
+                </motion.p>
+              )}
+            </form>
+          </div>
+        </div>
+
+        <Separator className="my-12" />
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 space-y-4 md:space-y-0 font-medium">
+          <p>© 2025 isBIM Limited. All rights reserved.</p>
+          <div className="flex space-x-8">
+            <Link href="/privacy" className="hover:text-slate-900 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-900 transition-colors">Terms of Service</Link>
+            <Link href="/cookies" className="hover:text-slate-900 transition-colors">Cookie Settings</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

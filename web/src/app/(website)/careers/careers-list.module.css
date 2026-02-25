@@ -1,0 +1,348 @@
+@keyframes careersFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes careersFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer components {
+  .fadeIn {
+    animation: careersFadeIn var(--motion-base) cubic-bezier(0.16, 1, 0.3, 1)
+      forwards;
+  }
+
+  .fadeInUp {
+    animation: careersFadeInUp 0.2s var(--ease-out) forwards;
+  }
+
+  .controlsBar {
+    position: relative;
+    z-index: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .controlsBar > :last-child {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .controlsBar {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .clearFilterButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-sub);
+    background: transparent;
+    transition: background var(--motion-fast) var(--ease-smooth),
+      border-color var(--motion-fast) var(--ease-smooth),
+      color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .clearFilterButton:hover {
+    background: var(--button-primary-bg);
+    border-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+  }
+
+  .resultCount {
+    color: var(--text-soft);
+  }
+
+  .filterButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid transparent;
+    font-weight: var(--weight-medium);
+    transition: color var(--motion-fast) var(--ease-smooth),
+      border-color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .filterButtonActive {
+    color: var(--text-strong);
+    border-color: var(--text-strong);
+  }
+
+  .filterButtonInactive {
+    color: var(--text-sub);
+  }
+
+  .filterButtonInactive:hover {
+    color: var(--text-strong);
+    border-color: var(--line-soft);
+  }
+
+  .dropdownMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    width: 16rem;
+    padding-block: 0.25rem;
+    background: var(--surface-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-dropdown);
+    box-shadow: var(--shadow-xl);
+    z-index: var(--z-dropdown);
+  }
+
+  .hoverPopover {
+    z-index: var(--z-popover);
+  }
+
+  .dropdownOption {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: background var(--motion-fast) var(--ease-smooth),
+      color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .dropdownOption:hover {
+    background: var(--surface-subtle);
+    color: var(--text-strong);
+  }
+
+  .dropdownOptionSelected {
+    color: var(--text-strong);
+    font-weight: var(--weight-semibold);
+  }
+
+  .hoverCard {
+    background: var(--surface-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2xl);
+    padding: 1.25rem;
+    width: 320px;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .hoverCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-divider);
+  }
+
+  .hoverCardTeam {
+    color: var(--text-strong);
+  }
+
+  .hoverCardBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+    color: var(--text-muted);
+  }
+
+  .hoverCardMetaKey {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-soft);
+  }
+
+  .hoverCardMetaValue {
+    color: var(--text-muted);
+    font-weight: var(--weight-medium);
+  }
+
+  .hoverCardDeadlineRow {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-divider);
+  }
+
+  .hoverCardDeadlineValue {
+    color: var(--text-strong);
+    font-weight: var(--weight-semibold);
+  }
+
+  .popoverArrow {
+    position: absolute;
+    left: 1.5rem;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--surface-base);
+    filter: drop-shadow(0 4px 8px rgba(var(--shadow-tone), 0.12));
+  }
+
+  .listHeaderRow {
+    border-bottom: 1px solid var(--text-strong);
+    color: var(--text-soft);
+  }
+
+  .listRow {
+    border-bottom: 1px solid var(--border-divider);
+    border-radius: var(--radius-lg);
+    transition: background var(--motion-fast) var(--ease-smooth);
+  }
+
+  .listRow:hover {
+    background: var(--surface-subtle);
+  }
+
+  .listRowTitle {
+    color: var(--text-strong);
+    font-weight: var(--weight-semibold);
+    transition: color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .listRow:hover .listRowTitle {
+    color: var(--text-accent);
+  }
+
+  .listRowMobileMeta {
+    color: var(--text-sub);
+  }
+
+  .listRowMeta {
+    color: var(--text-muted);
+  }
+
+  .workModelBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    color: inherit;
+  }
+
+  .applyIcon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-soft);
+    transition: background var(--motion-fast) var(--ease-smooth),
+      border-color var(--motion-fast) var(--ease-smooth),
+      color var(--motion-fast) var(--ease-smooth),
+      transform var(--motion-fast) var(--ease-smooth);
+  }
+
+  .listRow:hover .applyIcon {
+    background: var(--button-primary-bg);
+    border-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    transform: translateX(0.25rem);
+  }
+
+  .emptyState {
+    padding-block: 5rem;
+    text-align: center;
+    color: var(--text-soft);
+  }
+
+  .newspaperCategoryTitle {
+    color: var(--text-strong);
+    opacity: 0.9;
+    font-weight: var(--weight-light);
+  }
+
+  .newspaperTeamTitle {
+    color: var(--text-soft);
+    border-bottom: 1px solid var(--border-divider);
+    padding-bottom: 0.5rem;
+  }
+
+  .newspaperItemRow {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: border-color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .newspaperItemRow:hover {
+    border-bottom-color: var(--text-strong);
+  }
+
+  .newspaperItemTitle {
+    color: var(--text-muted);
+    transition: color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .newspaperItemRow:hover .newspaperItemTitle {
+    color: var(--text-strong);
+  }
+
+  .newspaperMeta {
+    color: var(--text-soft);
+  }
+
+  .newspaperItemRow:hover .newspaperMeta {
+    color: var(--text-sub);
+  }
+
+  .newspaperDot {
+    background: var(--line-soft);
+  }
+
+  .newspaperArrow {
+    color: var(--text-soft);
+    transition: color var(--motion-fast) var(--ease-smooth);
+  }
+
+  .newspaperItemRow:hover .newspaperArrow {
+    color: var(--text-strong);
+  }
+
+  .emptyCard {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: rgba(var(--surface-base-rgb), 0.8);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
+  }
+
+  .emptyCardText {
+    color: var(--text-muted);
+  }
+}

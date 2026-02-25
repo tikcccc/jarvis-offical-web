@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookies at isBIM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Palantir-inspired Typography & Layout */
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        /* Large Heading Style - Adjusted size and weight */
+        h1.hero-title {
+            font-size: 4.5rem; /* Larger scale */
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            font-weight: 500; /* Slightly lighter weight for modern look */
+        }
+
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .accordion-button {
+            width: 100%;
+            padding: 2.5rem 0; /* More padding */
+            text-align: left;
+            font-size: 1.75rem; /* Larger question text */
+            font-weight: 400; /* Lighter weight */
+            color: #111;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .accordion-button:hover {
+            color: #444;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out, padding 0.5s ease;
+            opacity: 0;
+            padding-bottom: 0;
+        }
+        .accordion-content.open {
+            opacity: 1;
+            padding-bottom: 2rem;
+            /* max-height is set via JS */
+        }
+        
+        /* Icon rotation - Thinner icon */
+        .icon-plus {
+            transition: transform 0.3s ease;
+            font-weight: 200; /* Thinner */
+            font-size: 2rem; /* Larger */
+            color: #9ca3af; /* Gray-400 */
+        }
+        .accordion-button.active .icon-plus {
+            transform: rotate(45deg); /* Turns + into x */
+            color: #111;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 3px; }
+    </style>
+</head>
+<body class="antialiased text-base">
+
+    <!-- Main Content Area Only -->
+    <div class="max-w-6xl mx-auto px-6 py-20"> <!-- Wider container -->
+        
+        <!-- Hero Section -->
+        <div class="mb-32"> <!-- Increased bottom margin for more whitespace -->
+            
+            <h1 class="hero-title text-black mb-8">Cookies at isBIM</h1>
+
+            <div class="text-sm font-medium text-gray-500 italic mb-12 pl-1">
+                Last updated December 2026
+            </div>
+
+            <div class="text-xl leading-relaxed text-gray-800 max-w-4xl font-light">
+                This Cookie Statement ("Statement") explains how isBIM Limited uses cookies and similar technologies when you visit our website. It forms part of our Privacy Notice and explains what cookies are and how we use them.
+            </div>
+        </div>
+
+        <!-- Accordion Section - Top Border Added -->
+        <div class="border-t border-black"> <!-- Darker top border -->
+
+            <!-- Item 1 -->
+            <div class="accordion-item">
+                <button class="accordion-button" onclick="toggleAccordion(1)">
+                    <span>What Are Cookies and Similar Technologies?</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div id="content-1" class="accordion-content">
+                    <div class="text-gray-600 leading-relaxed space-y-6 text-lg max-w-4xl font-light">
+                        <p>
+                            Cookies are small data files that are placed on your computer or mobile device when you visit a website. These text files can be read by website operators and help to identify when you return to a website.
+                        </p>
+                        <p>
+                            <strong>Session cookies</strong> only last until your browser is closed. They are then deleted.<br>
+                            <strong>Persistent cookies</strong> will remain on your device until they expire or are deleted by you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="accordion-item">
+                <button class="accordion-button" onclick="toggleAccordion(2)">
+                    <span>How Do We Use Cookies?</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div id="content-2" class="accordion-content">
+                    <div class="text-gray-600 leading-relaxed space-y-6 text-lg max-w-4xl font-light">
+                        <p>
+                            We and our third-party partners may use cookies to store information that helps us provide a secure and efficient service. However, isBIM maintains a minimal data footprint.
+                        </p>
+                        <div class="pl-6 border-l-2 border-black ml-1">
+                            <p class="mb-2 text-black font-medium">Strictly Necessary cookies:</p>
+                            <p>These cookies are strictly necessary for the website to operate and to provide you with our services, such as setting your privacy preferences or ensuring site security via Cloudflare. Because these cookies are strictly necessary, you cannot refuse them without impacting how our services function.</p>
+                        </div>
+                        <p class="text-sm italic text-gray-400 mt-2">Note: We do not use Targeting or Advertising cookies on this website.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="accordion-item">
+                <button class="accordion-button" onclick="toggleAccordion(3)">
+                    <span>Your Choices, Your Control</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div id="content-3" class="accordion-content">
+                    <div class="text-gray-600 leading-relaxed space-y-6 text-lg max-w-4xl font-light">
+                        <p>You can control which cookies are used in various ways:</p>
+                        <ul class="list-disc pl-5 space-y-3 marker:text-gray-300">
+                            <li>
+                                <strong class="text-black font-medium">Browser settings:</strong> You can configure your browser to delete cookies, accept cookies, or reject cookies manually at any time.
+                            </li>
+                            <li>
+                                <strong class="text-black font-medium">Clear Cache:</strong> You can manually delete previously stored cookies via your browser's history settings.
+                            </li>
+                        </ul>
+                        <p class="text-base text-gray-500 mt-4">
+                            Please note: If you configure your browser to reject all cookies (including strictly necessary ones), certain features of the website may not function properly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="accordion-item">
+                <button class="accordion-button" onclick="toggleAccordion(4)">
+                    <span>How Often Will You Update This Statement?</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div id="content-4" class="accordion-content">
+                    <div class="text-gray-600 leading-relaxed text-lg max-w-4xl font-light">
+                        <p>
+                            We may update this Statement from time to time in order to reflect, for example, changes to the cookies we use or for other operational, legal, or regulatory reasons. Please therefore re-visit this Statement regularly to stay informed. The date at the top of this Statement indicates when it was last updated.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="accordion-item">
+                <button class="accordion-button" onclick="toggleAccordion(5)">
+                    <span>Where Can I Get Further Information?</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div id="content-5" class="accordion-content">
+                    <div class="text-gray-600 leading-relaxed text-lg max-w-4xl font-light">
+                        <p>
+                            If you have any questions about how we process your information, please review our Privacy Policy or email us at <a href="mailto:solution@isbim.com.hk" class="text-black font-medium underline decoration-1 underline-offset-4 hover:bg-black hover:text-white transition-all px-1 -ml-1 rounded-sm">solution@isbim.com.hk</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Accordion Logic
+        function toggleAccordion(index) {
+            const content = document.getElementById(`content-${index}`);
+            const button = content.previousElementSibling;
+            
+            // Toggle current item
+            if (content.classList.contains('open')) {
+                content.style.maxHeight = null;
+                content.classList.remove('open');
+                button.classList.remove('active');
+            } else {
+                content.classList.add('open');
+                // Allow a bit of extra height for padding
+                content.style.maxHeight = (content.scrollHeight + 50) + "px";
+                button.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

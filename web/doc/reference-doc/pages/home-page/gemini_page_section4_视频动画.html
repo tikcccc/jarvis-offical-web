@@ -1,0 +1,157 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+
+// 定義資料結構
+interface PlatformItem {
+  id: string;
+  title: string;
+  description: string;
+  version: string;
+  videoUrl: string;
+}
+
+const platforms: PlatformItem[] = [
+  {
+    id: "01",
+    title: "AIP",
+    description: "Automate operations, from the factory floor to the front lines.",
+    version: "/0.1",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+  },
+  {
+    id: "02",
+    title: "Gotham",
+    description: "Achieve AI-driven combat superiority, from space to mud.",
+    version: "/0.2",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  },
+  {
+    id: "03",
+    title: "Foundry",
+    description: "Build and manage Ontology-powered software with a complete developer.",
+    version: "/0.3",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  },
+];
+
+export default function PlatformList() {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  return (
+    <div className="w-full min-h-screen bg-white text-slate-900 p-10 flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto w-full">
+        <h2 className="text-4xl font-medium mb-16 tracking-tight">Our Platforms</h2>
+        
+        <div className="flex flex-col">
+          {platforms.map((item) => (
+            <PlatformRow 
+              key={item.id} 
+              item={item} 
+              isHovered={hoveredId === item.id}
+              onHover={(id) => setHoveredId(id)}
+              onLeave={() => setHoveredId(null)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PlatformRow({ 
+  item, 
+  isHovered, 
+  onHover, 
+  onLeave 
+}: { 
+  item: PlatformItem; 
+  isHovered: boolean; 
+  onHover: (id: string) => void; 
+  onLeave: () => void;
+}) {
+  return (
+    <div 
+      className="relative border-t border-gray-200 py-12 group cursor-pointer"
+      onMouseEnter={() => onHover(item.id)}
+      onMouseLeave={onLeave}
+    >
+      {/* Grid 佈局更新 (Layout Update):
+         左側 (Text): col-span-3
+         中間 (Video): col-span-4
+         右側 (Title): col-span-5
+      */}
+      <div className="grid grid-cols-12 gap-6 items-center">
+        
+        {/* 1. 左側區域：純描述文字 (不再被覆蓋) */}
+        <div className="col-span-3 h-[160px] flex flex-col justify-between relative">
+          <div className="z-10 pointer-events-none">
+            <p className="text-xl leading-relaxed font-light text-gray-600">
+              {item.description}
+            </p>
+          </div>
+          <span className="text-sm text-gray-400 font-mono block mt-auto">
+            {item.version}
+          </span>
+        </div>
+
+        {/* 2. 中間區域：視頻容器 (只在 Hover 時顯示) */}
+        <div className="col-span-4 h-[160px] relative flex items-center justify-center">
+          <AnimatePresence>
+            {isHovered && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="absolute inset-0 z-20 overflow-hidden rounded-lg shadow-2xl bg-black"
+              >
+                <video
+                  src={item.videoUrl}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover opacity-90"
+                />
+                {/* UI 裝飾細節 */}
+                <div className="absolute top-3 left-3 flex gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                </div>
+                {/* 模擬 HUD 覆蓋層 */}
+                <div className="absolute bottom-4 left-4 text-[10px] text-white/70 font-mono">
+                  PLAYING: {item.title.toUpperCase()}_SEQ_01
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* 3. 右側區域：巨型標題 (保持原本的位移動畫) */}
+        <div className="col-span-5 flex items-center justify-start relative overflow-hidden pl-8">
+          <motion.h3
+            animate={{ x: isHovered ? 20 : 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            className="text-[100px] leading-none font-medium tracking-tighter text-slate-900 origin-left whitespace-nowrap"
+          >
+            {item.title}
+          </motion.h3>
+          
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? -10 : -20 }}
+            transition={{ duration: 0.3 }}
+            className="absolute left-0 top-1/2 -translate-y-1/2"
+          >
+             <ArrowRight className="w-8 h-8 text-slate-400" />
+          </motion.div>
+        </div>
+
+      </div>
+    </div>
+  );
+}

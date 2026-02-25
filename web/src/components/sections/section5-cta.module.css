@@ -1,0 +1,50 @@
+﻿.section {
+  background: var(--cta-bg);
+  color: var(--text-base);
+}
+
+.media {
+  border-radius: var(--cta-image-radius);
+  box-shadow: var(--cta-media-shadow);
+}
+
+.mediaBg {
+  background: var(--media-muted);
+}
+
+.mediaOverlay {
+  background: var(--cta-overlay);
+}
+
+/* 字體樣式已移至 .font-container-title utility class */
+.title {
+  color: var(--text-base);
+}
+
+/* 字體樣式已移至 .font-body-lg utility class */
+.subtitle {
+  color: var(--text-muted);
+}
+
+/* 字體樣式已移至 .font-body-base utility class */
+.buttonText {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-base);
+}
+
+.buttonVariant {
+  border-color: var(--cta-border);
+  color: var(--text-base);
+  background: transparent;
+  border-radius: var(--cta-button-radius);
+}
+
+.buttonVariant:hover {
+  background: var(--cta-hover-bg);
+  color: var(--cta-hover-text);
+}
+
+.buttonTransition {
+  transition-duration: var(--cta-button-transition, 0.3s);
+}

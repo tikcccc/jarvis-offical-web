@@ -1,0 +1,177 @@
+@reference "tailwindcss";
+
+@layer components {
+  .overlay {
+    @apply bg-[#050505] text-white overflow-y-scroll;
+  }
+
+  .overlay::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  .overlay::-webkit-scrollbar-thumb {
+    @apply bg-white/10;
+  }
+
+  .overlay::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .navIndexLabel {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 mb-8 tracking-[0.2em] uppercase;
+  }
+
+  .navTopItemTitle {
+    @apply text-3xl font-medium text-neutral-400 tracking-tight transition-colors;
+  }
+
+  @media (min-width: 1024px) {
+    .navTopItemTitle {
+      @apply text-4xl;
+    }
+  }
+
+  .navTopItem:hover .navTopItemTitle {
+    @apply text-white;
+  }
+
+  .navChildText {
+    @apply text-xl transition-colors;
+  }
+
+  .navChildTextHighlight {
+    @apply text-white font-medium;
+  }
+
+  .navChildTextNormal {
+    @apply text-neutral-400;
+  }
+
+  .navChild:hover .navChildTextHighlight {
+    @apply text-blue-400;
+  }
+
+  .navChild:hover .navChildTextNormal {
+    @apply text-white;
+  }
+
+  .mobileProductText {
+    @apply text-base text-neutral-400 transition-colors;
+  }
+
+  .mobileProduct:hover .mobileProductText {
+    @apply text-white;
+  }
+
+  .footerLink {
+    @apply text-sm text-neutral-400 transition-colors;
+  }
+
+  .footerLink:hover {
+    @apply text-white;
+  }
+
+  .productCatalogKicker {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 mb-3 tracking-widest uppercase;
+  }
+
+  .productCatalogTitle {
+    @apply text-4xl font-light text-white;
+  }
+
+  .productCatalogSubtitle {
+    @apply text-sm text-neutral-400 mt-2 block;
+  }
+
+  .deploymentsMeta {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-neutral-400 tracking-wider block uppercase;
+  }
+
+  .productCardName {
+    @apply text-lg font-semibold text-white transition-colors block;
+  }
+
+  .productCard:hover .productCardName {
+    @apply text-blue-400;
+  }
+
+  .productCardModule {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-neutral-500 uppercase tracking-wider whitespace-nowrap;
+  }
+
+  .productCardDesc {
+    @apply text-sm text-neutral-400 pl-5 leading-relaxed;
+  }
+
+  .defaultKicker {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 tracking-[0.2em] mb-4 block uppercase;
+  }
+
+  .defaultHeadline {
+    @apply text-3xl font-light text-white max-w-xl leading-snug;
+  }
+
+  .defaultHeadlineHighlight {
+    @apply text-blue-400;
+  }
+
+  .exploreCta {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium border border-white/25 px-6 py-3 text-neutral-300 uppercase tracking-widest inline-flex items-center gap-2 transition-colors;
+  }
+
+  .exploreCta:hover {
+    @apply text-white border-white/60;
+  }
+
+  .statLabel {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 tracking-[0.15em] mb-3 block uppercase;
+  }
+
+  .statValue {
+    @apply text-3xl font-medium text-white mb-2;
+  }
+
+  .statDesc {
+    @apply text-xs text-neutral-400 leading-tight;
+  }
+
+  .impactValue {
+    @apply text-xl font-semibold text-white block;
+  }
+
+  .impactLabel {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-neutral-300 uppercase tracking-wider block;
+  }
+
+  .newsKicker {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 tracking-[0.2em] uppercase;
+  }
+
+  .newsViewAll {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-neutral-300 uppercase tracking-widest flex items-center gap-2 transition-colors;
+  }
+
+  .newsViewAll:hover {
+    @apply text-white;
+  }
+
+  .featuredTag {
+    @apply bg-blue-600 text-white text-[10px] font-[family-name:var(--font-alliance-2)] font-bold px-2 py-1 uppercase inline-block;
+  }
+
+  .newsMeta {
+    @apply text-[10px] font-[family-name:var(--font-alliance-2)] font-medium text-blue-400 mb-2 block uppercase;
+  }
+
+  .newsTitle {
+    @apply text-xl text-neutral-300 leading-snug mb-2 transition-colors;
+  }
+
+  .newsCard:hover .newsTitle {
+    @apply text-white;
+  }
+
+  .newsExcerpt {
+    @apply text-sm text-neutral-400;
+  }
+}

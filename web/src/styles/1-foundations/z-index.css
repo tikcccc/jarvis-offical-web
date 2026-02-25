@@ -1,0 +1,87 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Z-INDEX SCALE - Foundation Layer
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Purpose: Define a consistent z-index scale for layering UI elements
+
+   Scale Strategy:
+   - Base: 0-10 (page content, sections)
+   - UI Elements: 100-500 (sticky headers, floating elements)
+   - Overlays: 1000-2000 (dropdowns, popovers, tooltips)
+   - Modals: 5000-9000 (dialogs, drawers, full-screen overlays)
+   - Critical: 9900+ (toast notifications, system alerts)
+
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     BASE LAYER (Page Content)
+     ───────────────────────────────────────────────────────────────────────── */
+  --z-base: 0;
+  --z-1: 1;
+  --z-5: 5;
+  --z-10: 10;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     UI ELEMENTS (Sticky, Fixed, Floating)
+     ───────────────────────────────────────────────────────────────────────── */
+  --z-sticky: 100;              /* Sticky headers, sidebars */
+  --z-fixed: 200;               /* Fixed navigation, FAB buttons */
+  --z-floating: 300;            /* Floating action buttons */
+  --z-header: 400;              /* Main site header */
+  --z-footer: 100;              /* Footer (usually lower than header) */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     OVERLAYS (Dropdowns, Popovers, Tooltips)
+     ───────────────────────────────────────────────────────────────────────── */
+  --z-dropdown: 1000;           /* Dropdown menus */
+  --z-popover: 1100;            /* Popovers */
+  --z-tooltip: 1200;            /* Tooltips */
+  --z-menu: 1300;               /* Context menus */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     MODALS & DIALOGS
+     ───────────────────────────────────────────────────────────────────────── */
+  --z-backdrop: 5000;           /* Modal backdrop/overlay */
+  --z-modal: 5100;              /* Modal dialogs */
+  --z-drawer: 5200;             /* Side drawers/panels */
+  --z-sheet: 5300;              /* Bottom sheets */
+  --z-fullscreen: 9000;         /* Full-screen overlays */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     CRITICAL UI (Always On Top)
+     ───────────────────────────────────────────────────────────────────────── */
+  --z-toast: 9900;              /* Toast notifications */
+  --z-alert: 9950;              /* System alerts */
+  --z-loading: 9999;            /* Loading screens */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   USAGE EXAMPLES
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Component CSS Module:
+   ```css
+   .header {
+     position: sticky;
+     top: 0;
+     z-index: var(--z-header);
+   }
+
+   .dropdown {
+     position: absolute;
+     z-index: var(--z-dropdown);
+   }
+
+   .modal-backdrop {
+     position: fixed;
+     z-index: var(--z-backdrop);
+   }
+
+   .modal-content {
+     position: fixed;
+     z-index: var(--z-modal);
+   }
+   ```
+
+   ═══════════════════════════════════════════════════════════════════════════ */

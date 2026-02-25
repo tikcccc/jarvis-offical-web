@@ -1,0 +1,48 @@
+/* =========================================
+   3-UTILITIES: SURFACE EFFECTS
+   Reusable surface patterns and overlays
+   ========================================= */
+
+@layer utilities {
+  /* PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+     NOISE TEXTURE OVERLAY
+     Premium grain texture for elevated surfaces
+
+     Usage: Add .surface-noise-overlay class to a container,
+     then add a child element with .noise-grain class
+
+     Example:
+     <div class="surface-noise-overlay">
+       <div class="noise-grain"></div>
+       <!-- content -->
+     </div>
+     PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP */
+
+  /* Container must be positioned for the overlay */
+  .surface-noise-overlay {
+    position: relative;
+    background: var(--surfact-softgray);
+  }
+
+  /* The actual noise grain layer */
+  .noise-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Alternative: Absolute positioned noise (for sections, not full page) */
+  .noise-grain-absolute {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+}

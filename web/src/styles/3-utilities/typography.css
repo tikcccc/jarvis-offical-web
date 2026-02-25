@@ -1,0 +1,45 @@
+/* =========================================
+   3-UTILITIES: TYPOGRAPHY CLASSES
+   Labels, text colors, and type utilities
+   ========================================= */
+
+@layer components {
+  /* ─────────────────────────────────────────
+     Text Color Utilities
+     Semantic text color classes
+     ───────────────────────────────────────── */
+
+  /* Light background text */
+  .text-strong { color: var(--text-strong); }
+  .text-base { color: var(--text-base); }
+  .text-muted { color: var(--text-muted); }
+  .text-subtle { color: var(--text-sub); }
+  .text-soft { color: var(--text-soft); }
+
+  /* Dark background text (inverse) */
+  .text-inverse { color: var(--text-inverse-strong); }
+  .text-inverse-base { color: var(--text-inverse-base); }
+  .text-inverse-muted { color: var(--text-inverse-muted); }
+  .text-inverse-subtle { color: var(--text-inverse-sub); }
+  .text-inverse-soft { color: var(--text-inverse-soft); }
+
+  /* ─────────────────────────────────────────
+     Gradient Text Utilities
+     For Product & JARVIS pages
+     ───────────────────────────────────────── */
+  .gradient-text {
+    background: var(--gradient-accent-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* fallback */
+  }
+
+  .gradient-text-neon {
+    background: linear-gradient(to right, var(--color-violet), var(--color-neon-cyan));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* fallback */
+  }
+}

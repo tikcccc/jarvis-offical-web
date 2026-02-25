@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS | Editorial Parallax</title>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font: Inter & Noto Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Hide scrollbar for cleaner look in some browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ICONS (Inline for stability) ---
+        const ArrowRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        );
+        const ArrowUpRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        );
+        const Menu = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        );
+        const X = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        );
+        const ChevronDown = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>
+        );
+
+        // --- DATA CONTENT MAPPING ---
+        const PAGES = {
+            JPM: {
+                hero: {
+                    title: "JPM",
+                    subTitle: "Project Management",
+                    desc: "Building the backbone of emerging economies.",
+                    tag: "Hong Kong Precision × China Scale",
+                    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" 
+                },
+                narrative: {
+                    label: "The Methodology",
+                    lead: "Traditional models fail.",
+                    sub: "We orchestrate differently.",
+                    p1: "Emerging economies demand infrastructure that is bankable, efficient, and defect-free. JPM fuses Hong Kong's rigorous professional services with China's unmatched manufacturing scale.",
+                    p2: "This isn't just construction; it's a strategic bridge to the Belt & Road initiative, powered by real-time digital twins and an ecosystem of 8,000+ vetted suppliers."
+                },
+                engine: [
+                    { id: "01", title: "HK Professional Services", desc: "Bilingual PM teams translating global standards into China-executable specs. Dual compliance expertise." },
+                    { id: "02", title: "AI Intelligence", desc: "Real-time digital twin predicting risks 30 days ahead at 89% accuracy. 3-minute executive dashboards." },
+                    { id: "03", title: "8,000+ Suppliers", desc: "Vetted MiC supply chain with 4-step matching: technical, experience, financial, and cultural fit." },
+                    { id: "04", title: "Global Delivery", desc: "End-to-end management. 35–45% less waste and 25–35% lower emissions." }
+                ],
+                stats: {
+                    label: "Performance Delta",
+                    main: { val: "20–30%", label: "PROJECT COST SAVINGS" },
+                    grid: [
+                        { val: "-45%", label: "Delivery Time" },
+                        { val: "5%", label: "Defect Rate (vs 18%)" },
+                        { val: "19%", label: "Overruns (vs 68%)" },
+                        { val: "24m", label: "Cash Cycle (vs 36m)" }
+                    ]
+                },
+                gallery: {
+                    title: "Africa 2025",
+                    meta: "HKD 13,000,000,000+ Signed",
+                    items: [
+                        { id: "01", loc: "CAMEROON", title: "National Engineering Initiative", desc: "28,000-unit City of Great Achievement + South Province Government HQ. Presidential approval secured.", metric: "HKD 760M" },
+                        { id: "02", loc: "NIGERIA", title: "Abuja Smart City", desc: "143-hectare luxury complex. MoU with Ministry of Housing. Speaker + 13 Governors engaged.", metric: "HKD 500M" }
+                    ]
+                }
+            },
+            BIM: {
+                hero: {
+                    title: "BIM",
+                    subTitle: "Consultancy",
+                    desc: "Mandated digital transformation.",
+                    tag: "Model • Coordinate • Comply",
+                    img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop"
+                },
+                narrative: {
+                    label: "The Mandate",
+                    lead: "Drawings are dead.",
+                    sub: "Compliance is mandatory.",
+                    p1: "Hong Kong's BIM journey started in 2017. Today, TC(W) No. 1/2025 makes BIM models contractually binding. isBIM has been there every step — delivering certified, compliant BIM for 2,600+ projects.",
+                    p2: "A single 3D digital twin replaces hundreds of conflicting 2D drawings. Everyone — architect, engineer, contractor — works on the same live model. No more arguments."
+                },
+                engine: [
+                    { id: "01", title: "Full BIM Modelling", desc: "LOD 300–500, Revit/IFC standards, and clash-free coordination for zero ambiguity." },
+                    { id: "02", title: "On-site Secondment", desc: "CIC/BSI-certified BIM Managers & Coordinators deployed directly to your project team." },
+                    { id: "03", title: "End-to-End Consultancy", desc: "From BEP creation and CDE setup to rigorous ISO 19650 compliance audits." },
+                    { id: "04", title: "Tendering Support", desc: "BIM-embedded BOQs, 5D cost models, and full ContractBIM compliance support." }
+                ],
+                stats: {
+                    label: "Impact Analysis",
+                    main: { val: "75%", label: "REWORK REDUCTION" },
+                    grid: [
+                        { val: "100%", label: "Mandate Ready" },
+                        { val: "72%", label: "Budget Accuracy" },
+                        { val: "-45%", label: "Timeline (4D Scheduling)" },
+                        { val: "2,600+", label: "Proven Projects" }
+                    ]
+                },
+                gallery: {
+                    title: "Proven Assets",
+                    meta: "1.2 Billion Sq.Ft Delivered",
+                    items: [
+                        { id: "01", loc: "HONG KONG", title: "M+ Museum", desc: "Delivering complex geometry coordination and asset management standards for a world-class cultural landmark.", metric: "ISO 19650" },
+                        { id: "02", loc: "INFRASTRUCTURE", title: "HKIA Expansion", desc: "Full lifecycle BIM implementation from investigation to 4D construction simulation for aviation hubs.", metric: "CIC GOLD" }
+                    ]
+                }
+            },
+            VENTURES: {
+                hero: {
+                    title: "VENTURES",
+                    subTitle: "Construction Tech",
+                    desc: "Globalising construction tech.",
+                    tag: "Physics + Intelligence",
+                    img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop"
+                },
+                narrative: {
+                    label: "The Playbook",
+                    lead: "VCs lack distribution.",
+                    sub: "We are the pipeline.",
+                    p1: "We partner with the sharpest construction-AI founders and give them what most VCs can't: instant commercial traction. We turn prototypes into revenue in months, not years.",
+                    p2: "Our conviction is simple: the winners will be those who fuse deep domain physics with frontier intelligence. We back them before anyone else sees it."
+                },
+                engine: [
+                    { id: "01", title: "Battle-Tested Distribution", desc: "20 years of domain expertise. We turn prototypes into revenue in months, not years." },
+                    { id: "02", title: "Conviction-Led Investment", desc: "First institutional capital for vertical AI, robotics, and digital twins." },
+                    { id: "03", title: "In-Kind Incubation", desc: "Accelerating product-market fit inside our own global pipeline of 2,600+ projects." },
+                    { id: "04", title: "Global Scale", desc: "Fastest route to AI-ready data centers in SE Asia and housing in Africa." }
+                ],
+                stats: {
+                    label: "Ecosystem Scale",
+                    main: { val: "2,600+", label: "LIVE PROJECTS ACCESS" },
+                    grid: [
+                        { val: "1.2B", label: "Sq.Ft Built Assets" },
+                        { val: "8,000+", label: "Supplier Network" },
+                        { val: "20 Yrs", label: "Domain Expertise" },
+                        { val: "Global", label: "Asia • Africa • Middle East" }
+                    ]
+                },
+                gallery: {
+                    title: "The Portfolio",
+                    meta: "Re-engineering Construction",
+                    items: [
+                        { id: "01", loc: "VERTICAL AI", title: "Autonomous Agents", desc: "Backing teams that automate complex construction workflows through generative design and scheduling.", metric: "SEED TO SERIES A" },
+                        { id: "02", loc: "HARDWARE", title: "Modular Robotics", desc: "Industrializing on-site assembly with precision robotics and computer vision systems.", metric: "GLOBAL PILOTS" },
+                        { id: "03", loc: "SMART CITIES", title: "Urban Operating Systems", desc: "Deploying city-scale digital twins and IoT networks to manage energy grid and traffic flows in emerging megacities.", metric: "SERIES B" }
+                    ]
+                }
+            },
+            FINANCE: {
+                hero: {
+                    title: "FINANCE",
+                    subTitle: "Infrastructure Capital",
+                    desc: "Infrastructure Finance.",
+                    tag: "Live JARVIS data + global capital = financial close",
+                    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop"
+                },
+                narrative: {
+                    label: "The Gap",
+                    lead: "Risk is opaque.",
+                    sub: "Data makes it visible.",
+                    p1: "Most global investors shy away from emerging economies due to non-commercial risk and lack of verifiable data. Billions in viable projects stay stranded.",
+                    p2: "We sit at the centre of a network of PE funds and multilateral banks. Because every project runs on JARVIS, we deliver the live transparency lenders demand."
+                },
+                engine: [
+                    { id: "01", title: "Global Capital Network", desc: "Access to leading PE funds, DFIs, export-credit agencies , and sovereign investors." },
+                    { id: "02", title: "Live Digital Twins", desc: "Real-time monitoring of every cost and schedule parameter." },
+                    { id: "03", title: "In-Kind Investment", desc: "We fund bankable feasibility studies and financial modelling to de-risk projects early." },
+                    { id: "04", title: "30-Day Forecasting", desc: "Audited cost curves and risk prediction giving lenders certainty." }
+                ],
+                stats: {
+                    label: "Risk Mitigation",
+                    main: { val: "T+1", label: "REAL-TIME REPORTING" },
+                    grid: [
+                        { val: "30 Days", label: "Risk Forecast Horizon" },
+                        { val: "0", label: "Blind Spots" },
+                        { val: "100%", label: "Bankable Studies" },
+                        { val: "AAA", label: "Standard Compliance" }
+                    ]
+                },
+                gallery: {
+                    title: "Asset Classes",
+                    meta: "Making Infrastructure Bankable",
+                    items: [
+                        { id: "01", loc: "GREEN ENERGY", title: "Renewable Power", desc: "Structuring finance for solar and wind power projects in emerging markets.", metric: "ESG COMPLIANT" },
+                        { id: "02", loc: "DIGITAL INFRA", title: "Data Centres", desc: "Providing cost certainty and opaque cost trajectory solutions for emerging markets.", metric: "AUDITED COST CURVES" }
+                    ]
+                }
+            }
+        };
+
+        // --- COLOR PALETTE ---
+        const COLORS = {
+            textStrong: "text-slate-900", 
+            textBase: "text-gray-900",   
+            textMuted: "text-slate-700",  
+            textSub: "text-slate-600",     
+            textSoft: "text-slate-400",    
+            textVSoft: "text-slate-300",   
+            
+            textInvStrong: "text-white",
+            textInvBase: "text-white/85",
+            textInvMuted: "text-white/75",
+            textInvSub: "text-white/65",
+            textInvVSoft: "text-white/20",
+
+            bgLight: "bg-white",
+            bgGray: "bg-slate-50", 
+            bgDark: "bg-[#1e1f2b]", 
+        };
+
+        const SECTION_TITLE_STYLE = `${COLORS.textSub} text-3xl font-bold tracking-widest uppercase pb-4 inline-block mb-12`;
+
+        const EditorialTemplate = () => {
+            const [activeTab, setActiveTab] = useState('JPM');
+            const [scrolled, setScrolled] = useState(false);
+            const [menuOpen, setMenuOpen] = useState(false);
+
+            const content = PAGES[activeTab];
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                window.scrollTo(0, 0);
+            }, [activeTab]);
+
+            return (
+                <div className={`min-h-screen font-sans selection:bg-[#18181b] selection:text-[#ffffff] transition-colors duration-700`}>
+                
+                {/* ========================================
+                    1. FIXED BACKGROUND LAYER (Z-INDEX 0)
+                    The Parallax/Curtain Effect Base
+                    ======================================== */}
+                <div className="fixed inset-0 z-0 w-full h-screen overflow-hidden">
+                    <img 
+                        key={activeTab} 
+                        src={content.hero.img} 
+                        alt="Hero Background" 
+                        className="w-full h-full object-cover animate-[fadeIn_1s_ease-in]"
+                    />
+                    {/* Overlay Gradient for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40"></div>
+                </div>
+
+                {/* Navigation - Fixed topmost (Z-INDEX 50) */}
+                <nav className={`fixed w-full z-50 transition-all duration-500 ease-in-out ${scrolled ? `py-4 ${COLORS.bgLight}/95 backdrop-blur-md border-b border-[#e5e7eb]` : 'py-8 bg-transparent border-transparent'}`}>
+                    <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
+                    
+                    {/* Logo / Brand */}
+                    <div className="flex items-center space-x-6">
+                        <div className={`text-sm font-bold tracking-widest uppercase transition-colors duration-300 ${scrolled ? COLORS.textStrong : 'text-white'}`}>
+                        JARVIS / {activeTab}
+                        </div>
+                    </div>
+
+                    {/* Desktop Nav */}
+                    <div className="hidden lg:flex items-center space-x-12">
+                        {Object.keys(PAGES).map((key) => (
+                        <button
+                            key={key}
+                            onClick={() => setActiveTab(key)}
+                            className={`text-xs font-bold tracking-widest uppercase transition-all duration-300 relative group ${
+                            scrolled 
+                                ? (activeTab === key ? COLORS.textStrong : `${COLORS.textSub} hover:${COLORS.textBase}`)
+                                : (activeTab === key ? 'text-white' : 'text-white/60 hover:text-white')
+                            }`}
+                        >
+                            {key}
+                            <span className={`absolute -bottom-2 left-0 w-full h-px transform origin-left transition-transform duration-300 ${activeTab === key ? 'scale-x-100' : 'scale-x-0'} ${scrolled ? 'bg-[#18181b]' : 'bg-white'}`}></span>
+                        </button>
+                        ))}
+                        <button className={`px-6 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${
+                        scrolled
+                            ? `bg-[#18181b] text-white hover:bg-slate-700`
+                            : `bg-white text-[#18181b] hover:bg-gray-200`
+                        }`}>
+                        Inquire
+                        </button>
+                    </div>
+
+                    {/* Mobile Menu Toggle */}
+                    <button className="lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+                        {menuOpen ? <X className={scrolled ? 'text-[#18181b]' : 'text-white'} /> : <Menu className={scrolled ? 'text-[#18181b]' : 'text-white'} />}
+                    </button>
+                    </div>
+                </nav>
+
+                {/* Mobile Menu Overlay */}
+                {menuOpen && (
+                    <div className={`fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8 lg:hidden ${COLORS.bgLight} ${COLORS.textStrong}`}>
+                    {Object.keys(PAGES).map((key) => (
+                        <button
+                            key={key}
+                            onClick={() => { setActiveTab(key); setMenuOpen(false); }}
+                            className="text-2xl font-bold tracking-widest uppercase"
+                        >
+                            {key}
+                        </button>
+                        ))}
+                    </div>
+                )}
+
+                {/* ========================================
+                    2. HERO TEXT SCROLLABLE LAYER (Z-INDEX 10)
+                    Transparent, scrolls up to reveal image, then gets covered.
+                    ======================================== */}
+                <div className="relative z-10 pointer-events-none"> 
+                    <header className="h-screen w-full flex flex-col justify-end pb-20 md:pb-32">
+                    <div className="container mx-auto px-6 md:px-12 pointer-events-auto">
+                        <div className="grid grid-cols-12 gap-6 items-end">
+                        <div className="col-span-12 lg:col-span-8">
+                            <div className="w-24 h-1 bg-white mb-8"></div>
+                            <h1 className="text-[15vw] md:text-[10rem] font-black leading-[0.8] tracking-tighter mb-4 mix-blend-overlay opacity-90 text-white">
+                                {content.hero.title}
+                            </h1>
+                            <h2 className="text-4xl md:text-7xl font-light tracking-tight text-white/90 leading-none">
+                                {content.hero.subTitle}
+                            </h2>
+                        </div>
+                        <div className="col-span-12 lg:col-span-4 flex flex-col justify-end">
+                            <p className="text-xl md:text-2xl font-light leading-relaxed mb-8 text-white/80 border-l-2 border-white/30 pl-6">
+                                {content.hero.desc} <br/>
+                                <span className="text-white/50 text-base mt-2 block font-mono uppercase tracking-wider">{content.hero.tag}</span>
+                            </p>
+                            <div className="animate-bounce">
+                                <ChevronDown className="w-6 h-6 text-white/50" />
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </header>
+                </div>
+
+                {/* ========================================
+                    3. CONTENT CURTAIN LAYER (Z-INDEX 20)
+                    The "Curtain" that slides up over the fixed background.
+                    Requires a solid background color.
+                    ======================================== */}
+                <div className={`relative z-20 ${COLORS.bgLight} shadow-[0_-50px_100px_rgba(0,0,0,0.5)]`}>
+                    
+                    {/* SECTION 2: The Narrative */}
+                    <section className={`py-32 px-6 md:px-12 ${COLORS.bgLight}`}>
+                    <div className="container mx-auto">
+                        <h2 className={SECTION_TITLE_STYLE}>
+                            {content.narrative.label}
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start mt-4">
+                            <div className="md:col-span-5">
+                                <p className={`text-4xl md:text-6xl font-bold leading-tight tracking-tight ${COLORS.textStrong} mb-8`}>
+                                    {content.narrative.lead} <br/>
+                                    <span className={`${COLORS.textMuted} font-medium`}>
+                                        {content.narrative.sub}
+                                    </span>
+                                </p>
+                            </div>
+                            
+                            <div className="md:col-span-1"></div> 
+                            <div className="md:col-span-6 space-y-8 pt-2">
+                                <p className={`text-lg md:text-xl ${COLORS.textBase} leading-relaxed font-light border-l border-slate-900 pl-6`}>
+                                    {content.narrative.p1}
+                                </p>
+                                <p className={`text-lg ${COLORS.textMuted} leading-relaxed pl-6`}>
+                                    {content.narrative.p2}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+
+                    {/* SECTION 3: The Engine */}
+                    <section className={`py-24 px-6 md:px-12 ${COLORS.bgGray}`}>
+                    <div className="container mx-auto">
+                        <h3 className={SECTION_TITLE_STYLE}>THE ENGINE</h3>
+                        
+                        <div className="flex flex-col mt-8">
+                            {content.engine.map((item, idx) => (
+                                <div key={idx} className={`group flex flex-col md:flex-row md:items-baseline border-t border-slate-300 py-12 transition-colors duration-300 hover:bg-white
+                                ${idx === 0 ? 'border-t-slate-900' : ''}
+                                ${idx === 3 ? 'border-b' : ''}
+                                `}>
+                                    <span className={`text-sm font-mono mr-12 ${COLORS.textSub} group-hover:${COLORS.textStrong} transition-colors min-w-[3ch]`}>
+                                        {item.id}
+                                    </span>
+                                    <h4 className={`text-3xl md:text-4xl font-medium w-full md:w-1/3 mb-4 md:mb-0 ${COLORS.textStrong}`}>
+                                        {item.title}
+                                    </h4>
+                                    <p className={`w-full md:w-1/2 font-light leading-relaxed ${COLORS.textMuted} group-hover:${COLORS.textBase} transition-colors`}>
+                                        {item.desc}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    </section>
+
+                    {/* SECTION 4: Data */}
+                    <section className={`py-32 px-6 md:px-12 ${COLORS.bgLight}`}>
+                    <div className="container mx-auto">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                            <div className="relative">
+                                <h3 className={SECTION_TITLE_STYLE}>
+                                    {content.stats.label}
+                                </h3>
+
+                                <p className={`text-2xl leading-relaxed ${COLORS.textBase} font-light mt-4`}>
+                                    Traditional construction is plagued by <span className={`${COLORS.textSoft}`}>uncertainty</span>. JARVIS delivers mathematical certainty.
+                                </p>
+                                
+                                <div className="mt-12 p-10 bg-gray-100 text-slate-900">
+                                    <span className={`block text-xs font-mono mb-4 ${COLORS.textSub} tracking-widest`}>
+                                        {content.stats.main.label}
+                                    </span>
+                                    <span className="text-6xl md:text-8xl font-bold tracking-tighter">
+                                        {content.stats.main.val}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-x-12 gap-y-16 mt-8 lg:mt-0">
+                                {content.stats.grid.map((stat, idx) => (
+                                    <div key={idx} className={`flex flex-col justify-end border-l pl-6 ${idx % 2 === 0 ? 'border-slate-900' : 'border-slate-200'}`}>
+                                        <span className={`text-4xl md:text-5xl font-light mb-2 ${COLORS.textStrong}`}>{stat.val}</span>
+                                        <span className={`text-xs font-bold tracking-widest uppercase ${COLORS.textSub}`}>{stat.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+
+                    {/* SECTION 5: Gallery - DARK THEME Charcoal-900 */}
+                    <section className={`py-32 px-6 md:px-12 ${COLORS.bgDark}`}>
+                    <div className="container mx-auto">
+                        <div className={`flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/20 pb-8`}>
+                            <div>
+                                <span className={`block text-3xl font-bold tracking-widest uppercase pb-4 inline-block mb-12 ${COLORS.textInvSub}`}>THE GALLERY</span>
+                                <h2 className={`text-4xl md:text-6xl font-bold tracking-tight ${COLORS.textInvStrong}`}>{content.gallery.title}</h2>
+                            </div>
+                            <div className="text-right mt-8 md:mt-0">
+                                <p className={`text-xl md:text-2xl font-mono ${COLORS.textInvBase}`}>{content.gallery.meta}</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-32">
+                            {content.gallery.items.map((item, idx) => (
+                                <div key={idx} className="group grid grid-cols-1 md:grid-cols-12 gap-12 items-center cursor-pointer">
+                                    {/* Alternating Layout */}
+                                    <div className={`md:col-span-7 overflow-hidden ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
+                                        <div className="h-[400px] md:h-[600px] relative overflow-hidden bg-[#2a2b3d]">
+                                            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop" alt={item.loc} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-all duration-1000 ease-out grayscale group-hover:grayscale-0" />
+                                        </div>
+                                    </div>
+                                    <div className={`md:col-span-5 flex flex-col h-full justify-center py-4 ${idx % 2 === 1 ? 'md:order-1 md:text-right' : ''}`}>
+                                        <div>
+                                            <span className={`text-xs font-mono mb-6 block ${COLORS.textInvSub} tracking-widest`}>
+                                                {item.id} — {item.loc}
+                                            </span>
+                                            <h3 className={`text-3xl md:text-4xl font-bold mb-6 ${COLORS.textInvStrong} group-hover:${COLORS.textInvMuted} transition-colors`}>{item.title}</h3>
+                                            <p className={`text-lg font-light leading-relaxed mb-8 ${COLORS.textInvBase} ${idx % 2 === 1 ? 'ml-auto' : ''} max-w-md`}>
+                                                {item.desc}
+                                            </p>
+                                        </div>
+                                        <div className={`flex items-center border-t border-white/20 pt-6 ${idx % 2 === 1 ? 'justify-end' : 'justify-between'}`}>
+                                            <span className={`text-2xl font-mono ${COLORS.textInvStrong} ${idx % 2 === 1 ? 'order-2 ml-4' : ''}`}>{item.metric}</span>
+                                            <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-opacity text-white" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    </section>
+
+                    {/* FOOTER - DARK THEME Charcoal-900 */}
+                    <footer className={`py-20 px-6 md:px-12 ${COLORS.bgDark} border-t border-white/10`}>
+                    <div className="container mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div>
+                            <h2 className={`text-4xl md:text-6xl font-bold tracking-tighter mb-4 ${COLORS.textInvStrong}`}>Ready to Transform?</h2>
+                            <a href="#" className={`inline-flex items-center text-xl transition-colors group ${COLORS.textInvBase} hover:${COLORS.textInvMuted}`}>
+                                Book your {activeTab} session <ArrowRight className="ml-4 w-6 h-6 group-hover:translate-x-2 transition-transform"/>
+                            </a>
+                        </div>
+                        <div className="mt-12 md:mt-0 text-right">
+                            <p className={`text-sm font-mono ${COLORS.textInvSub}`}>JARVIS {activeTab}</p>
+                            <p className={`text-sm font-mono ${COLORS.textInvSub}`}>© 2025</p>
+                        </div>
+                    </div>
+                    </footer>
+
+                </div> {/* End of Z-20 Content Wrapper */}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<EditorialTemplate />);
+    </script>
+</body>
+</html>

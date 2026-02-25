@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding: GSAP + Lenis Demo</title>
+    
+    <!-- Tailwind CSS (用於快速構建 Phase 2 結構) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 模擬 Palantir 字體風格 -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* 隱藏滾動條但保持功能 (Lenis 推薦設置) */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 antialiased">
+
+    <!-- 頂部導航佔位 -->
+    <nav class="fixed top-0 left-0 w-full p-6 border-b border-zinc-200 bg-white/80 backdrop-blur-md z-50 flex justify-between items-center">
+        <div class="text-sm font-semibold tracking-widest uppercase">Vibe Coding Arch.</div>
+        <div class="text-xs text-zinc-500">Phase 3: Experience Layer Demo</div>
+    </nav>
+
+    <!-- Hero Section (佔位符，強迫用戶滾動) -->
+    <section class="h-screen flex flex-col items-center justify-center bg-white border-b border-zinc-200">
+        <h1 class="text-4xl md:text-6xl font-light tracking-tight text-center max-w-3xl leading-tight mb-8">
+            Scroll Down to Trigger <br>
+            <span class="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-500">The Narrative Animation</span>
+        </h1>
+        <div class="animate-bounce mt-12">
+            <svg class="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <!-- 
+        Target CTA Section 
+        這就是我們之前 React 組件的 HTML 版本
+    -->
+    <section id="cta-section" class="w-full py-32 bg-zinc-50 overflow-hidden relative">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- 左側圖片區 -->
+                <!-- 初始狀態由 GSAP 控制，但在這裡我們不需要寫 CSS 隱藏，GSAP 會處理 -->
+                <div id="cta-image-container" class="relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-2xl bg-zinc-200">
+                    <img 
+                        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
+                        alt="Team Logic" 
+                        class="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-700 ease-in-out"
+                    />
+                    <!-- 裝飾性覆蓋層 -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-60"></div>
+                </div>
+
+                <!-- 右側內容區 -->
+                <div class="flex flex-col space-y-8 md:pl-12">
+                    <h2 class="cta-text text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 leading-tight">
+                        There is so much <br> left to build
+                    </h2>
+                    
+                    <p class="cta-text text-xl text-zinc-600 max-w-md leading-relaxed font-light">
+                        Palantirians deliver mission-critical outcomes for the West's most important institutions.
+                    </p>
+
+                    <!-- 按鈕 -->
+                    <div class="cta-text pt-4">
+                        <button class="group inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-zinc-300 bg-transparent hover:bg-zinc-900 hover:text-white h-12 px-8">
+                            Learn More
+                            <!-- 微互動：圖標移動 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 更多內容以展示離開視口的效果 -->
+    <section class="h-[50vh] bg-white border-t border-zinc-200 flex items-center justify-center">
+        <p class="text-zinc-400">End of Experience Layer</p>
+    </section>
+
+    <!-- 載入 Phase 3 關鍵技術庫 -->
+    <!-- 1. GSAP Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- 2. ScrollTrigger Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- 3. Lenis (Smooth Scroll) - 使用更穩定的 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+
+    <script>
+        // 使用 window.onload 確保所有外部腳本（Lenis, GSAP）完全載入後再執行
+        window.onload = function () {
+            
+            // 安全檢查：確保 Lenis 已定義
+            if (typeof Lenis === 'undefined') {
+                console.error("Lenis library failed to load.");
+                // 可選：這裡可以添加降級處理
+            } else {
+                // --- Phase 1: 初始化基礎設施 (Lenis) ---
+                // 核心職責：接管原生滾動，提供平滑的阻尼效果，讓 GSAP 的觸發更絲滑
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // 自定義緩動函數
+                    direction: 'vertical', 
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+            }
+
+
+            // 安全檢查：確保 GSAP 已定義
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                
+                // --- Phase 3: 體驗層 (GSAP + ScrollTrigger) ---
+                
+                // 註冊插件
+                gsap.registerPlugin(ScrollTrigger);
+
+                // 建立時間軸
+                // 核心職責：定義「當滾動到特定位置時，元素該如何運動」
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#cta-section", // 監聽的容器
+                        start: "top 75%",        // 當區塊頂部到達視口 75% 高度時觸發
+                        end: "bottom 20%",
+                        toggleActions: "play none none reverse", // 進場播放，離開反轉 (可選)
+                        // markers: true         // 開發時可開啟此選項查看觸發線
+                    }
+                });
+
+                // 動畫 1: 左側圖片從左滑入
+                tl.from("#cta-image-container", {
+                    x: -80,              // 從左側 80px 處開始
+                    opacity: 0,          // 透明度從 0 開始
+                    duration: 1.2,       // 持續 1.2 秒
+                    ease: "power3.out"   // 緩動曲線 (Palantir 風格通常比較優雅，使用 power3 或 expo)
+                });
+
+                // 動畫 2: 右側文字序列上浮 (Stagger)
+                tl.from(".cta-text", {
+                    y: 40,               // 從下方 40px 開始
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.15,       // 每個元素之間間隔 0.15 秒
+                    ease: "power2.out"
+                }, "-=0.8");
+            
+            } else {
+                console.error("GSAP or ScrollTrigger failed to load.");
+            }
+        };
+    </script>
+</body>
+</html>

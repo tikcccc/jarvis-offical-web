@@ -1,0 +1,388 @@
+/* =========================================
+   3-UTILITIES: SERVICE TEMPLATE FONT TYPES
+   Service-specific typography system
+   ========================================= */
+
+@layer components {
+
+  /* ─────────────────────────────────────────
+     HERO SECTION
+     Copied from global font-types.css
+     ───────────────────────────────────────── */
+
+  /* Hero mega title - from .font-hero-mega */
+  .font-service-hero-mega {
+    font-family: var(--font-heading-en);
+    font-size: clamp(4rem, 15vw, 10rem);
+    font-weight: var(--weight-bold);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Hero sub-title (h2) - service specific inline style */
+  .font-service-hero-sub {
+    font-family: var(--font-body-en);
+    font-size: clamp(2.25rem, 5vw, 4.375rem); /* text-4xl → md:text-7xl */
+    font-weight: var(--weight-light);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  /* Hero tag - from .font-hero-tag */
+  .font-service-hero-tag {
+    font-family: var(--font-heading-en);
+    font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+    text-transform: uppercase;
+    font-weight: var(--weight-regular);
+    letter-spacing: 0.2em;
+  }
+
+  /* Hero subtitle (desc) - from .font-hero-subtitle */
+  .font-service-hero-subtitle {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  /* ─────────────────────────────────────────
+     SECTION TITLE (Shared across sections)
+     ───────────────────────────────────────── */
+
+  .font-service-section-title {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.75rem, 3vw, 1.875rem); /* ~text-3xl */
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─────────────────────────────────────────
+     METHODOLOGY SECTION
+     ───────────────────────────────────────── */
+
+  /* Lead headline */
+  .font-service-headline {
+    font-family: var(--font-body-en);
+    font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  /* Subheadline (sub) */
+  .font-service-subheadline {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* Body paragraph - light weight */
+  .font-service-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.9625rem, 2vw, 1.275rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* Body paragraph - regular weight (muted) */
+  .font-service-body-muted {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.9625rem, 2vw, 1.275rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* ─────────────────────────────────────────
+     ENGINE SECTION
+     ───────────────────────────────────────── */
+
+  /* Index number (01, 02, etc.) */
+  .font-service-index {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.875rem; /* text-sm */
+    font-weight: var(--weight-regular);
+    line-height: 1.4;
+  }
+
+  /* Card title */
+  .font-service-card-title {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.875rem, 3vw, 2.25rem); /* text-3xl → text-4xl */
+    font-weight: var(--weight-medium);
+    line-height: 1.2;
+    letter-spacing: 0em;
+  }
+
+  /* Card body */
+  .font-service-card-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.9625rem, 2vw, 1.275rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* Inline emphasis inside card body (renderWithBold) */
+  .font-service-card-body-strong {
+    font-weight: var(--weight-medium);
+    color: var(--text-strong);
+  }
+
+  /* ─────────────────────────────────────────
+     GALLERY SECTION
+     ───────────────────────────────────────── */
+
+  /* Display title (large section title) */
+  .font-service-display {
+    font-family: var(--font-body-en);
+    font-size: clamp(2.25rem, 4vw, 3.75rem); /* text-4xl → text-6xl */
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  /* Meta text (right side) */
+  .font-service-meta {
+    font-family: var(--font-mono);
+    font-size: clamp(1.25rem, 2vw, 1.35rem); /* text-xl → text-2xl */
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+  }
+
+  /* Label (item id & location) */
+  .font-service-label {
+    font-family: var(--font-mono);
+    font-size: 0.9rem; /* text-xs */
+    font-weight: var(--weight-regular);
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Item title */
+  .font-service-item-title {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.875rem, 3vw, 2.25rem); /* text-3xl → text-4xl */
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  /* Item body (description) */
+  .font-service-item-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(1rem, 1.5vw, 1.125rem); /* text-base → text-lg */
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* Metric number */
+  .font-service-metric {
+    font-family: var(--font-body-en);
+    font-size: clamp(1rem, 1.5vw, 1.125rem); 
+    font-weight: var(--weight-medium);
+    line-height: 1.2;
+  }
+
+  /* ─────────────────────────────────────────
+     TIMELINE SECTION
+     ───────────────────────────────────────── */
+
+  /* Year label - from .font-label-lg */
+  .font-service-timeline-label {
+    font-family: var(--font-heading-en);
+    font-size: 0.875rem;
+    font-weight: var(--weight-semibold);
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Timeline title */
+  .font-service-timeline-title {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.25rem, 2vw, 1.5rem); /* text-xl → text-2xl */
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  /* Timeline body (description) - from .font-body-base */
+  .font-service-timeline-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.875rem, 1.5vw, 1rem); /* text-sm → text-base */
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* ─────────────────────────────────────────
+     CTA SECTION
+     ───────────────────────────────────────── */
+
+  /* CTA body text */
+  .font-service-cta-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.125rem, 2vw, 1.25rem); /* text-lg → text-xl */
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* CTA link text */
+  .font-service-cta-link {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.125rem, 2vw, 1.25rem); /* text-lg → text-xl */
+    font-weight: var(--weight-regular);
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+  /* 
+     DATA SECTION (Service template)
+
+  /* Intro paragraph */
+  .font-service-data-intro {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  /* Upper label/kicker */
+  .font-service-data-kicker {
+    font-family: var(--font-heading-en);
+    font-size: clamp(1rem, 1.8vw, 1.125rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Mono labels (e.g., stat meta, grid labels) */
+  .font-service-data-label {
+    font-family: var(--font-mono);
+    font-size: clamp(0.75rem, 1.25vw, 0.9375rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1.35;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Micro meta text (Before/After) */
+  .font-service-data-meta {
+    font-family: var(--font-mono);
+    font-size: clamp(0.6875rem, 1vw, 0.75rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.35;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Supporting stat value */
+  .font-service-data-value {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.25rem, 4vw, 3rem); /* text-4xl ?+' text-5xl */
+    font-weight: var(--weight-light);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+
+  /* Elevated stat value */
+  .font-service-data-value-emphasis {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  /* Emphasized stat value */
+  .font-service-data-value-strong {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  /* Hero stat value */
+  .font-service-data-figure {
+    font-family: var(--font-heading-en);
+    font-size: clamp(3.5rem, 8vw, 6rem); /* text-6xl ?+' text-8xl */
+    font-weight: var(--weight-bold);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+  }
+
+  /* Inline delta marker */
+  .font-service-data-accent {
+    font-family: var(--font-heading-en);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+
+  .font-service-timeline-pill {
+    font-family: var(--font-body-en);
+    font-size: 0.625rem;
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+}
+
+/* ─────────────────────────────────────────
+   CHINESE LOCALE: Line-height protection
+   ───────────────────────────────────────── */
+
+:lang(zh) .font-service-hero-mega,
+:lang(zh) .font-service-hero-sub,
+:lang(zh) .font-service-headline,
+:lang(zh) .font-service-display,
+:lang(zh) .font-service-card-title,
+:lang(zh) .font-service-item-title,
+:lang(zh) .font-service-timeline-title,
+:lang(zh-HK) .font-service-hero-mega,
+:lang(zh-HK) .font-service-hero-sub,
+:lang(zh-HK) .font-service-headline,
+:lang(zh-HK) .font-service-display,
+:lang(zh-HK) .font-service-card-title,
+:lang(zh-HK) .font-service-item-title,
+:lang(zh-HK) .font-service-timeline-title,
+:lang(zh-CN) .font-service-hero-mega,
+:lang(zh-CN) .font-service-hero-sub,
+:lang(zh-CN) .font-service-headline,
+:lang(zh-CN) .font-service-display,
+:lang(zh-CN) .font-service-card-title,
+:lang(zh-CN) .font-service-item-title,
+:lang(zh-CN) .font-service-timeline-title,
+:lang(zh-TW) .font-service-hero-mega,
+:lang(zh-TW) .font-service-hero-sub,
+:lang(zh-TW) .font-service-headline,
+:lang(zh-TW) .font-service-display,
+:lang(zh-TW) .font-service-card-title,
+:lang(zh-TW) .font-service-item-title,
+:lang(zh-TW) .font-service-timeline-title {
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+:lang(zh) .font-service-section-title,
+:lang(zh-HK) .font-service-section-title,
+:lang(zh-CN) .font-service-section-title,
+:lang(zh-TW) .font-service-section-title {
+  letter-spacing: 0;
+}

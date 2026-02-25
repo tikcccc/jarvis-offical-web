@@ -1,0 +1,248 @@
+/* =========================================
+   JARVIS Builders Section (Dark)
+   ========================================= */
+
+.section {
+  position: relative;
+  background-color: var(--jarvis-surface-dark);
+  padding-top: 10rem;
+  padding-bottom: 8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  color: var(--jarvis-text-inverse);
+}
+
+/* ─────────────────────────────────────────
+   Decoration Lines
+   ───────────────────────────────────────── */
+.decorLineRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.decorLineCenter {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   Container
+   ───────────────────────────────────────── */
+.container {
+  max-width: var(--jarvis-container-max);
+  margin: 0 auto;
+  padding-left: var(--jarvis-container-padding);
+  padding-right: var(--jarvis-container-padding);
+  position: relative;
+  z-index: 10;
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout
+   ───────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 4rem;
+  align-items: center;
+  justify-items: start;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 5fr 7fr;
+    column-gap: clamp(3rem, 7vw, 9rem);
+  }
+}
+
+/* ─────────────────────────────────────────
+   Left Column
+   ───────────────────────────────────────── */
+.leftColumn {
+  position: relative;
+  z-index: 10;
+  max-width: 560px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.chip {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--jarvis-cta-border);
+  background: var(--jarvis-cta-bg);
+  backdrop-filter: blur(20px);
+  font-family: var(--font-heading);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-inverse-muted);
+  display: flex;
+  align-items: center;
+}
+
+.chipDotPurple {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  background-color: var(--jarvis-accent-primary);
+  border-radius: 9999px;
+  margin-right: 0.5rem;
+}
+
+.chipDotCyan {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  background-color: var(--color-neon-cyan);
+  border-radius: 9999px;
+  margin-right: 0.5rem;
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: var(--jarvis-heading-lg, clamp(2.5rem, 3vw, 3.5rem));
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text-inverse-strong);
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .heading {
+    font-size: 6rem;
+  }
+}
+
+.headingItalic {
+  
+}
+
+
+.description {
+  font-size: var(--jarvis-body-lg, 1.125rem);
+  font-weight: 400;
+  line-height: 1.375;
+  color: var(--text-inverse-base);
+  max-width: 36rem;
+}
+
+@media (min-width: 1024px) {
+  .description {
+    font-size: 1.875rem;
+  }
+}
+
+.highlight {
+  color: var(--jarvis-accent-primary);
+  font-weight: 400;
+  border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+  padding-bottom: 0.25rem;
+}
+
+/* ─────────────────────────────────────────
+   Right Column
+   ───────────────────────────────────────── */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4rem;
+  position: relative;
+  max-width: 720px;
+}
+
+.bodyText {
+  color: var(--text-inverse-muted);
+  max-width: 46rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-left: 0;
+  border-left: none;
+}
+
+@media (min-width: 1024px) {
+  .bodyText {
+    padding-left: 3rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.bodyLead {
+  font-family: var(--font-body);
+  font-size: var(--jarvis-heading-md, clamp(1.5rem, 2vw, 2rem));
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text-inverse-muted);
+}
+
+.bodyParagraph {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text-inverse-sub);
+  font-weight: 400;
+}
+
+.bodyAccentViolet {
+  color: var(--color-violet);
+  font-weight: 600;
+}
+
+.bodyAccentCyan {
+  color: var(--color-cyan);
+  font-weight: 600;
+}
+
+.featureList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--jarvis-card-gap, 1rem);
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .featureList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.featureCard {
+  padding: var(--jarvis-card-padding, 1.75rem);
+  border-radius: var(--jarvis-panel-radius);
+  border: var(--jarvis-panel-border-dark);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: var(--jarvis-panel-shadow-dark);
+}
+
+.featureTitle {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-inverse-strong);
+  margin-bottom: 0.5rem;
+}
+
+.featureDesc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-inverse-muted);
+}

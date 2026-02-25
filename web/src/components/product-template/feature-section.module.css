@@ -1,0 +1,218 @@
+.featureCard {
+  background: var(--surface-paper);
+  border-color: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2xl);
+  border-style: solid;
+}
+
+.divider {
+  border-color: var(--border-subtle);
+}
+
+/* Font styles moved to font-product-feature-title utility class */
+
+/* Font styles moved to font-product-detail-title utility class */
+
+/* Font styles moved to font-product-body utility class */
+
+/* Font styles moved to font-product-detail-desc utility class */
+
+/* Font styles moved to font-product-feature-desc utility class */
+
+.detailList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.detailItem {
+  padding-bottom: var(--space-xs, 0.5rem);
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Detail panel typography - optimized for 4:3 aspect ratio */
+.detailTitle {
+  font-family: var(--font-heading-en);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: var(--weight-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.detailDesc {
+  font-family: var(--font-body-en);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.6;
+  color: var(--text-sub);
+}
+
+/* Detail panel container - responsive padding */
+.detailPanel {
+  padding: 1.5rem 1.75rem;
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .detailPanel {
+    padding: 2rem 2.5rem;
+  }
+
+  .detailList {
+    gap: var(--space-md);
+  }
+
+  .detailItem {
+    padding-bottom: var(--space-sm, 0.75rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .detailPanel {
+    padding: 2.5rem 3rem;
+  }
+
+  .detailList {
+    gap: var(--space-lg, 1.5rem);
+  }
+
+  .detailTitle {
+    font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+    margin-bottom: 0.625rem;
+  }
+
+  .detailDesc {
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  }
+
+  .detailItem {
+    padding-bottom: var(--space-md, 1rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .detailPanel {
+    padding: 3rem 3.5rem;
+  }
+
+  .detailTitle {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+  }
+
+  .detailDesc {
+    font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+  }
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  transition: none;
+  border-radius: inherit;
+}
+
+.panelHidden {
+  display: none;
+  opacity: 0;
+  transform: none;
+  pointer-events: none;
+}
+
+.panelVisible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.toggleShell {
+  background: rgba(var(--color-white-rgb), 0.5);
+  border-color: var(--border-strong);
+  border-radius: 9999px;
+}
+
+.toggleBase {
+  border-radius: var(--radius-full);
+}
+
+.featureMedia {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 100%;
+  align-self: flex-start;
+  margin-inline: 0;
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 1024px) {
+  .featureMedia {
+    width: 90%;
+    max-width: 90%;
+    margin-inline: 0;
+  }
+}
+
+.featureMediaVideo {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureMediaDetails {
+  background: var(--color-white, #fff);
+}
+
+.featureMask {
+  /* Match the card radius so the transition overlay fully covers the corners */
+  border-radius: var(--radius-lg);
+}
+
+
+.textMuted {
+  color: var(--text-muted);
+}
+
+.textStrong {
+  color: var(--text-strong);
+}
+
+/* Font styles moved to font-product-body utility class */
+
+/* Font styles moved to font-product-toggle-label utility class */
+
+.toggleActive {
+  background: var(--toggle-active-bg);
+  color: var(--text-inverse-strong);
+}
+
+.toggleInactive {
+  color: var(--text-sub);
+}
+
+.toggleInactive:hover {
+  color: var(--toggle-hover-text);
+}
+
+.focusRing:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--product-accent-ring),
+    0 0 0 4px rgba(var(--color-white-rgb) / 0.5);
+}
+
+.chip {
+  background: var(--chip-bg);
+  border-color: var(--chip-border);
+}
+
+.panelSurface {
+  background: var(--color-white, #fff);
+  border-color: var(--product-border-subtle);
+  border-radius: var(--radius-lg);
+}

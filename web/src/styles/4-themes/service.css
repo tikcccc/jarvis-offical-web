@@ -1,0 +1,50 @@
+/* =========================================
+   4-THEMES: SERVICE TEMPLATE THEME
+   Scope: JARVIS service template (JPM/BIM/VENTURES/FINANCE)
+   Goal: Minimal overrides, reusing global semantics
+   ========================================= */
+
+.service-page {
+  /* Spacing & layout */
+  --service-section: var(--section-v-spacing);
+  --service-section-lg: calc(var(--section-v-spacing) * 1.2);
+  --service-container-inline: var(--h-spacing);
+  --service-container-inline-lg: calc(var(--h-spacing) * 1.8);
+
+  /* Baseline colors */
+  background: var(--surface-base);
+  color: var(--text-base);
+  font-family: var(--font-body);
+}
+
+@media (min-width: 60em) {
+  .service-page {
+    --service-section: calc(var(--section-v-spacing) * 1.05);
+    --service-section-lg: calc(var(--section-v-spacing) * 1.3);
+    --service-container-inline-lg: calc(var(--h-spacing) * 2.1);
+  }
+}
+
+@layer components {
+  .service-section-lg {
+    padding-block: var(--service-section);
+  }
+
+  .service-section-xl {
+    padding-block: var(--service-section-lg);
+  }
+
+  .service-nav {
+    border-bottom: 1px solid transparent;
+  }
+
+  .service-nav--top {
+    background: transparent;
+  }
+
+  .service-nav--scrolled {
+    background: color-mix(in srgb, var(--surface-base) 92%, transparent);
+    border-bottom-color: var(--border-subtle);
+    backdrop-filter: blur(14px);
+  }
+}

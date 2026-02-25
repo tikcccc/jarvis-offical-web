@@ -1,0 +1,25 @@
+﻿.section {
+  background: var(--surface-hero);
+}
+
+.gradient {
+  background: var(--hero-gradient);
+}
+
+.overlay {
+  background: var(--hero-overlay);
+}
+
+.heroText {
+  color: var(--text-inverse-strong);
+}
+
+/* 字體樣式已移至 .font-display-hero utility class */
+.title {
+  color: var(--text-inverse-strong);
+}
+
+/* 字體樣式已移至 .font-body-lg utility class */
+.subtitle {
+  color: var(--hero-subtitle-color);
+}

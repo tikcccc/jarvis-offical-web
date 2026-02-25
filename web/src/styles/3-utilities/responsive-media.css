@@ -1,0 +1,40 @@
+/* =========================================
+   3-UTILITIES: RESPONSIVE MEDIA
+   筆電區間圖片/視訊高度保護
+   ========================================= */
+
+@layer components {
+  /* ═══════════════════════════════════════════
+     筆電區間（1024px - 1599px）媒體高度限制
+     目的：防止圖片/視訊佔據過多垂直空間
+     ═══════════════════════════════════════════ */
+
+  @media (min-width: 1024px) and (max-width: 1599px) {
+    /* 展示區媒體（不包含 Hero 全屏） */
+    .showcase-media {
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    /* 特色區域媒體（Product Template Feature Section） */
+    .feature-media {
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    /* CTA 區域圖片 */
+    .cta-media {
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    /* Gallery 圖片 */
+    .gallery-media {
+      max-height: 450px;
+      object-fit: cover;
+    }
+
+    /* ⚠️ 注意：Hero 相關的 .hero-media 和 .hero-video 已移除
+       因為 Hero Section 需要保持全屏效果，不應受到高度限制 */
+  }
+}

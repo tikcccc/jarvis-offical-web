@@ -1,0 +1,19 @@
+/* 字體樣式已移至 .font-narrative utility class */
+.title {
+  color: var(--text-base);
+}
+
+.soft {
+  color: var(--text-vsoft);
+}
+
+.section {
+  background: var(--surface-base);
+  padding-block: clamp(6rem, 9vw, 10rem);
+}
+
+.textInitial {
+  will-change: line-height, opacity, transform;
+  opacity: 0.5;
+  line-height: 1.5;
+}

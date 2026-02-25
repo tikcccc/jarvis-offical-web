@@ -1,0 +1,592 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import { 
+  ArrowLeft, MapPin, Clock, Briefcase, ArrowRight, ArrowUpRight, 
+  Search, ChevronDown, LayoutTemplate, List, Users, CheckCircle, Zap, Building2, Globe, Calendar, Tag, Timer
+} from 'lucide-react';
+
+// --- RICH JOB DESCRIPTIONS ---
+const JOB_DESCRIPTIONS = {
+  "default": `
+    ### About the Role
+    We are looking for an exceptional individual to join our team. You will work on high-impact projects that directly shape the future of our company.
+    
+    ### What You Will Do
+    - Collaborate with cross-functional teams to deliver high-quality results.
+    - Drive innovation and continuous improvement in your area of expertise.
+    - Take ownership of key initiatives and manage them from conception to delivery.
+    
+    ### What We Are Looking For
+    - Strong problem-solving skills and attention to detail.
+    - Ability to work effectively in a fast-paced, dynamic environment.
+    - Excellent communication and interpersonal skills.
+  `,
+  "Forward Deployed Software Engineer": `
+    ### A World-Changing Mission
+    At isBIM, we don't just build software; we build the digital nervous system for the world's most complex infrastructure. As a Forward Deployed Software Engineer (FDSE), you are the bridge between our cutting-edge technology and the critical problems our clients face on the ground.
+
+    ### The Role
+    FDSEs are engineers who love being on the front lines. You won't be hidden away in a cubicle. You will be embedded with our clients—whether that's at a major airport construction site in Dubai or a smart city planning office in Nairobi. You will write code that solves immediate, tangible problems, often seeing the impact of your work within hours.
+
+    ### Core Responsibilities
+    - **Rapid Prototyping & Deployment:** Architect, implement, and deploy scalable solutions using our proprietary data operating system.
+    - **Client Partnership:** Work side-by-side with non-technical stakeholders (architects, civil engineers, government officials) to translate their operational pain points into technical solutions.
+    - **Product Evolution:** Identify gaps in our core product based on field experience and work with the Product Engineering team to build long-term fixes.
+    - **Data Integration:** Wrangle complex, messy datasets from legacy construction systems and turn them into actionable insights.
+
+    ### What We Value
+    - **Engineering Excellence:** You have a strong background in computer science (Algorithms, Data Structures) and proficiency in at least one major language (Java, TypeScript, Python, Go, C++).
+    - **Grit & Resourcefulness:** You thrive in unstructured environments. When the API documentation is missing, you figure it out. When the internet is spotty, you find a way.
+    - **User Empathy:** You care deeply about the person using your software. You measure success not by lines of code, but by how much time you saved the site manager.
+    - **Willingness to Travel:** This role requires travel (25-50%) to client sites globally.
+  `,
+};
+
+// --- RAW DATA ---
+const ALL_JOBS = [
+  // Global Project Team
+  { 
+    id: 1, title: "Senior BIM Consultant", location: "Hong Kong", type: "Full-time", workMode: "Hybrid", team: "Global Project Team", category: "Delivery & Success",
+    tags: ["BIM", "Revit", "Consulting"], seniority: "Senior", postedAt: "2 days ago", deadline: "Jan 15, 2026"
+  },
+  { 
+    id: 11, title: "Project Manager", location: "Dubai", type: "Contract", workMode: "On-Site", team: "Global Project Team", category: "Delivery & Success",
+    tags: ["PMP", "Construction", "Leadership"], seniority: "Lead", postedAt: "1 week ago" 
+  },
+  
+  // Customer Success Team
+  { 
+    id: 3, title: "Customer Success Manager", location: "Singapore", type: "Full-time", workMode: "Remote", team: "Customer Success Team", category: "Delivery & Success",
+    tags: ["SaaS", "Client Relations", "CRM"], seniority: "Mid-Level", postedAt: "3 days ago", deadline: "Jan 20, 2026"
+  },
+  { 
+    id: 31, title: "Implementation Specialist", location: "London", type: "Full-time", workMode: "On-Site", team: "Customer Success Team", category: "Delivery & Success",
+    tags: ["Training", "Onboarding", "Technical Support"], seniority: "Associate", postedAt: "5 days ago"
+  },
+
+  // AI & Software Engineering Team
+  { 
+    id: 2, title: "Forward Deployed Software Engineer", location: "London", type: "Full-time", workMode: "On-Site", team: "AI & Software Engineering Team", category: "Engineering",
+    tags: ["AI", "Python", "Data Engineering", "On-site"], seniority: "Mid-Senior", postedAt: "Just now", deadline: "Rolling"
+  },
+  { 
+    id: 5, title: "Product Designer", location: "Remote", type: "Full-time", workMode: "Remote", team: "AI & Software Engineering Team", category: "Engineering",
+    tags: ["UX/UI", "Figma", "Design Systems"], seniority: "Mid-Level", postedAt: "1 week ago", deadline: "Jan 30, 2026"
+  },
+  { 
+    id: 6, title: "DevOps Engineer", location: "Singapore", type: "Full-time", workMode: "Hybrid", team: "AI & Software Engineering Team", category: "Engineering",
+    tags: ["AWS", "Kubernetes", "CI/CD"], seniority: "Senior", postedAt: "2 weeks ago"
+  },
+
+  // Investments & Finance Team
+  { 
+    id: 8, title: "Investment Associate", location: "New York", type: "Full-time", workMode: "Hybrid", team: "Investments & Finance Team", category: "Strategy & Talent",
+    tags: ["FinOps", "M&A", "Financial Modeling"], seniority: "Associate", postedAt: "4 days ago", deadline: "Jan 18, 2026"
+  },
+  { 
+    id: 81, title: "Strategic Finance Manager", location: "Hong Kong", type: "Full-time", workMode: "On-Site", team: "Investments & Finance Team", category: "Strategy & Talent",
+    tags: ["Finance", "Strategy", "Management"], seniority: "Manager", postedAt: "6 days ago", deadline: "Jan 28, 2026"
+  },
+
+  // Internships & Early Talent
+  { 
+    id: 4, title: "Investment Analyst Intern", location: "New York", type: "Internship", workMode: "On-Site", team: "Internships & Early Talent", category: "Strategy & Talent",
+    tags: ["Finance", "Research", "Internship"], seniority: "Intern", postedAt: "1 day ago", deadline: "Mar 01, 2026"
+  },
+  { 
+    id: 7, title: "Software Engineer Intern", location: "London", type: "Internship", workMode: "Hybrid", team: "Internships & Early Talent", category: "Strategy & Talent",
+    tags: ["Coding", "React", "Node.js"], seniority: "Intern", postedAt: "3 days ago", deadline: "Rolling"
+  },
+  { 
+    id: 9, title: "Graduate Analyst", location: "Hong Kong", type: "Full-time", workMode: "On-Site", team: "Internships & Early Talent", category: "Strategy & Talent",
+    tags: ["Analytics", "Graduate", "Rotation"], seniority: "Entry Level", postedAt: "1 week ago", deadline: "Feb 15, 2026"
+  }
+];
+
+// --- Shared Components ---
+
+const Button = ({ children, onClick, className = "", variant = "primary" }) => {
+  const baseStyle = "px-6 py-3 font-medium transition-all duration-200 text-sm tracking-wide";
+  const variants = {
+    primary: "bg-black text-white hover:bg-gray-800",
+    outline: "border border-gray-300 text-black hover:bg-gray-50",
+    ghost: "text-gray-500 hover:text-black hover:bg-gray-100"
+  };
+
+  return (
+    <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`}>
+      {children}
+    </button>
+  );
+};
+
+// Custom Dropdown for Filters
+const FilterDropdown = ({ label, value, options, onChange, icon: Icon }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && !event.target.closest(`.filter-dropdown-${label.replace(/\s/g, '')}`)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, label]);
+
+  return (
+    <div className={`relative filter-dropdown-${label.replace(/\s/g, '')}`}>
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-2 text-sm font-medium transition-colors pb-2 border-b ${value !== 'All' ? 'text-black border-black' : 'text-gray-500 border-transparent hover:text-black hover:border-gray-300'}`}
+      >
+        {Icon && <Icon size={14} />}
+        {value === 'All' ? label : value}
+        <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 shadow-xl rounded-sm z-50 py-1 animate-fade-in-up">
+          <div 
+             onClick={() => { onChange('All'); setIsOpen(false); }}
+             className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-50 ${value === 'All' ? 'font-bold text-black' : 'text-gray-600'}`}
+          >
+            All {label.replace('All ', '')}s
+          </div>
+          {options.map((opt) => (
+            <div 
+              key={opt} 
+              onClick={() => { onChange(opt); setIsOpen(false); }}
+              className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-50 ${value === opt ? 'font-bold text-black' : 'text-gray-600'}`}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// --- Layout Components ---
+
+// Optimized Hover Card
+const HoverCard = ({ job }) => (
+    <div className="bg-white border border-gray-100 shadow-[0_12px_32px_rgb(0,0,0,0.08)] p-5 text-xs tracking-wide min-w-[260px] rounded-lg animate-fade-in-up">
+        {/* Header with Team and Type */}
+        <div className="flex items-center justify-between border-b border-gray-50 pb-3 mb-3">
+             <div className="font-semibold text-gray-900 text-sm max-w-[70%] truncate">{job.team}</div>
+             <span className="inline-block bg-gray-50 border border-gray-200 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-medium">
+               {job.type}
+             </span>
+        </div>
+
+        {/* Details Grid */}
+        <div className="space-y-3">
+            <div className="flex justify-between items-center group/item">
+                <div className="flex items-center gap-2 text-gray-400">
+                    <Briefcase size={12} />
+                    <span>Seniority</span>
+                </div>
+                <div className="text-gray-800 font-medium">{job.seniority}</div>
+            </div>
+
+            <div className="flex justify-between items-center group/item">
+                 <div className="flex items-center gap-2 text-gray-400">
+                    <MapPin size={12} />
+                    <span>Location</span>
+                </div>
+                <div className="text-gray-800 font-medium">{job.location}</div>
+            </div>
+            
+            <div className="flex justify-between items-center group/item">
+                 <div className="flex items-center gap-2 text-gray-400">
+                    <Calendar size={12} />
+                    <span>Posted</span>
+                </div>
+                <div className="text-gray-800 font-medium">{job.postedAt}</div>
+            </div>
+
+            {/* Conditionally render closing date */}
+            {job.deadline && (
+              <div className="flex justify-between items-center group/item pt-2 border-t border-gray-50 mt-2">
+                  <div className="flex items-center gap-2 text-gray-400">
+                      <Timer size={12} />
+                      <span>Deadline</span>
+                  </div>
+                  <div className="text-black font-semibold">{job.deadline}</div>
+              </div>
+            )}
+        </div>
+    </div>
+);
+
+// New: Single Team List View Layout
+const SingleTeamListView = ({ jobs, onJobClick }) => {
+  return (
+    <div className="flex flex-col gap-0 animate-fade-in max-w-5xl mx-auto">
+      {/* Header Row */}
+      <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-black text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-2">
+        <div className="col-span-5">Role</div>
+        <div className="col-span-2">Seniority</div>
+        <div className="col-span-2">Location</div>
+        <div className="col-span-2">Work Mode</div>
+        <div className="col-span-1 text-right">Apply</div>
+      </div>
+      
+      {jobs.length > 0 ? (
+        jobs.map(job => (
+          <div 
+            key={job.id} 
+            onClick={() => onJobClick(job)}
+            className="group relative grid grid-cols-1 md:grid-cols-12 gap-4 py-5 border-b border-gray-100 items-center cursor-pointer hover:bg-gray-50 transition-all rounded-lg px-2"
+          >
+             {/* Title & Hover Trigger */}
+             <div className="col-span-5 relative">
+                <span className="font-semibold text-gray-900 group-hover:text-black text-base md:text-sm transition-colors">{job.title}</span>
+                {/* Simplified Mobile Details visible only on small screens */}
+                <div className="md:hidden flex gap-2 mt-1 text-xs text-gray-500">
+                   <span>{job.location}</span> • <span>{job.type}</span>
+                </div>
+
+                {/* Hover Popover */}
+                <div className="absolute left-10 bottom-full mb-2 hidden group-hover:block z-20 pointer-events-none transform -translate-x-0">
+                   <HoverCard job={job} />
+                   <div className="absolute left-6 top-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white drop-shadow-sm ml-2"></div>
+                </div>
+             </div>
+             
+             <div className="hidden md:block col-span-2 text-sm text-gray-600 font-medium">{job.seniority}</div>
+             <div className="hidden md:block col-span-2 text-sm text-gray-600">{job.location}</div>
+             <div className="hidden md:block col-span-2 text-sm text-gray-600">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700">
+                  {job.workMode}
+                </span>
+             </div>
+             <div className="hidden md:flex col-span-1 text-right justify-end">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center border border-gray-200 text-gray-400 group-hover:border-black group-hover:bg-black group-hover:text-white transition-all transform group-hover:translate-x-1">
+                  <ArrowRight size={14} />
+                </div>
+             </div>
+          </div>
+        ))
+      ) : (
+        <div className="py-20 text-center text-gray-400 italic">
+          No current openings for this team.
+        </div>
+      )}
+    </div>
+  );
+};
+
+const NewspaperItem = ({ job, onClick }) => (
+  <div className="relative group">
+    <div onClick={() => onClick(job)} className="flex justify-between items-start py-3 border-b border-gray-200 cursor-pointer hover:border-black transition-colors duration-200">
+      <div className="flex flex-col gap-1 pr-4">
+        <h4 className="text-sm md:text-[15px] font-normal text-gray-800 group-hover:text-black leading-snug transition-colors">{job.title}</h4>
+        <div className="flex items-center gap-3 text-[10px] text-gray-400 uppercase tracking-wider group-hover:text-gray-600 transition-colors">
+            <span>{job.location}</span>
+            <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+            <span>{job.workMode}</span>
+        </div>
+      </div>
+      <ArrowRight size={14} className="text-gray-400 group-hover:text-black transition-colors flex-shrink-0 mt-1" />
+    </div>
+
+    {/* -- HOVER POPOVER -- */}
+    <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block z-20 pointer-events-none transform -translate-x-2">
+      <HoverCard job={job} />
+      {/* Decorative Arrow */}
+       <div className="absolute left-6 top-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white drop-shadow-sm ml-2"></div>
+    </div>
+  </div>
+);
+
+const NewspaperLayout = ({ data, onJobClick }) => {
+  // Group by Category -> Team for Newspaper Layout
+  const groupedData = useMemo(() => {
+     const groups = {};
+     data.forEach(job => {
+        if (!groups[job.category]) groups[job.category] = {};
+        if (!groups[job.category][job.team]) groups[job.category][job.team] = [];
+        groups[job.category][job.team].push(job);
+     });
+     return groups;
+  }, [data]);
+
+  const categories = ["Delivery & Success", "Engineering", "Strategy & Talent"];
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20 animate-fade-in">
+      {categories.map((cat) => (
+        <div key={cat} className="flex flex-col gap-10">
+          <h2 className="text-3xl font-light text-black tracking-tight mb-2 opacity-90">{cat}</h2>
+          {groupedData[cat] ? (
+            Object.entries(groupedData[cat]).map(([team, jobs]) => (
+              <div key={team} className="mb-4">
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-100 pb-2 flex items-center gap-2">
+                  {team}
+                </h3>
+                <div className="flex flex-col gap-1">
+                  {jobs.map(job => <NewspaperItem key={job.id} job={job} onClick={onJobClick} />)}
+                </div>
+              </div>
+            ))
+          ) : (
+             <div className="text-sm text-gray-400 italic mt-2">No positions.</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// --- Main Views ---
+
+const ListingView = ({ onJobClick }) => {
+  // Filter States - Only Team remaining
+  const [filterTeam, setFilterTeam] = useState('All');
+
+  // Derive unique options
+  const teams = useMemo(() => [...new Set(ALL_JOBS.map(j => j.team))].sort(), []);
+
+  // Filter Logic
+  const filteredJobs = useMemo(() => {
+    return ALL_JOBS.filter(job => {
+      const matchTeam = filterTeam === 'All' || job.team === filterTeam;
+      return matchTeam;
+    });
+  }, [filterTeam]);
+
+  // Determine which layout to show
+  const showNewspaperLayout = filterTeam === 'All';
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-[1400px] mx-auto px-6 py-12 md:py-20 animate-fade-in">
+        
+        {/* Controls Bar */}
+        <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-30 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-16 py-6 border-b border-gray-200 transition-all">
+           
+           <div className="flex items-center gap-4">
+               {/* Back Button (Only visible when filtering) */}
+               {filterTeam !== 'All' && (
+                  <button 
+                    onClick={() => setFilterTeam('All')}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 hover:bg-black hover:border-black hover:text-white transition-all"
+                    title="Clear Filter"
+                  >
+                    <ArrowLeft size={14} />
+                  </button>
+               )}
+
+               {/* Filters */}
+               <div className="flex flex-wrap gap-6 w-full md:w-auto">
+                  <FilterDropdown 
+                    label="All Teams" 
+                    value={filterTeam} 
+                    options={teams} 
+                    onChange={setFilterTeam} 
+                    icon={Users}
+                  />
+               </div>
+           </div>
+
+           {/* Position Count */}
+           <div className="flex items-center justify-between w-full md:w-auto gap-4">
+              <span className="text-xs text-gray-400 font-medium uppercase tracking-wider block">
+                {filteredJobs.length} Positions Found
+              </span>
+           </div>
+        </div>
+
+        {/* Dynamic Content Area */}
+        <div className="min-h-[500px]">
+          {showNewspaperLayout ? (
+             <NewspaperLayout data={filteredJobs} onJobClick={onJobClick} />
+          ) : (
+             <SingleTeamListView jobs={filteredJobs} onJobClick={onJobClick} />
+          )}
+        </div>
+        
+        <div className="mt-20 py-16 text-center border-t border-gray-100">
+            <p className="text-gray-400 text-sm">Design Prototype</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DetailView = ({ job, onBack }) => {
+  const renderContent = (text) => {
+    return text.split('\n').map((line, index) => {
+      const trimmed = line.trim();
+      
+      if (trimmed.startsWith('###')) {
+        return (
+          <h3 key={index} className="text-2xl font-medium text-black mt-12 mb-6 tracking-tight flex items-center gap-3">
+             <span className="w-4 h-0.5 bg-black inline-block opacity-20"></span>
+             {trimmed.replace('###', '').trim()}
+          </h3>
+        );
+      }
+      
+      if (trimmed.startsWith('-') && trimmed.includes('**')) {
+        const content = trimmed.replace('-', '').trim();
+        const parts = content.split('**');
+        return (
+          <li key={index} className="flex items-start gap-3 mb-4 text-gray-600 leading-relaxed text-lg font-light group">
+             <CheckCircle size={18} className="mt-1.5 text-gray-300 shrink-0 group-hover:text-black transition-colors" />
+             <span>
+               <strong className="font-medium text-gray-900">{parts[1]}</strong>
+               {parts[2]}
+             </span>
+          </li>
+        );
+      }
+
+      if (trimmed.startsWith('-')) {
+        return (
+           <li key={index} className="flex items-start gap-3 mb-3 text-gray-600 leading-relaxed text-lg font-light ml-2">
+             <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-2.5 shrink-0"></span>
+             {trimmed.replace('-', '').trim()}
+           </li>
+        );
+      }
+      
+      if (trimmed === '') return <div key={index} className="h-2"></div>;
+      
+      return <p key={index} className="text-gray-600 mb-4 leading-relaxed text-lg font-light max-w-3xl">{line}</p>;
+    });
+  };
+
+  const descriptionContent = JOB_DESCRIPTIONS[job.title] || JOB_DESCRIPTIONS["default"];
+
+  return (
+    <div className="min-h-screen bg-white animate-fade-in pb-20">
+      <nav className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
+        <div className="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+          <button onClick={onBack} className="group flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors">
+            <ArrowLeft size={18} className="mr-3 group-hover:-translate-x-1 transition-transform" />
+            Back to Positions
+          </button>
+          <span className="hidden md:block text-xs font-bold tracking-[0.2em] uppercase text-gray-400">isBIM Careers</span>
+        </div>
+      </nav>
+
+      <main className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+        {/* Hero Section */}
+        <header className="mb-20">
+          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6 font-medium tracking-wide border-b border-gray-100 pb-6">
+             <div className="flex items-center gap-2"><Users size={16} />{job.team}</div>
+             <span className="text-gray-300">/</span>
+             
+             <div className="flex items-center gap-2"><Briefcase size={16} />{job.seniority}</div>
+             <span className="text-gray-300">/</span>
+
+             <div className="flex items-center gap-2"><MapPin size={16} />{job.location}</div>
+             <span className="text-gray-300">/</span>
+
+             <div className="flex items-center gap-2"><Building2 size={16} />{job.workMode}</div>
+
+             {job.deadline && (
+               <>
+                 <span className="text-gray-300">/</span>
+                 <div className="flex items-center gap-2"><Timer size={16} className="text-gray-400" /><span className="text-gray-600">Closing Date: {job.deadline}</span></div>
+               </>
+             )}
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-medium text-gray-900 mb-8 leading-tight tracking-tight max-w-4xl">
+            {job.title}
+          </h1>
+
+          {/* Tags Section */}
+          {job.tags && job.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-12">
+              {job.tags.map(tag => (
+                <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-50 border border-gray-200 text-xs font-medium text-gray-600">
+                  <Tag size={10} className="text-gray-400" />
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex flex-col md:flex-row gap-6">
+            <Button className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-5 text-base shadow-xl shadow-gray-200 hover:shadow-none hover:translate-y-1">
+              Apply for this Role <ArrowUpRight size={18} />
+            </Button>
+          </div>
+        </header>
+
+        <div className="flex flex-col lg:flex-row gap-20">
+           <div className="flex-grow">
+              <article className="prose prose-lg prose-gray max-w-none">
+                {renderContent(descriptionContent)}
+              </article>
+           </div>
+
+           <div className="hidden lg:block w-72 shrink-0">
+              <div className="sticky top-32 p-6 bg-gray-50 border border-gray-100 rounded-sm">
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Department</h4>
+                 <p className="text-sm text-gray-600 mb-6">{job.team}</p>
+                 
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Seniority</h4>
+                 <p className="text-sm text-gray-600 mb-6">{job.seniority}</p>
+
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Work Mode</h4>
+                 <p className="text-sm text-gray-600 mb-6">{job.workMode}</p>
+                 
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Office</h4>
+                 <p className="text-sm text-gray-600 mb-6">{job.location}</p>
+
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Employment</h4>
+                 <p className="text-sm text-gray-600 mb-6">{job.type}</p>
+
+                 {job.deadline && (
+                   <>
+                     <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Closing Date</h4>
+                     <p className="text-sm text-gray-900 font-medium">{job.deadline}</p>
+                   </>
+                 )}
+              </div>
+           </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+// --- Main App Component ---
+
+const App = () => {
+  const [currentView, setCurrentView] = useState('list');
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const handleJobClick = (job) => {
+    setSelectedJob(job);
+    setCurrentView('detail');
+    window.scrollTo(0, 0);
+  };
+
+  const handleBackClick = () => {
+    setSelectedJob(null);
+    setCurrentView('list');
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-black selection:text-white">
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.2s ease-out forwards; }
+      `}</style>
+      {currentView === 'list' ? <ListingView onJobClick={handleJobClick} /> : <DetailView job={selectedJob} onBack={handleBackClick} />}
+    </div>
+  );
+};
+
+export default App;

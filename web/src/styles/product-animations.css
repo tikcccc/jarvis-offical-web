@@ -1,0 +1,204 @@
+/* Product animations and motion helpers */
+@layer components {
+  /* Character-level reveal */
+  :is(.product-page) .product-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.22s cubic-bezier(0.2, 0.65, 0.3, 0.9), transform 0.24s cubic-bezier(0.2, 0.65, 0.3, 0.9);
+    transition-delay: var(--char-delay-in, 0ms);
+    will-change: opacity, transform;
+  }
+  :is(.product-page) .stage1-exiting .product-char {
+    transition-delay: var(--char-delay-out, 0ms);
+  }
+  :is(.product-page) .revealed .product-char {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Block-level fade */
+  :is(.product-page) .product-block-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s cubic-bezier(0.25, 0.7, 0.3, 1), transform 0.4s cubic-bezier(0.25, 0.7, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  :is(.product-page) .product-block-anim.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0ms;
+  }
+
+  /* Bounce-up */
+  :is(.product-page) .product-bounce-anim {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: opacity, transform;
+  }
+  :is(.product-page) .product-bounce-anim.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition-delay: 0ms;
+  }
+
+  /* Stage2 gradient overlay text */
+  :is(.product-page) .product-stage2-text { position: relative; }
+  :is(.product-page) .product-stage2-text::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: var(--product-accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+  }
+  :is(.product-page) .gradient-active.product-stage2-text::before { opacity: 1; }
+
+  /* Index animation */
+  :is(.product-page) .index-anim-container {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+  :is(.product-page) .index-anim-container > div,
+  :is(.product-page) .index-anim-container > span {
+    opacity: 0;
+    transform: translateY(-10px) translateZ(0);
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :is(.product-page) .feature-active .index-anim-container > div,
+  :is(.product-page) .feature-active .index-anim-container > span {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :is(.product-page) .index-line {
+    transform: scaleX(0) translateZ(0);
+    transform-origin: left;
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :is(.product-page) .line-active .index-line {
+    transform: scaleX(1) translateZ(0);
+    opacity: 0.8;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.08));
+  }
+  :is(.product-page) .index-connector {
+    display: inline-block;
+    transform: scaleX(0) translateZ(0);
+    transform-origin: left;
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :is(.product-page) .line-active .index-connector {
+    transform: scaleX(1) translateZ(0);
+    opacity: 0.65;
+  }
+
+  /* Grid sheen overlay */
+  :is(.product-page) .grid-sheen-overlay {
+    position: absolute;
+    inset: 0;
+    background-size: 60px 60px;
+    background-image:
+      repeating-linear-gradient(to right,
+        color-mix(in srgb, var(--accent-cyan) 80%, transparent) 0px,
+        color-mix(in srgb, var(--accent-cyan) 70%, transparent) 0.5px,
+        rgba(var(--color-white-rgb) / 0.65) 1px,
+        transparent 1px,
+        transparent 60px),
+      repeating-linear-gradient(to bottom,
+        color-mix(in srgb, var(--accent-cyan) 80%, transparent) 0px,
+        color-mix(in srgb, var(--accent-cyan) 70%, transparent) 0.5px,
+        rgba(var(--color-white-rgb) / 0.65) 1px,
+        transparent 1px,
+        transparent 60px);
+    mix-blend-mode: screen;
+    opacity: 0;
+    -webkit-mask-image: linear-gradient(180deg, transparent 46%, black 48%, black 52%, transparent 54%);
+    mask-image: linear-gradient(180deg, transparent 46%, black 48%, black 52%, transparent 54%);
+    -webkit-mask-size: 100% 260%;
+    mask-size: 100% 260%;
+    -webkit-mask-position: 0 -140%;
+    mask-position: 0 -140%;
+    animation: grid-sheen-sweep var(--grid-sheen-duration, 9s) ease-out infinite;
+    animation-play-state: paused;
+    will-change: opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  :is(.product-page) .grid-sheen-overlay--run { animation-play-state: running; }
+
+  /* Gradient loop */
+  :is(.product-page) .animate-gradient-x {
+    background-size: 200% auto;
+    animation: gradient-x 3s ease infinite;
+  }
+  :is(.product-page) .text-glow { text-shadow: 0 0 20px currentColor; }
+  :is(.product-page) .text-gradient-mask {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.6) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Toggle pulse */
+  :is(.product-page) .animate-rapid-pulse {
+    animation: rapid-pulse 0.25s ease-in-out !important;
+    will-change: opacity;
+    transition: none !important;
+  }
+
+  /* Scroll indicator bounce */
+  :is(.product-page) .product-scroll-bounce {
+    animation: product-bounce-slow 1.2s infinite;
+  }
+}
+
+@keyframes grid-sheen-sweep {
+  0% {
+    -webkit-mask-position: 0 -140%;
+    mask-position: 0 -140%;
+    opacity: 0;
+  }
+  20% { opacity: 0.9; }
+  60% { opacity: 0.6; }
+  100% {
+    -webkit-mask-position: 0 140%;
+    mask-position: 0 140%;
+    opacity: 0;
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes product-bounce-slow {
+  0%, 100% {
+    transform: translateY(-12%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes rapid-pulse {
+  0% { opacity: 1; }
+  20% { opacity: 0.3; }
+  40% { opacity: 1; }
+  60% { opacity: 0.3; }
+  80%, 100% { opacity: 1; }
+}

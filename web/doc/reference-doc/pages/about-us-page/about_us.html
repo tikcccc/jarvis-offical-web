@@ -1,0 +1,555 @@
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+
+// --- 0. �Y��Z�"-�-��� (Infrastructure Layer) ---
+
+// [�"��"�] Mini-Zustand
+const createStore = (createState) => {
+  let state;
+  const listeners = new Set();
+  
+  const setState = (partial, replace) => {
+    const nextState = typeof partial === 'function' ? partial(state) : partial;
+    if (!Object.is(nextState, state)) {
+      state = replace ? nextState : { ...state, ...nextState };
+      listeners.forEach(listener => listener());
+    }
+  };
+  
+  const getState = () => state;
+  
+  const useStore = (selector = (s) => s) => {
+    const [slice, setSlice] = useState(() => selector(state));
+    
+    useEffect(() => {
+      const listener = () => {
+        const nextSlice = selector(state);
+        setSlice(current => Object.is(current, nextSlice) ? current : nextSlice);
+      };
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }, [selector]);
+    
+    return slice;
+  };
+  
+  const api = { setState, getState, subscribe: (l) => { listeners.add(l); return () => listeners.delete(l); } };
+  state = createState(setState, getState, api);
+  return useStore;
+};
+
+// [�"��"�] cn ����.�
+const cn = (...classes) => classes.filter(Boolean).join(' ');
+
+// [����.�] �<�.<�.3�o��S���%�T"
+const useExternalScripts = () => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const scripts = [
+      'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js',
+      'https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js'
+    ];
+
+    let loadedCount = 0;
+    scripts.forEach(src => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        loadedCount++;
+        if (loadedCount === scripts.length) setLoaded(true);
+        return;
+      }
+      
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => {
+        loadedCount++;
+        if (loadedCount === scripts.length) setLoaded(true);
+      };
+      document.body.appendChild(script);
+    });
+  }, []);
+
+  return loaded;
+};
+
+// --- 1. �."�YY�<?�.<�rs�_c (Zustand Store) ---
+const useNavStore = createStore((set) => ({
+  activeSection: 1, 
+  setActiveSection: (index) => set({ activeSection: index }),
+}));
+
+// --- 2. UI �.����� (Components) ---
+
+// [TechDivider]: �`�S?�,Y�^+�s"��s
+const TechDivider = ({ className }) => (
+  <div className={cn("w-full h-[1px] relative overflow-visible", className)}>
+    <div className="absolute inset-0 bg-neutral-200"></div>
+    {/* �<�.<�.%��? */}
+    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-blue-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+  </div>
+);
+
+// [ArrowLink]: �,�r-��-�^؆���s�s,��3��%�O%�^
+const ArrowLink = ({ label, href = "#" }) => (
+  <a href={href} className="group/btn inline-flex flex-col items-start gap-2 cursor-pointer mt-6">
+    <div className="flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-neutral-900">
+      {label}
+      <span className="transform group-hover/btn:translate-x-1 transition-transform duration-300">�+'</span>
+    </div>
+    <div className="w-full h-[1px] bg-neutral-300 relative overflow-hidden">
+       <div className="absolute inset-0 bg-blue-600 transform -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 ease-out"></div>
+    </div>
+  </a>
+);
+
+// [RevealTitle]: �>����,Y�"��3S��_�?_�"T��O (�>���� ScrambleTitle)
+const RevealTitle = ({ text, className }) => {
+  const elementRef = useRef(null);
+  
+  useEffect(() => {
+    if (!window.gsap || !window.ScrollTrigger || !elementRef.current) return;
+    
+    const words = elementRef.current.querySelectorAll('.word');
+    
+    // �?���'�<����s�_z�"��3S + �,<��%�<?�.<��r�?_
+    window.gsap.fromTo(words, 
+      { 
+        y: 20, 
+        opacity: 0, 
+        filter: 'blur(10px)' 
+      },
+      { 
+        scrollTrigger: {
+          trigger: elementRef.current,
+          start: "top 85%", // ��.��'��?��.���-��-����" 15% �T,�,�T�
+          toggleActions: "play none none reverse"
+        },
+        y: 0, 
+        opacity: 1, 
+        filter: 'blur(0px)', 
+        duration: 1, 
+        stagger: 0.04, // �??�cz���?�
+        ease: "power2.out" 
+      }
+    );
+  }, [text]);
+
+  // ��؆?��-?�<+�^+�,��-r�cz��O����_��??�?<�Z�^
+  const words = text.split(' ');
+
+  return (
+    <h3 ref={elementRef} className={cn("cursor-default flex flex-wrap gap-x-[0.3em]", className)}>
+      {words.map((word, i) => (
+        <span key={i} className="word inline-block will-change-transform">
+          {word}
+        </span>
+      ))}
+    </h3>
+  );
+};
+
+// [FeatureRow]: What We Do �s,�-r��O��^��?�.���
+const FeatureRow = ({ title, content, linkLabel }) => (
+  <div className="group py-12 border-t border-neutral-200 first:border-t-0 hover:bg-neutral-100/50 transition-colors duration-500 px-4 -mx-4 rounded-sm">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Left: Large Title with Cinematic Reveal Effect */}
+      <div className="lg:col-span-5">
+        {/* group-hover:text-blue-700: 
+           ���`�����,�?o�'�?< Row �T,��O�"T��O�13��`�rS�,��-?�%���O�?T�_"��,����^�zo�>'��^��-�,"�,?�1��"_�-�r? 
+        */}
+        <RevealTitle 
+          text={title}
+          className="text-2xl md:text-3xl font-medium text-neutral-900 leading-tight group-hover:text-blue-700 transition-colors duration-500"
+        />
+      </div>
+      
+      {/* Right: Content + Button */}
+      <div className="lg:col-span-7 flex flex-col justify-between h-full">
+        <p className="text-lg text-neutral-600 leading-relaxed mb-4">
+          {content}
+        </p>
+        <div>
+           <ArrowLink label={linkLabel} />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// [StickyNav]: ��Z�^���,��
+const StickyNav = ({ lenisRef }) => {
+  const activeSection = useNavStore((state) => state.activeSection);
+  
+  const handleScrollTo = (id) => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(id, { 
+        duration: 1.5, 
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
+      });
+    } else {
+       document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    if (!window.gsap) return;
+    const target = document.getElementById(`nav-item-${activeSection}`);
+    
+    if (target) {
+      const textElements = target.querySelectorAll('span');
+      window.gsap.killTweensOf(textElements);
+      
+      const tl = window.gsap.timeline();
+      
+      tl.to(textElements, { 
+          color: "#2563eb", opacity: 0, x: -3, duration: 0.06, ease: "steps(1)" 
+        })
+        .to(textElements, { 
+          color: "#171717", opacity: 1, x: 3, duration: 0.06, ease: "steps(1)" 
+        })
+        .to(textElements, { 
+          color: "#2563eb", opacity: 0.2, x: 0, scale: 1.1, duration: 0.06, ease: "steps(1)" 
+        })
+        .to(textElements, { 
+          color: "#171717", opacity: 1, scale: 1, duration: 0.06, ease: "steps(1)" 
+        });
+    }
+  }, [activeSection]);
+
+  return (
+    <div className="fixed bottom-10 left-10 z-50 flex flex-col gap-4 font-mono text-sm tracking-widest text-neutral-900 pointer-events-auto mix-blend-darken">
+      {[1, 2, 3].map((num) => (
+        <div
+          key={num}
+          id={`nav-item-${num}`}
+          onClick={() => handleScrollTo(`#section-${num}`)}
+          className={cn(
+            "cursor-pointer transition-all duration-300 flex items-center gap-3 group",
+            activeSection === num ? "opacity-100 font-bold" : "opacity-40 hover:opacity-70"
+          )}
+        >
+          <span className="text-xs transition-none will-change-transform">0{num}</span>
+          <span className={cn(
+             "overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap will-change-transform",
+             activeSection === num ? "max-w-[300px] opacity-100" : "max-w-0 opacity-0"
+          )}>
+            {num === 1 ? "WHY WE'RE HERE" : num === 2 ? "WHAT WE DO" : "WHERE WE ARE GOING"}
+          </span>
+          {activeSection === num && <div className="h-[1px] w-8 bg-neutral-900 animate-pulse" />}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// [Section]: �?s�""�.�r1�??��S
+const Section = ({ id, title, subtitle, content, imageSrc, children }) => {
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const cursorRef = useRef(null);
+  const setActiveSection = useNavStore((state) => state.setActiveSection);
+
+  useEffect(() => {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+
+    const el = sectionRef.current;
+    const titleEl = titleRef.current;
+    const cursorEl = cursorRef.current;
+
+    if (!el || !titleEl) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: el,
+      start: "top 55%",
+      end: "bottom 55%",
+      onEnter: () => setActiveSection(id),
+      onEnterBack: () => setActiveSection(id),
+      markers: false
+    });
+
+    gsap.set(titleEl, { width: "0%" });
+    gsap.set(cursorEl, { left: "0%" });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "top 70%", 
+        toggleActions: "play none none reverse",
+      }
+    });
+
+    const blinkAnim = gsap.to(cursorEl, {
+      opacity: 0,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
+      ease: "steps(1)"
+    });
+
+    tl.to(titleEl, {
+      width: "100%",
+      duration: 1.5,
+      ease: "steps(40)", 
+    });
+    
+    tl.to(cursorEl, {
+      left: "100%",      
+      duration: 1.5,
+      ease: "steps(40)", 
+    }, "<");
+
+    tl.fromTo(`.section-${id}-anim`, 
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.1 },
+      "-=0.5"
+    );
+
+    return () => {
+      trigger.kill();
+      tl.kill();
+      blinkAnim.kill();
+    };
+  }, [id, title, setActiveSection]);
+
+  return (
+    <section 
+      id={`section-${id}`} 
+      ref={sectionRef} 
+      className="min-h-screen w-full flex flex-col justify-center px-6 md:px-20 lg:px-32 relative overflow-hidden py-32 bg-neutral-50"
+    >
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-40 mix-blend-multiply pointer-events-none filter grayscale contrast-150"></div>
+      
+      <div className="max-w-7xl z-10 w-full mx-auto">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-2">
+          <div>
+            <span className="block text-xs font-mono text-neutral-400 mb-4">
+              0{id} <span className="text-neutral-300">/ 03</span>
+            </span>
+            
+            <div className="relative inline-block">
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none text-transparent select-none uppercase invisible">
+                {title}
+              </h2>
+              <h2 
+                ref={titleRef}
+                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none text-neutral-900 whitespace-nowrap overflow-hidden align-middle uppercase absolute top-0 left-0"
+                style={{ width: '0%' }}
+              >
+                {title}
+              </h2>
+              <span 
+                ref={cursorRef} 
+                className="absolute top-2 h-[80%] w-3 bg-blue-600 block ml-1 md:ml-2"
+                style={{ left: '0%' }}
+              ></span>
+            </div>
+          </div>
+
+          {subtitle && (
+            <div className={`section-${id}-anim opacity-0`}>
+               <p className="text-xl md:text-2xl font-light text-neutral-800 leading-snug border-l-2 border-blue-600 pl-6 pt-2">
+                 {subtitle}
+               </p>
+            </div>
+          )}
+        </div>
+
+        <div className={`section-${id}-anim opacity-0`}>
+          <TechDivider className="mb-8" />
+        </div>
+
+        {/* Content Area */}
+        <div className={`section-${id}-anim opacity-0`}>
+          {children || (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <div className="lg:col-span-7 text-lg text-neutral-600 leading-relaxed space-y-6">
+                {content}
+              </div>
+              <div className="lg:col-span-5"></div>
+            </div>
+          )}
+        </div>
+
+        {imageSrc && (
+          <div className={`section-${id}-anim opacity-0 mt-16`}>
+             <div className="relative w-full aspect-video overflow-hidden bg-neutral-200 shadow-2xl border border-neutral-200 group">
+                <img 
+                  src={imageSrc} 
+                  alt={title} 
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 filter grayscale hover:grayscale-0"
+                />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+             </div>
+          </div>
+        )}
+
+      </div>
+    </section>
+  );
+};
+
+// --- 3. ��?�?��.��?� (Entry Point) ---
+export default function AboutPage() {
+  const scriptsLoaded = useExternalScripts();
+  const lenisRef = useRef(null);
+
+  useEffect(() => {
+    if (!scriptsLoaded) return;
+
+    const Lenis = window.Lenis;
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+
+    if (Lenis && gsap && ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+      lenisRef.current = lenis;
+
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      gsap.fromTo("main", 
+        { opacity: 0 }, 
+        { opacity: 1, duration: 1.5, delay: 0.2 }
+      );
+
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 500);
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      return () => {
+        lenis.destroy();
+        gsap.ticker.remove(lenis.raf);
+      };
+    }
+  }, [scriptsLoaded]);
+
+  if (!scriptsLoaded) {
+    return (
+      <div className="h-screen w-full bg-neutral-50 flex items-center justify-center text-neutral-900 font-mono">
+        INITIALIZING VIBE CODING STACK...
+      </div>
+    );
+  }
+
+  return (
+    <main className="bg-neutral-50 text-neutral-900 min-h-[300vh] selection:bg-blue-100 selection:text-blue-900 font-sans antialiased opacity-0">
+      
+      <StickyNav lenisRef={lenisRef} />
+
+      {/* 01: Why We're Here */}
+      <Section 
+        id={1} 
+        title="Why We�?Tre Here" 
+        subtitle="isBIM is accelerating the global infrastructure build-out by driving digital transformation through a hybrid �?oConsulting + AI Products�?? model."
+        imageSrc="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070"
+        content={
+          <>
+            <p>
+              We fuse world-class engineering execution, frontier generative AI, and modular construction into a single platform�?"live across 2,600 AI factories, data centers, power plants, stadiums, and hospitals spanning 1.2 billion ftA�.
+            </p>
+            <p>
+              Decades of proprietary engineering data converge in <strong className="text-blue-600">JARVIS</strong>, the industry�?Ts first generative AI agent that accelerates every phase: from generative design and automated tendering to payment certification, site safety, and facility operations�?"delivering projects faster, cheaper, safer, and greener.
+            </p>
+            <p>
+              JARVIS Project Management (JPM) integrates Hong Kong�?Ts renowned professional expertise with AI-driven foresight, China�?Ts Modular Integrated Construction (MiC) ecosystem, and a global hyperscaler network to power critical infrastructure in emerging economies.
+            </p>
+          </>
+        } 
+      />
+      
+      {/* 02: What We Do */}
+      <Section 
+        id={2} 
+        title="What We Do" 
+        subtitle="We deliver a verticalized AI copilot for every player in construction, turning fragmented workflows into executable intelligence."
+      >
+        <div className="flex flex-col">
+          <FeatureRow 
+            title="We deliver a verticalized AI copilot for every player in construction."
+            content="JARVIS is the industry�?Ts first full-stack generative AI suite, serving owners, consultants, contractors, quantity surveyors, and facility managers end-to-end. From JARVIS Agent to JARVIS Air, every module turns fragmented workflows into executable intelligence."
+            linkLabel="Our Platforms"
+          />
+          <FeatureRow 
+            title="We partner with global governments and investors to accelerate nation-scale infrastructure."
+            content="Through JARVIS Project Management (JPM), we integrate Hong Kong professional services, AI risk prediction, and China�?Ts MiC supplier network�?"delivering 20�?"30% cost savings and 30�?"45% faster timelines for major initiatives."
+            linkLabel="Our Projects"
+          />
+          <FeatureRow 
+            title="We deploy strategic capital to frontier ConTech and critical infrastructure."
+            content="JARVIS Ventures invests equity, productizes deep tech, and scales via 2,600 live project testbeds. We structure transparent digital twin pipelines�?"unlocking multilateral banks and PE with real-time credit ratings and 360A� visibility."
+            linkLabel="JARVIS Ventures"
+          />
+          <FeatureRow 
+            title="We ensure safety, carbon efficiency, and resilient infrastructure for humanity."
+            content="Across 2,600 critical assets, we embed 35�?"45% less waste, 25�?"35% lower emissions, and predictive health/safety systems�?"building the physical and digital backbone that powers societies."
+            linkLabel="Sustainability"
+          />
+        </div>
+      </Section>
+      
+      {/* 03: Where We Are Going */}
+      <Section 
+        id={3} 
+        title="Where We Are Going" 
+        subtitle="We are building a future where every infrastructure project is AI-native from day one, powering the next century."
+        content={
+          <>
+            <p>
+              Governments, developers, and hyperscalers across APAC and emerging economies are using isBIM to build the AI infrastructure and critical assets that power the next century. With JARVIS, African presidents are signing 28,000-unit housing cities into reality in months�?"not decades. Data center operators are deploying liquid-cooled AI factories 45% faster.
+            </p>
+            <p>
+              And this is just the beginning. We are building a future where every infrastructure project is <strong className="text-neutral-900 font-semibold">AI-native from day one</strong>. Where emerging nations leapfrog legacy construction with Hong Kong precision, China�?Ts MiC scale, and Alibaba-powered intelligence.
+            </p>
+            <p className="text-blue-600 italic font-medium mt-4">
+              This is the operating system for global infrastructure build-out�?"faster, cheaper, safer, greener.
+            </p>
+          </>
+        } 
+      />
+
+      {/* Call To Action (Footer) */}
+      <div className="h-[60vh] flex flex-col items-center justify-center text-center bg-neutral-100 border-t border-neutral-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30 mix-blend-multiply pointer-events-none filter grayscale"></div>
+        
+        <h3 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 z-10">Transform Your Next Project</h3>
+        <p className="text-xl text-neutral-600 mb-10 max-w-xl z-10">
+          Join the global infrastructure revolution with isBIM
+        </p>
+        
+        <button className="group relative px-8 py-4 bg-blue-600 text-white font-mono text-sm tracking-widest uppercase overflow-hidden hover:bg-blue-700 transition-all duration-300 z-10 shadow-lg">
+          <span className="relative z-10 group-hover:tracking-[0.2em] transition-all duration-300">Learn More</span>
+          <div className="absolute inset-0 bg-neutral-900 transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"></div>
+        </button>
+
+        <div className="absolute bottom-10 flex flex-col items-center text-neutral-500 z-10">
+          <p className="text-xs font-mono mb-2">POWERED BY VIBE CODING STACK</p>
+          <div className="flex gap-4 text-[10px] tracking-widest uppercase opacity-50">
+            <span>Next.js</span>
+            <span>React</span>
+            <span>GSAP</span>
+            <span>Lenis</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  );
+}

@@ -1,0 +1,257 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, LayoutTemplate, Layers } from 'lucide-react';
+
+// --- Types & Interfaces ---
+type Page = 'home' | 'about' | 'services';
+
+// --- Components: UI Elements ---
+const Button = ({ onClick, children, variant = 'default', className = '' }: any) => {
+  const baseStyle = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2";
+  const variants = {
+    default: "bg-primary text-primary-foreground shadow hover:bg-primary/90 bg-black text-white",
+    outline: "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground border-gray-200 text-gray-900",
+    ghost: "hover:bg-accent hover:text-accent-foreground hover:bg-gray-100",
+  };
+  return (
+    <button onClick={onClick} className={`${baseStyle} ${variants[variant as keyof typeof variants]} ${className}`}>
+      {children}
+    </button>
+  );
+};
+
+// --- Core Architecture: The Transition System ---
+
+const InnerOverlayRunner = () => {
+    return (
+        <div className="fixed inset-0 z-[50] pointer-events-none overflow-hidden">
+            
+            {/* 1. 巨型平行四邊形板刷 (The Giant Brush) */}
+            {/* 狀態流 (State Flow) - Unidirectional Fix:
+                1. Initial: x=0% (覆蓋)
+                2. Animate: x=200vw (向右滑開) -> 結束後瞬移至 x=-200vw (左側隱藏)
+                3. Exit: x=0% (從左側滑回覆蓋)
+            */}
+            <motion.div
+                className="absolute top-0 bottom-0 h-full"
+                style={{
+                    width: '150vw',
+                    left: '-25vw',
+                }}
+                initial={{ x: "0%" }} 
+                animate={{ 
+                    x: "200vw",
+                    transitionEnd: { 
+                        x: "-200vw" // 關鍵修復：動畫結束後，靜默重置到左側
+                    }
+                }} 
+                exit={{ x: "0%" }} 
+                transition={{ 
+                    duration: 1, 
+                    ease: [0.22, 1, 0.36, 1] 
+                }}
+            >
+                <div 
+                    className="w-full h-full bg-[#767676]"
+                    style={{
+                        transform: 'skewX(-20deg)', 
+                        transformOrigin: 'bottom left'
+                    }}
+                />
+            </motion.div>
+
+            {/* 2. Loading Icon + 閃爍效果 */}
+            <motion.div 
+                className="absolute inset-0 flex flex-col items-center justify-center text-white z-[60]"
+                initial={{ opacity: 1, scale: 1 }}
+                exit={{ 
+                    opacity: 1, 
+                    scale: 1.2, 
+                    transition: { duration: 0.2 } 
+                }}   
+                animate={{ 
+                    opacity: 0, 
+                    scale: 0.8,
+                    transition: { 
+                        delay: 0.4, 
+                        duration: 0.4 
+                    }
+                }} 
+            >
+                <motion.div
+                    className="relative flex flex-col items-center justify-center"
+                    animate={{ filter: ["drop-shadow(0 0 0px white)", "drop-shadow(0 0 10px white)", "drop-shadow(0 0 0px white)"] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                    <motion.div
+                        className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full mb-4"
+                        animate={{ rotate: 360 }}
+                        transition={{ 
+                            repeat: Infinity, 
+                            duration: 1, 
+                            ease: "linear" 
+                        }}
+                    />
+                    <span className="text-[10px] tracking-[0.3em] font-bold drop-shadow-md bg-black/20 px-2 py-1 rounded">LOADING</span>
+                </motion.div>
+            </motion.div>
+        </div>
+    )
+}
+
+// --- HOC: Page Wrapper (架構重構) ---
+const PageWrapper = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  return (
+    <div className="relative w-full min-h-screen">
+      
+      <motion.div
+        className={`min-h-screen w-full pt-20 px-8 ${className}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }} 
+        transition={{
+          delay: 0.2, 
+          duration: 0.5
+        }}
+      >
+        {children}
+      </motion.div>
+
+      <InnerOverlayRunner /> 
+    </div>
+  );
+};
+
+// --- Mock Pages ---
+
+const HomePage = ({ setPage }: { setPage: (p: Page) => void }) => (
+  <PageWrapper className="bg-white text-black">
+    <div className="max-w-4xl mx-auto">
+      <header className="mb-12">
+        <div className="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-500 mb-4">
+          Phase 1: Foundation
+        </div>
+        <h1 className="text-6xl font-bold tracking-tighter mb-6">
+          Next.js <br/> App Router
+        </h1>
+        <p className="text-xl text-gray-600 max-w-2xl leading-relaxed">
+          核心基礎層。我們已修復了方向問題：現在遮罩利用 <code>transitionEnd</code> 技巧，實現了從左至右的<strong>單向循環刷動</strong>，不再有倒帶的感覺。
+        </p>
+      </header>
+
+      <div className="flex gap-4">
+        <Button onClick={() => setPage('about')}>
+          探索架構 (About) <ArrowRight className="ml-2 w-4 h-4" />
+        </Button>
+        <Button variant="outline" onClick={() => setPage('services')}>
+          檢視服務 (Services)
+        </Button>
+      </div>
+
+      <div className="mt-24 grid grid-cols-3 gap-8 border-t pt-8">
+        <div>
+            <h3 className="font-bold mb-2 flex items-center gap-2"><LayoutTemplate className="w-4 h-4"/> Layouts</h3>
+            <p className="text-sm text-gray-500">全域佈局管理狀態與 Lenis 滾動環境。</p>
+        </div>
+        <div>
+            <h3 className="font-bold mb-2 flex items-center gap-2"><Layers className="w-4 h-4"/> Metadata</h3>
+            <p className="text-sm text-gray-500">針對每個視圖動態生成的 SEO 標籤。</p>
+        </div>
+      </div>
+    </div>
+  </PageWrapper>
+);
+
+const AboutPage = ({ setPage }: { setPage: (p: Page) => void }) => (
+  <PageWrapper className="bg-gray-50 text-gray-900">
+    <div className="max-w-4xl mx-auto">
+      <header className="mb-12">
+        <div className="inline-block px-3 py-1 bg-blue-100 rounded-full text-xs font-medium text-blue-600 mb-4">
+          Phase 3: Experience Layer
+        </div>
+        <h1 className="text-5xl font-bold tracking-tighter mb-6">
+          Shadcn/ui + <br/> Tailwind CSS
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl">
+            這個轉場動畫現在速度為 1s，保持了優雅但更加敏捷，且 Loading Icon 會在遮罩覆蓋時清晰地閃爍。
+        </p>
+      </header>
+
+      <div className="p-6 bg-white border rounded-lg shadow-sm mb-8">
+        <h3 className="font-mono text-sm text-gray-400 mb-4">CODE SNAPSHOT</h3>
+        <code className="text-xs bg-gray-900 text-green-400 p-4 block rounded font-mono">
+          {`// Unidirectional Fix\n`}
+          {`animate={{\n`}
+          {`  x: "200vw",\n`}
+          {`  transitionEnd: { x: "-200vw" }\n`}
+          {`}}`}
+        </code>
+      </div>
+
+      <Button onClick={() => setPage('home')} variant="default">
+        返回首頁
+      </Button>
+    </div>
+  </PageWrapper>
+);
+
+const ServicesPage = ({ setPage }: { setPage: (p: Page) => void }) => (
+    <PageWrapper className="bg-black text-white">
+      <div className="max-w-4xl mx-auto">
+        <header className="mb-12">
+          <div className="inline-block px-3 py-1 bg-zinc-800 rounded-full text-xs font-medium text-zinc-300 mb-4">
+            Phase 4: Interactivity
+          </div>
+          <h1 className="text-5xl font-bold tracking-tighter mb-6">
+            Zustand + <br/> TanStack Query
+          </h1>
+          <p className="text-lg text-zinc-400 max-w-2xl">
+            雖然此視圖主要展示視覺效果，但在後台，Zustand 管理著全域狀態，而 TanStack Query 負責資料的非同步獲取。
+          </p>
+        </header>
+  
+        <div className="grid grid-cols-2 gap-6 mb-12">
+            <div className="p-6 border border-zinc-800 rounded bg-zinc-900/50">
+                <div className="w-8 h-8 bg-blue-500 rounded mb-4" />
+                <h4 className="font-bold mb-2">State Management</h4>
+                <p className="text-sm text-zinc-500">Zustand store 觸發 UI 變化。</p>
+            </div>
+            <div className="p-6 border border-zinc-800 rounded bg-zinc-900/50">
+                <div className="w-8 h-8 bg-green-500 rounded mb-4" />
+                <h4 className="font-bold mb-2">Data Fetching</h4>
+                <p className="text-sm text-zinc-500">TanStack Query 處理 API 快取。</p>
+            </div>
+        </div>
+  
+        <Button onClick={() => setPage('home')} className="bg-white text-black hover:bg-gray-200">
+          返回首頁
+        </Button>
+      </div>
+    </PageWrapper>
+  );
+
+// --- Main Application ---
+export default function App() {
+  const [page, setPage] = useState<Page>('home');
+
+  return (
+    <div className="relative w-full min-h-screen overflow-hidden bg-gray-50 font-sans">
+      <AnimatePresence mode="wait">
+        {page === 'home' && (
+          <HomePage key="home" setPage={setPage} />
+        )}
+        {page === 'about' && (
+          <AboutPage key="about" setPage={setPage} />
+        )}
+        {page === 'services' && (
+            <ServicesPage key="services" setPage={setPage} />
+        )}
+      </AnimatePresence>
+
+      <nav className="fixed top-0 left-0 right-0 p-6 flex justify-between items-center z-40 pointer-events-none mix-blend-difference text-white">
+          <div className="font-bold tracking-tighter text-xl">VIBE CODING</div>
+          <div className="text-xs font-mono opacity-50">ARCHITECTURAL DEMO</div>
+      </nav>
+    </div>
+  );
+}

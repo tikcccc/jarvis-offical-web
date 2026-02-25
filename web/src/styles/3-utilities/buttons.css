@@ -1,0 +1,36 @@
+/* =========================================
+   3-UTILITIES: BUTTON CLASSES
+   Reusable button styles
+   ========================================= */
+
+@layer components {
+  /* ─────────────────────────────────────────
+     Primary Button
+     Dark background, light text
+     ───────────────────────────────────────── */
+  .btn-primary {
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border-color: var(--button-primary-border);
+    transition: background var(--motion-fast) var(--ease-smooth);
+  }
+
+  .btn-primary:hover {
+    background: var(--button-primary-hover);
+  }
+
+  /* ─────────────────────────────────────────
+     Strong Button (Legacy Alias)
+     Maps to btn-primary for backward compatibility
+     ───────────────────────────────────────── */
+  .button-strong {
+    background: var(--button-primary-bg);
+    color: var(--text-inverse-strong);
+    border-color: var(--button-primary-border);
+    transition: background var(--motion-fast) var(--ease-smooth);
+  }
+
+  .button-strong:hover {
+    background: var(--button-primary-hover);
+  }
+}

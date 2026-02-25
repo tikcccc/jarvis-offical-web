@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS AI - Intelligent Blueprint (Video Preview)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- UPDATED: Added Playfair Display font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;800&family=Space+Grotesk:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archWhite: '#F2F2F2', /* Light Grey */
+                        deepDark: '#1E1F2B',  /* Dark Blue-Grey */
+                        accentPurple: '#8A2BE2',
+                        accentCyan: '#00AFB9', /* For Light Mode */
+                        brightCyan: '#00FFFF', /* For Dark Mode */
+                    },
+                    fontFamily: {
+                        // Sans for UI
+                        sans: ['Inter', 'sans-serif'],
+                        // Mono for Tech
+                        mono: ['Space Grotesk', 'monospace'],
+                        // Grotesk for Headings
+                        grotesk: ['Space Grotesk', 'sans-serif'],
+                        // UPDATED: Playfair Display for "Artistic Serif"
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    letterSpacing: {
+                        tighter: '-0.05em',
+                        tightest: '-0.08em',
+                    },
+                    animation: {
+                        'scan-vertical': 'scanVertical 3s ease-in-out infinite',
+                        'float-background': 'floatBackground 15s ease-in-out infinite',
+                        'marquee': 'marquee 120s linear infinite',
+                        'marquee-reverse': 'marqueeReverse 120s linear infinite',
+                        'fade-in-up': 'fadeInUp 1.5s ease-out forwards',
+                        'blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        scanVertical: {
+                            '0%, 100%': { top: '5%' },
+                            '50%': { top: '90%' },
+                        },
+                        floatBackground: {
+                            '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        marqueeReverse: {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px) rotate(-3deg)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) rotate(-3deg)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base Styles */
+        body { background-color: #F2F2F2; color: #1E1F2B; }
+        
+        /* Glass Panel Styles */
+        .glass-panel-dark {
+            background: rgba(30, 31, 43, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,255,255,0.02);
+        }
+
+        /* Screen Container */
+        .screen-container {
+            background-color: #0F1016;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+        
+        /* Interactive List Items (Light Mode) */
+        .matrix-item-light {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 2px solid transparent;
+            cursor: pointer;
+            padding-left: 0;
+            opacity: 0.5;
+        }
+        .matrix-item-light:hover { opacity: 0.8; padding-left: 10px; }
+        .matrix-item-light.active {
+            opacity: 1;
+            border-left-color: #8A2BE2;
+            padding-left: 20px;
+        }
+        .matrix-item-light .desc {
+            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, opacity 0.5s ease-out; opacity: 0;
+        }
+        .matrix-item-light.active .desc { max-height: 200px; opacity: 1; margin-top: 1rem; }
+
+        /* Interactive List Items (Dark Mode) */
+        .matrix-item-dark {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 2px solid transparent;
+            cursor: pointer;
+            padding-left: 0;
+            opacity: 0.5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .matrix-item-dark:hover { opacity: 0.9; padding-left: 10px; }
+        .matrix-item-dark.active {
+            opacity: 1;
+            border-left-color: #00FFFF; 
+            padding-left: 20px;
+            background: linear-gradient(90deg, rgba(0,255,255,0.05) 0%, transparent 100%);
+        }
+        .matrix-item-dark .desc {
+            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, opacity 0.5s ease-out; opacity: 0;
+        }
+        .matrix-item-dark.active .desc { max-height: 200px; opacity: 1; margin-top: 1rem; padding-bottom: 1rem; }
+
+        /* Arrow Animation specific */
+        .arrow-icon {
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .group:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Grids - Only kept for Dark Section */
+        .grid-bg-dark {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+        }
+
+        /* Visuals */
+        .visual-container {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .fade-enter-active { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Outline Text Utility */
+        .text-outline {
+            -webkit-text-stroke: 1px rgba(30, 31, 43, 0.1);
+            color: transparent;
+        }
+        
+        /* Video Styling */
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden selection:bg-accentPurple selection:text-white bg-archWhite">
+
+    <!-- ================= SECTION 1: HERO ================= -->
+    <section class="h-screen relative flex flex-col justify-center bg-archWhite border-b border-black/5 overflow-hidden">
+        
+        <!-- Layer 0: Dynamic Gradient Blobs (Subtle) -->
+        <div class="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-gradient-to-br from-accentPurple/5 to-blue-200/10 rounded-full blur-[120px] animate-float-background pointer-events-none mix-blend-multiply opacity-50"></div>
+        <div class="absolute -bottom-[20%] -left-[10%] w-[700px] h-[700px] bg-gradient-to-tr from-accentCyan/5 to-teal-200/10 rounded-full blur-[100px] animate-float-background pointer-events-none mix-blend-multiply opacity-50" style="animation-delay: -5s;"></div>
+
+        <!-- Kinetic Typography Background -->
+        <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none select-none z-0 overflow-hidden opacity-0 animate-fade-in-up" style="transform: rotate(-3deg) scale(1.1);">
+            <div class="w-full whitespace-nowrap opacity-[0.04] mb-4">
+                <div class="inline-block animate-marquee">
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-deepDark">JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE</span>
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-deepDark">JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE</span>
+                </div>
+            </div>
+            <div class="w-full whitespace-nowrap opacity-100 mb-4">
+                <div class="inline-block animate-marquee-reverse">
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-outline">INTELLIGENT BLUEPRINT &nbsp; INTELLIGENT BLUEPRINT &nbsp; INTELLIGENT BLUEPRINT</span>
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-outline">INTELLIGENT BLUEPRINT &nbsp; INTELLIGENT BLUEPRINT &nbsp; INTELLIGENT BLUEPRINT</span>
+                </div>
+            </div>
+            <div class="w-full whitespace-nowrap opacity-[0.04]">
+                <div class="inline-block animate-marquee">
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-deepDark">JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE</span>
+                    <span class="font-grotesk text-[10rem] lg:text-[14rem] font-bold tracking-tighter leading-none mr-12 text-deepDark">JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE &nbsp; JARVIS AI SUITE</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Decoration Lines -->
+        <div class="absolute top-0 right-12 h-full w-px bg-black/5 hidden lg:block z-0"></div>
+        <div class="absolute bottom-24 left-0 w-full h-px bg-black/5 z-0"></div>
+
+        <div class="container mx-auto px-6 lg:px-12 relative z-10">
+            <div class="mb-24">
+                <!-- UPDATED: Using grotesk font for main title -->
+                <h1 class="font-grotesk text-8xl lg:text-[10rem] font-light tracking-tightest leading-[0.85] text-deepDark relative drop-shadow-xl backdrop-blur-[2px] rounded-2xl inline-block p-4 -ml-4">
+                    JARVIS<br>
+                    <span class="font-normal text-transparent bg-clip-text bg-gradient-to-r from-accentPurple to-accentCyan">AI Suite</span>
+                </h1>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+                <div class="pb-4 backdrop-blur-sm rounded-lg p-2 -ml-2">
+                    <div class="flex items-center space-x-2 text-accentPurple mb-4">
+                        <span class="w-1.5 h-1.5 bg-accentPurple rounded-full animate-pulse"></span>
+                        <span class="font-mono text-[10px] uppercase tracking-widest">Input Stream</span>
+                    </div>
+                    <div class="h-24 lg:h-32">
+                        <p class="font-mono text-xl lg:text-2xl text-gray-600 leading-relaxed">
+                            > <span id="typewriter-text"></span><span class="animate-blink inline-block w-2 h-6 bg-accentPurple align-middle ml-1"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-end pb-4">
+                    <!-- UPDATED: Accuracy Highlighting -->
+                    <div class="flex items-end">
+                        <div class="font-grotesk text-[8rem] lg:text-[10rem] font-light text-deepDark leading-none tracking-tighter tabular-nums drop-shadow-lg" id="counter-display">00.0</div>
+                        <div class="flex flex-col justify-end pb-6 ml-2">
+                            <span class="font-grotesk text-4xl lg:text-5xl text-accentCyan font-light">%</span>
+                        </div>
+                    </div>
+                    <div class="text-right mt-2 w-full max-w-xs">
+                         <!-- UPDATED: Label for Accuracy -->
+                        <div class="font-grotesk text-sm font-bold tracking-[0.3em] text-accentPurple uppercase mb-3 flex justify-end items-center gap-2">
+                             <div class="w-8 h-[1px] bg-accentPurple/50"></div> OCR Accuracy
+                        </div>
+                        
+                        <div class="flex justify-between font-mono text-[10px] text-gray-400 uppercase tracking-widest mb-2">
+                            <span>Processing</span>
+                            <span>Done</span>
+                        </div>
+                        <div class="w-full h-0.5 bg-gray-200 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-accentPurple to-accentCyan w-0 transition-all duration-[2000ms] ease-out" id="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 2: DESIGNED FOR BUILDERS ================= -->
+    <!-- UPDATED: Optimization of layout (Spacing, Fonts) -->
+    <section class="relative bg-deepDark pt-40 pb-32 border-b border-white/5 overflow-hidden text-white">
+        <div class="absolute top-0 right-0 w-1/2 h-full border-l border-white/5 pointer-events-none"></div>
+        <div class="absolute top-1/2 left-0 w-full h-px bg-white/5 pointer-events-none"></div>
+        <div class="container mx-auto px-6 lg:px-12 relative z-10">
+            <!-- UPDATED: Increased Grid Gap for better breathing room -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+                <div class="lg:col-span-5 relative z-10">
+                    <div class="flex flex-wrap gap-3 mb-12">
+                        <div class="px-3 py-1.5 rounded border border-white/10 bg-white/5 backdrop-blur text-[10px] font-mono uppercase tracking-wider text-gray-300 flex items-center">
+                            <span class="w-1.5 h-1.5 bg-accentPurple rounded-full mr-2"></span> isBIM DATASET
+                        </div>
+                        <div class="px-3 py-1.5 rounded border border-white/10 bg-white/5 backdrop-blur text-[10px] font-mono uppercase tracking-wider text-gray-300 flex items-center">
+                            <span class="w-1.5 h-1.5 bg-brightCyan rounded-full mr-2"></span> ALIBABA MODELS
+                        </div>
+                    </div>
+                    <!-- UPDATED: Used font-serif (Playfair) for the entire block for consistency -->
+                    <h2 class="font-serif text-6xl lg:text-8xl font-medium tracking-tight leading-none text-white mb-8">
+                        Designed <br>
+                        for <span class="italic bg-gradient-to-r from-white to-gray-500 text-transparent bg-clip-text">Builders.</span>
+                    </h2>
+                    <div class="w-32 h-1.5 bg-gradient-to-r from-accentPurple to-brightCyan mb-12"></div>
+                    <p class="text-2xl lg:text-3xl font-light text-gray-200 leading-snug max-w-lg">
+                        Transforms decades of engineering expertise into an <span class="text-accentPurple font-normal border-b border-accentPurple/30 pb-1">agentic assistant</span>.
+                    </p>
+                </div>
+                <div class="lg:col-span-7 flex flex-col justify-center space-y-16 relative">
+                    <div class="text-gray-400 text-lg leading-relaxed max-w-2xl font-light pl-0 lg:pl-12 border-l-0 lg:border-l border-white/10">
+                        <p class="mb-6">
+                            JARVIS understands context, anticipates needs, and executes with precision. It accelerates operations for owners, consultants, contractors, and quantity surveyors.
+                        </p>
+                    </div>
+                    <!-- Marquee Section -->
+                    <div class="relative w-full overflow-hidden border-y border-white/10 py-12 bg-white/[0.02]">
+                        <div class="flex whitespace-nowrap animate-marquee">
+                            <!-- Set 1 -->
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">FINANCE</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">DESIGN</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">TENDERING</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">MANAGEMENT</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">INSPECTION</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">PAYMENT</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">FACILITY OPS</span>
+                            <!-- Set 2 (Duplicate for Loop) -->
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">FINANCE</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">DESIGN</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">TENDERING</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">MANAGEMENT</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">INSPECTION</span>
+                            <span class="text-5xl font-grotesk font-medium text-white mx-10">PAYMENT</span>
+                            <span class="text-5xl font-grotesk font-extralight text-gray-600 mx-10">FACILITY OPS</span>
+                        </div>
+                        <div class="absolute top-0 left-0 w-40 h-full bg-gradient-to-r from-deepDark to-transparent z-10"></div>
+                        <div class="absolute top-0 right-0 w-40 h-full bg-gradient-to-l from-deepDark to-transparent z-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 3: GENERATE ================= -->
+    <section class="relative bg-archWhite min-h-screen flex flex-col justify-center">
+        <div class="container mx-auto px-6 lg:px-12 py-24">
+            <div class="mb-20">
+                <span class="font-mono text-accentPurple text-sm lg:text-base font-bold tracking-[0.2em] uppercase block mb-6">Generative & Strategic Intelligence</span>
+                <h2 class="font-grotesk text-5xl lg:text-8xl font-medium tracking-tight text-deepDark leading-none">
+                    Generate. <span class="text-gray-300">Automate.</span> <span class="bg-gradient-to-r from-accentPurple to-accentCyan bg-clip-text text-transparent">Capitalize.</span>
+                </h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 h-[600px]">
+                <div class="lg:col-span-5 flex flex-col justify-center space-y-4 order-2 lg:order-1">
+                    
+                    <!-- Item 1 -->
+                    <div class="matrix-item-light active group" onmouseenter="setS3(0)">
+                        <div class="flex items-center justify-between py-2 border-b border-black/5">
+                            <h3 class="font-grotesk text-4xl font-medium text-deepDark group-hover:text-accentPurple transition-colors">JARVIS Agent</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-accentPurple arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-base leading-relaxed text-gray-600 font-light">
+                            Automates repetitive tasks such as invoice scanning with <strong class="text-accentPurple font-medium">99.8% accuracy</strong>. Features tender parsing and auto-scoring.
+                        </div>
+                    </div>
+                    
+                    <!-- Item 2 -->
+                    <div class="matrix-item-light group" onmouseenter="setS3(1)">
+                        <div class="flex items-center justify-between py-2 border-b border-black/5">
+                            <h3 class="font-grotesk text-4xl font-medium text-deepDark group-hover:text-accentCyan transition-colors">JARVIS Pay</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-accentCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-base leading-relaxed text-gray-600 font-light">
+                            Digitizes Bills of Quantities and links payment milestones to 360° digital twins, enabling 60-day certification.
+                        </div>
+                    </div>
+                    
+                    <!-- Item 3 -->
+                    <div class="matrix-item-light group" onmouseenter="setS3(2)">
+                        <div class="flex items-center justify-between py-2 border-b border-black/5">
+                            <h3 class="font-grotesk text-4xl font-medium text-deepDark group-hover:text-accentPurple transition-colors">JARVIS Air</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-accentPurple arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-base leading-relaxed text-gray-600 font-light">
+                            Leverages stable diffusion to generate photorealistic design visuals in seconds. With over 500,000 templates.
+                        </div>
+                    </div>
+
+                </div>
+                <div class="lg:col-span-7 relative h-full pt-8 order-1 lg:order-2">
+                    <div class="w-full h-full screen-container rounded-sm overflow-hidden relative shadow-2xl border-t border-white/20">
+                        <div class="h-10 border-b border-white/10 bg-[#15161E] flex items-center justify-between px-4 z-20 absolute top-0 w-full">
+                            <div class="flex space-x-2"><div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div><div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div><div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div></div>
+                            <div class="font-mono text-[10px] text-gray-500 uppercase tracking-widest" id="s3-title">JARVIS_AGENT.MP4</div>
+                            <div class="w-10"></div>
+                        </div>
+                        <div class="absolute inset-0 top-10 bg-[#0F1016]" id="s3-container">
+                            <!-- Video will be injected here -->
+                        </div>
+                        <!-- Video Overlay Gradient for aesthetics -->
+                        <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none z-10"></div>
+                    </div>
+                    <div class="absolute -inset-4 bg-black/5 blur-3xl -z-10 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TRANSITION ================= -->
+    <div class="w-full h-24 bg-gradient-to-b from-archWhite via-[#7A7B85] to-deepDark"></div>
+
+    <!-- ================= SECTION 4: SENSE (DARK MODE) ================= -->
+    <section class="relative bg-deepDark min-h-screen flex items-center">
+        <!-- Dark Mode Grid Kept Here -->
+        <div class="absolute inset-0 grid-bg-dark opacity-30 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 lg:px-12 py-24">
+            
+            <div class="mb-12 border-b border-white/10 pb-8 flex flex-col md:flex-row md:justify-between md:items-end">
+                <div>
+                    <span class="font-mono text-gray-400 text-sm lg:text-base font-bold tracking-[0.2em] uppercase block mb-6">Live Digital Twin & Site OS</span>
+                    <h2 class="font-grotesk text-5xl lg:text-7xl font-medium tracking-tightest text-white leading-tight">
+                        Sense. <span class="text-gray-600">Secure.</span> <span class="text-brightCyan font-normal">Sustain.</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 h-[750px] lg:h-[650px]">
+                
+                <!-- LEFT: Dashboard (Now Video Preview) -->
+                <div class="lg:col-span-7 relative pt-4 order-1">
+                    <div class="w-full h-full glass-panel-dark rounded-xl overflow-hidden relative border border-white/10 shadow-2xl">
+                        <div class="h-12 bg-white/5 border-b border-white/10 flex items-center justify-between px-6 absolute top-0 w-full z-10">
+                            <div class="font-mono text-xs text-gray-400" id="s4-title">LIVE_FEED // EAGLE_EYE</div>
+                            <div class="flex items-center space-x-2"><div class="w-2 h-2 bg-brightCyan rounded-full animate-pulse"></div><span class="font-mono text-xs text-brightCyan">REC</span></div>
+                        </div>
+                        <!-- Container for the video -->
+                        <div class="absolute inset-0 top-12 bg-[#0F1016] flex items-center justify-center" id="s4-container">
+                            <!-- Video will be injected here -->
+                        </div>
+                        <div class="absolute inset-0 grid-bg-dark opacity-10 pointer-events-none mix-blend-overlay z-20"></div>
+                    </div>
+                    <div class="absolute -inset-4 bg-brightCyan/5 blur-3xl -z-10 rounded-full"></div>
+                </div>
+
+                <!-- RIGHT: Menu (Renamed Items) -->
+                <div class="lg:col-span-5 flex flex-col justify-center space-y-4 order-2 pl-4">
+                    
+                    <!-- Eagle Eye -->
+                    <div class="matrix-item-dark active group" onmouseenter="setS4(0)">
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <h3 class="font-grotesk text-3xl font-medium text-white group-hover:text-brightCyan transition-colors">JARVIS Eagle Eye</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-brightCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-sm font-light leading-relaxed text-gray-400">
+                            Real-time digital twin with IoT and 360° capture for remote monitoring and anomaly detection.
+                        </div>
+                    </div>
+                    
+                    <!-- SSSS -->
+                    <div class="matrix-item-dark group" onmouseenter="setS4(1)">
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <h3 class="font-grotesk text-3xl font-medium text-white group-hover:text-brightCyan transition-colors">JARVIS SSSS</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-brightCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-sm font-light leading-relaxed text-gray-400">
+                            Smart Site Safety System utilizing AI wearables to instantly alert and prevent hazards.
+                        </div>
+                    </div>
+                    
+                    <!-- DWSS -->
+                    <div class="matrix-item-dark group" onmouseenter="setS4(2)">
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <h3 class="font-grotesk text-3xl font-medium text-white group-hover:text-brightCyan transition-colors">JARVIS DWSS</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-brightCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-sm font-light leading-relaxed text-gray-400">
+                            Digital Works Supervision System ensuring compliance with blockchain-backed audit trails.
+                        </div>
+                    </div>
+                    
+                    <!-- CDCP -->
+                    <div class="matrix-item-dark group" onmouseenter="setS4(3)">
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <h3 class="font-grotesk text-3xl font-medium text-white group-hover:text-brightCyan transition-colors">JARVIS CDCP</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-brightCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-sm font-light leading-relaxed text-gray-400">
+                            Common Data Environment hub for interoperable BIM collaboration and version control.
+                        </div>
+                    </div>
+                    
+                    <!-- Assets -->
+                    <div class="matrix-item-dark group" onmouseenter="setS4(4)">
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <h3 class="font-grotesk text-3xl font-medium text-white group-hover:text-brightCyan transition-colors">JARVIS Assets</h3>
+                            <!-- Arrow Icon -->
+                            <svg class="w-6 h-6 text-brightCyan arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                        <div class="desc text-sm font-light leading-relaxed text-gray-400">
+                            AI-driven predictive maintenance and ESG tracking for full lifecycle facility optimization.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 5: CALL TO ACTION ================= -->
+    <section class="bg-deepDark py-32 border-t border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 grid-bg-dark opacity-10"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-white/20 to-transparent"></div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <span class="font-mono text-xs text-brightCyan tracking-[0.4em] uppercase mb-8 block">System Status: Ready</span>
+            
+            <h2 class="font-grotesk text-6xl lg:text-8xl font-medium text-white mb-12 tracking-tighter">
+                See JARVIS <br>
+                <span class="font-serif italic font-light text-gray-500">in action.</span>
+            </h2>
+
+            <div class="flex flex-col items-center gap-8">
+                <!-- UPDATED: Optimized button size, padding, and text -->
+                <button class="group relative px-12 py-6 bg-white/5 border border-white/10 rounded-full overflow-hidden transition-all hover:bg-white/10 hover:border-brightCyan/50 hover:shadow-[0_0_40px_rgba(0,255,255,0.25)]">
+                    <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-accentPurple/20 to-brightCyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <span class="relative font-mono text-base tracking-widest text-white uppercase group-hover:text-brightCyan transition-colors flex items-center gap-4">
+                        Request Live Demo 
+                        <span class="w-2 h-2 bg-brightCyan rounded-full animate-pulse"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // --- HERO ANIMATIONS ---
+        const textToType = "Automate invoices, tenders, and forms.";
+        const typeContainer = document.getElementById('typewriter-text');
+        let charIndex = 0;
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                typeContainer.innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        const counterDisplay = document.getElementById('counter-display');
+        const progressBar = document.getElementById('progress-bar');
+        let currentVal = 0.0;
+        const targetVal = 99.8;
+        function updateCounter() {
+            if (currentVal < targetVal) {
+                const diff = targetVal - currentVal;
+                const increment = Math.max(0.1, diff * 0.05);
+                currentVal += increment;
+                if(currentVal > targetVal) currentVal = targetVal;
+                counterDisplay.innerText = currentVal.toFixed(1);
+                requestAnimationFrame(updateCounter);
+            } else {
+                 counterDisplay.innerText = targetVal.toFixed(1);
+            }
+        }
+
+        // --- SECTION 3: VIDEO VISUALS ---
+        function getS3Visual(index) {
+            // Placeholder URLs from Pexels (Free Stock Video)
+            // REPLACE THESE URLS WITH YOUR ACTUAL PRODUCT VIDEOS
+            const videos = [
+                // Agent: Typing/Coding/Data
+                "https://videos.pexels.com/video-files/5473806/5473806-hd_1920_1080_25fps.mp4",
+                // Pay: Blockchain/Numbers/Finance
+                "https://videos.pexels.com/video-files/3163534/3163534-hd_1920_1080_30fps.mp4",
+                // Air: Architecture/Blueprint
+                "https://videos.pexels.com/video-files/7565439/7565439-hd_1920_1080_30fps.mp4"
+            ];
+            
+            // Using a fade animation container
+            return `
+                <div class="visual-container fade-enter-active">
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                        <source src="${videos[index]}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            `;
+        }
+
+        // --- SECTION 4: VIDEO VISUALS (DARK MODE) ---
+        function getS4Visual(index) {
+            // Placeholder URLs from Pexels
+            // REPLACE THESE URLS WITH YOUR ACTUAL PRODUCT VIDEOS
+            const videos = [
+                // Eagle Eye: Drone/City View
+                "https://videos.pexels.com/video-files/2048246/2048246-hd_1920_1080_30fps.mp4",
+                // SSSS: Construction Workers/Safety
+                "https://videos.pexels.com/video-files/3205626/3205626-hd_1920_1080_25fps.mp4", 
+                // DWSS: Tablet/Inspection
+                "https://videos.pexels.com/video-files/6894025/6894025-hd_1920_1080_25fps.mp4",
+                // CDCP: Servers/Data/Connection
+                "https://videos.pexels.com/video-files/1181169/1181169-hd_1920_1080_30fps.mp4",
+                // Assets: Modern Building/Maintenance
+                "https://videos.pexels.com/video-files/1572685/1572685-hd_1920_1080_30fps.mp4" 
+            ];
+
+            return `
+                <div class="visual-container fade-enter-active">
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+                        <source src="${videos[index]}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            `;
+        }
+
+        function setS3(index) {
+            const items = document.querySelectorAll('.matrix-item-light');
+            items.forEach((el, i) => { if(i === index) el.classList.add('active'); else el.classList.remove('active'); });
+            const container = document.getElementById('s3-container');
+            const title = document.getElementById('s3-title');
+            const titles = ["DEMO_AGENT.MP4", "DEMO_PAY.MP4", "DEMO_AIR.MP4"];
+            
+            // Inject Video HTML
+            container.innerHTML = getS3Visual(index);
+            title.innerText = titles[index];
+        }
+
+        function setS4(index) {
+            const items = document.querySelectorAll('.matrix-item-dark');
+            items.forEach((el, i) => { if(i === index) el.classList.add('active'); else el.classList.remove('active'); });
+            const container = document.getElementById('s4-container');
+            const title = document.getElementById('s4-title');
+            const titles = ["LIVE_FEED // EAGLE_EYE", "LIVE_FEED // SSSS", "LIVE_FEED // DWSS", "LIVE_FEED // CDCP", "LIVE_FEED // ASSETS"];
+            
+            // Inject Video HTML
+            container.innerHTML = getS4Visual(index);
+            title.innerText = titles[index];
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(typeWriter, 1000);
+            setTimeout(updateCounter, 500);
+            setTimeout(() => { document.getElementById('progress-bar').style.width = '99.8%'; }, 800);
+            
+            // Set initial state
+            document.getElementById('s3-container').innerHTML = getS3Visual(0);
+            document.getElementById('s4-container').innerHTML = getS4Visual(0);
+        });
+    </script>
+</body>
+</html>

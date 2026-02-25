@@ -1,0 +1,50 @@
+/* =========================================
+   1-FOUNDATIONS: RADIUS PRIMITIVES
+   Border radius scale for consistent roundness
+   ========================================= */
+
+:root {
+  /* ─────────────────────────────────────────
+     Radius Scale (Primitives)
+     ───────────────────────────────────────── */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;   /* 2px */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-full: 9999px;   /* Pill shape */
+  --radius-circle: 50%;    /* Perfect circle */
+
+  /* ─────────────────────────────────────────
+     Semantic Radius Mappings
+     ───────────────────────────────────────── */
+
+  /* Cards & Containers */
+  --radius-card: var(--radius-lg);
+  --radius-modal: var(--radius-lg);
+  --radius-popover: var(--radius-md);
+  --radius-dropdown: var(--radius-md);
+  --radius-fieldset: var(--radius-md);
+
+  /* Buttons */
+  --radius-btn: var(--radius-none);           /* Sharp buttons (default) */
+  --radius-btn-rounded: var(--radius-sm);     /* Slightly rounded */
+
+  /* Form Elements */
+  --radius-input: var(--radius-sm);
+  --radius-tooltip: var(--radius-sm);
+
+  /* Media */
+  --radius-media: var(--radius-none);              /* Images/video (sharp) */
+  --radius-media-overlay: var(--radius-none);
+  --radius-media-rounded: var(--radius-sm);        /* Images/video (rounded) */
+  --radius-media-overlay-rounded: var(--radius-sm);
+  --radius-thumbnail: var(--radius-sm);
+  --radius-video: var(--radius-none);
+
+  /* Special Elements */
+  --radius-chip: var(--radius-full);          /* Pills, tags */
+  --radius-toggle: var(--radius-full);        /* Toggle controls */
+  --radius-avatar: var(--radius-circle);      /* User avatars */
+}

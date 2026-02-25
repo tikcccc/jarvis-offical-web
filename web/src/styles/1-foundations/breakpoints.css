@@ -1,0 +1,24 @@
+/* =========================================
+   1-FOUNDATIONS: BREAKPOINT PRIMITIVES
+   Responsive breakpoint system
+   ========================================= */
+
+:root {
+  /* ─────────────────────────────────────────
+     Four-Breakpoint System
+     Mobile → Tablet → Laptop → Desktop
+     ───────────────────────────────────────── */
+  --bp-mobile: 0px;
+  --bp-tablet: 768px;
+  --bp-laptop: 1024px;
+  --bp-desktop: 1600px;
+
+  /* ─────────────────────────────────────────
+     Container Max-Width (Four-Tier)
+     Progressive container sizing across breakpoints
+     ───────────────────────────────────────── */
+  --container-max-mobile: 100%;
+  --container-max-tablet: 720px;
+  --container-max-laptop: 1280px;
+  --container-max-desktop: 1920px;
+}

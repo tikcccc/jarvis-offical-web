@@ -1,0 +1,124 @@
+/* =========================================
+   4-THEMES: PRODUCT PAGE THEME
+   Product template unique tokens only
+   ========================================= */
+
+.product-page {
+  /* ─────────────────────────────────────────
+     Surface Aliases (compatibility)
+     Scoped to product template components
+     ───────────────────────────────────────── */
+  --product-surface-dark: var(--surface-hero);
+  --product-surface-light: var(--surface-muted);
+
+  --product-border-subtle: var(--border-subtle);
+  --product-border-soft: color-mix(in srgb, var(--border-subtle) 60%, transparent);
+
+  /* ─────────────────────────────────────────
+     Product-Unique Accent Colors & Gradients
+     (Violet-Cyan gradient system)
+     ───────────────────────────────────────── */
+  --accent-cyan: var(--color-cyan);
+  --product-accent-ring: var(--color-violet);
+
+  /* Product accent gradient (signature violet-cyan) */
+  --product-accent-gradient: var(--gradient-accent);
+
+  /* Meta line gradient (for decorative lines) */
+  --product-meta-line: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  /* Hero overlay gradients (video background) */
+  --product-hero-overlay-vertical: linear-gradient(
+    to top,
+    rgba(var(--color-black-rgb) / 0.8),
+    rgba(var(--color-black-rgb) / 0.2),
+    transparent
+  );
+
+  --product-hero-overlay-horizontal: linear-gradient(
+    to right,
+    rgba(var(--color-black-rgb) / 0.4),
+    transparent,
+    transparent
+  );
+
+  /* ─────────────────────────────────────────
+     Narrative Track Tokens (CRITICAL - Scroll-driven)
+     These control the scroll-based story progression
+     ───────────────────────────────────────── */
+  /* Scroll position checkpoints (0-1 percentage values) */
+  --product-track-bg-start: 0.05;       /* Dark background starts fading */
+  --product-track-bg-end: 0.25;         /* Dark background fully faded */
+  --product-track-stage1: 0.3;          /* First narrative stage */
+  --product-track-stage2: 0.45;         /* Second narrative stage */
+  --product-track-gradient: 0.6;        /* Gradient overlay appears */
+  --product-track-bottom: 0.7;          /* Bottom section appears */
+  --product-track-scroll-lock: 0.95;    /* Scroll lock threshold */
+
+  /* Narrative track styling */
+  --product-track-shadow: 0 -50px 100px rgba(0, 0, 0, 0.5);
+  --product-track-color-ease: 0.5s;     /* Color transition timing */
+
+  /* ─────────────────────────────────────────
+     Layout & Spacing Tokens
+     ───────────────────────────────────────── */
+  --product-container-max: var(--container-max);
+  --product-container-padding: var(--h-spacing);
+  --product-container-padding-md: calc(var(--h-spacing) * 1.8);
+  --product-container-padding-lg: calc(var(--h-spacing) * 2.4);
+  --product-container-padding-xl: calc(var(--h-spacing) * 3);
+  --product-hero-padding-y: calc(var(--section-v-spacing) * 0.7);
+  --product-hero-padding-y-lg: var(--section-v-spacing);
+  --product-hero-max: calc(var(--max-width) + 8rem);
+  --product-track-padding: var(--h-spacing);
+  --product-track-padding-md: calc(var(--h-spacing) * 1.8);
+  --product-track-padding-lg: calc(var(--h-spacing) * 2.4);
+  --product-section-padding: calc(var(--section-v-spacing) * 0.9);
+  --product-gap: var(--spacing-m);
+  --product-gap-lg: var(--spacing-l);
+  --product-gap-sm: var(--spacing-s);
+  --product-stack-sm: var(--spacing-s);
+  --product-stack-md: var(--spacing-m);
+  --product-stack-lg: var(--spacing-l);
+
+  /* ─────────────────────────────────────────
+     Shape & Depth
+     ───────────────────────────────────────── */
+  --product-radius-card: var(--radius-lg);
+  --product-shadow-card: 0 25px 50px -12px rgba(var(--color-black-rgb) / 0.25);
+
+  /* ─────────────────────────────────────────
+     Buttons / Toggles / Chips
+     ───────────────────────────────────────── */
+  --product-mask-color: var(--text-soft);
+
+  /* ─────────────────────────────────────────
+     Toggle Component (Feature View Switcher)
+     ───────────────────────────────────────── */
+  --toggle-active-bg: var(--color-ink-800);
+  --toggle-hover-text: var(--text-base);
+
+  /* ─────────────────────────────────────────
+     Chip Component (Tags)
+     ───────────────────────────────────────── */
+  --chip-bg: rgba(var(--color-white-rgb) / 0.05);
+  --chip-border: rgba(var(--color-white-rgb) / 0.1);
+
+  /* ─────────────────────────────────────────
+     Motion Tokens (Product-Specific Timings)
+     ───────────────────────────────────────── */
+  --grid-sheen-duration: 9s;            /* Grid sheen overlay animation duration */
+
+  /* Spring physics (for Framer Motion) */
+  --product-motion-fast: var(--motion-fast);
+  --product-motion-base: var(--motion-base);
+  --product-motion-overlay: 0.9s;
+  --product-motion-ease: var(--ease-smooth);
+
+  background: var(--product-surface-light);
+}

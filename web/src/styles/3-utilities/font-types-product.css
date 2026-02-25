@@ -1,0 +1,207 @@
+/**
+ * Product Template 字體系統 (Consolidated - Plan A)
+ * 從 21 個類別精簡至 11 個通用類別
+ * 所有類別以 .font-product- 開頭
+ */
+
+@layer components {
+  /* ============================================
+   * TITLE SYSTEM (5 classes)
+   * ============================================ */
+
+  /* Hero 主標題 (56→144px, bold, 極緊行高) - 最大最重 */
+  .font-product-title-hero {
+    font-family: var(--font-heading-en);
+    font-size: clamp(4rem, 7vw, 10rem);
+    font-weight: var(--weight-bold);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Hero 空心描邊標題 (56→144px, bold, 極緊行高 + 空心效果) - 公司名專用 */
+  .font-product-title-hero-outline {
+    font-family: var(--font-heading-en);
+    font-size: clamp(4rem, 7vw, 10rem);
+    font-weight: var(--weight-bold);
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.6);
+    color: transparent;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 48em) {
+    .font-product-title-hero-outline {
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  /* Hero Display Standard Super Title (7rem~16rem, bold) */
+  .font-product-title-display {
+    font-family: var(--font-heading-en);
+    font-size: clamp(7rem, 9vw, 14rem);
+    font-weight: var(--weight-bold);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+    text-transform: none;
+  }
+
+  /* Hero Display Gradient Super Title (independent registration) */
+  .font-product-title-display-gradient {
+    font-family: var(--font-heading-en);
+    font-size: clamp(7rem, 9vw, 14rem);
+    font-weight: var(--weight-bold);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+    text-transform: none;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    background-image: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+  }
+
+  /* Narrative 大標題 (40→96px, regular, 輕字重) - 大但輕柔 */
+  .font-product-title-narrative {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* 大型標題 (48→96px, bold) - 合併 cta-title + section-title */
+  .font-product-title-lg {
+    font-family: var(--font-heading-en);
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  /* 中型標題 (32→57.6px, semibold) - Feature 主標題 */
+  .font-product-title-md {
+    font-family: var(--font-heading-en);
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  /* 小型標題 (21→36.8px, semibold) - 合併 detail-title + card-title */
+  .font-product-title-sm {
+    font-family: var(--font-heading-en);
+    font-size: clamp(1.32rem, 3vw, 2.3rem);
+    font-weight: var(--weight-semibold);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* ============================================
+   * BODY TEXT SYSTEM (3 classes)
+   * ============================================ */
+
+  /* Hero 副標題 (21→29px, regular) - Hero 區域專用 */
+  .font-product-hero-subtitle {
+    font-family: var(--font-heading-en);
+    font-size: clamp(1.08rem, 2vw, 1.25rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* 副標題 (17→28px, light) - 合併 hero-subtitle + cta-subtitle */
+  .font-product-subtitle {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.08rem, 2.2vw, 1.75rem);
+    font-weight: var(--weight-light);
+    line-height: 1.68;
+  }
+
+  /* 描述文字 (17→24px, regular) - 合併 narrative-desc + feature-desc + card-desc */
+  .font-product-desc {
+    font-family: var(--font-body-en);
+    font-size: clamp(1.0625rem, 1.9vw, 1.5rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.65;
+  }
+
+  /* Body 正文 (15.68→20px, regular) - 合併 body + detail-desc */
+  .font-product-body {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.98rem, 1.6vw, 1.25rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+  }
+
+  /* ============================================
+   * LABEL & BUTTON SYSTEM (3 classes)
+   * ============================================ */
+
+  /* Label 粗體 (12px, bold, uppercase) - 合併 meta + meta-mobile + scroll-label */
+  .font-product-label-bold {
+    font-family: var(--font-body-en);
+    font-size: 0.75rem;
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Meta Icon Title (16px, medium, spaced) - product hero metadata (icon layout) */
+  .font-product-meta-icon-title {
+    font-family: var(--font-heading-en);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.15em;
+  }
+
+  /* Meta Icon Subtext (10px, regular, uppercase, spaced) - reveal on hover */
+  .font-product-meta-icon-subtext {
+    font-family: var(--font-heading-en);
+    font-size: 0.725rem;
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  /* Label 正常 (12→13.6px, regular, uppercase) - section-label + card-meta */
+  .font-product-label-regular {
+    font-family: var(--font-body-en);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    font-weight: var(--weight-regular);
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  /* Button 標籤 (14→16px, bold, uppercase) - 合併 cta-button + toggle-label */
+  .font-product-button {
+    font-family: var(--font-body);
+    font-size: clamp(0.875rem, 1.2vw, 1rem);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ============================================
+   * 中文語系保護
+   * ============================================ */
+
+  :lang(zh) .font-product-title-hero,
+  :lang(zh) .font-product-title-hero-outline,
+  :lang(zh) .font-product-title-display,
+  :lang(zh) .font-product-title-display-gradient,
+  :lang(zh) .font-product-title-narrative,
+  :lang(zh) .font-product-title-lg,
+  :lang(zh) .font-product-title-md,
+  :lang(zh) .font-product-title-sm {
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+}

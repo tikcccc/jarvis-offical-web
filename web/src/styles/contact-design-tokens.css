@@ -1,0 +1,487 @@
+/* ========================================
+   CONTACT PAGE DESIGN TOKENS
+   Layer 4: Theme - Contact Page specific
+
+   Architecture: Uses semantic tokens from 2-semantic/colors.css
+   Only defines page-specific accent colors and gradients
+   ======================================== */
+
+@layer base {
+  :root {
+    /* ─────────────────────────────────────────
+       Contact Page Accent Colors
+       Page-specific colors not covered by semantic layer
+       ───────────────────────────────────────── */
+    --contact-accent: #0ea5e9;                /* cyan - form focus, links */
+    --contact-accent-alt: var(--color-slate-950);  /* deep navy */
+    --contact-gradient: linear-gradient(120deg, var(--color-slate-950) 0%, #0ea5e9 100%);
+
+    /* Selection (page-specific branding) */
+    --contact-selection-bg: #ccfbf1;          /* teal-100 */
+    --contact-selection-text: #0f766e;        /* teal-700 */
+
+    /* ─────────────────────────────────────────
+       Contact Page Typography System
+       Unified font sizes, weights, and colors
+       (Based on prototype + 1 size level)
+       ───────────────────────────────────────── */
+
+    /* Font Sizes - 3 levels only */
+    --contact-text-xs: clamp(0.6rem, 1vw, 0.65rem);    /* coords, small buttons */
+    --contact-text-sm: clamp(0.85rem, 1.4vw, 0.95rem);   /* labels, consent, info headings */
+    --contact-text-base: clamp(1rem, 1.6vw, 1.125rem);   /* body, inputs, selects */
+
+    /* Font Weights - 3 levels */
+    --contact-font-normal: 500;               /* body content */
+    --contact-font-semibold: 600;             /* labels (匹配原型) */
+    --contact-font-bold: 700;                 /* emphasis */
+
+    /* Text Colors - 3 levels only */
+    --contact-color-primary: var(--text-base);    /* main text */
+    --contact-color-muted: var(--text-muted);     /* labels, secondary */
+    --contact-color-subtle: var(--color-gray-500); /* decorative text */
+  }
+}
+
+@layer components {
+  /* ═══════════════════════════════════════════
+     PAGE WRAPPER
+     ═══════════════════════════════════════════ */
+  .contact-page {
+    @apply min-h-screen w-full relative overflow-x-hidden;
+    background: var(--color-soft-gray);
+    color: var(--text-base);
+    font-family: var(--font-alliance-1), system-ui, sans-serif;
+  }
+
+  .contact-page::selection,
+  .contact-page *::selection {
+    background: var(--contact-selection-bg);
+    color: var(--contact-selection-text);
+  }
+
+  /* ═══════════════════════════════════════════
+     FORM PANEL
+     ═══════════════════════════════════════════ */
+  .contact-panel {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-100);
+  }
+
+  /* ═══════════════════════════════════════════
+     GRADIENT EFFECTS
+     ═══════════════════════════════════════════ */
+  .contact-gradient-text {
+    background: var(--contact-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .contact-gradient-bg {
+    background: var(--contact-gradient);
+  }
+
+  /* ═══════════════════════════════════════════
+     ACCENT UNDERLINE (HOVER ANIMATION)
+     ═══════════════════════════════════════════ */
+  .contact-accent-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .contact-accent-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--contact-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .contact-accent-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* ═══════════════════════════════════════════
+     FORM INPUTS
+     ═══════════════════════════════════════════ */
+  .contact-input {
+    @apply w-full bg-transparent border-b py-3 focus:outline-none transition-colors rounded-none;
+    border-color: var(--color-gray-300);
+    color: var(--contact-color-primary);
+    font-size: var(--contact-text-base);
+    line-height: 1.5;
+    font-weight: var(--contact-font-normal);
+  }
+
+  .contact-input::placeholder {
+    color: var(--text-vsoft);
+  }
+
+  .contact-input:focus {
+    border-color: var(--contact-accent);
+  }
+
+  /* Override browser autofill blue background */
+  .contact-input:-webkit-autofill,
+  .contact-input:-webkit-autofill:hover,
+  .contact-input:-webkit-autofill:focus,
+  .contact-select:-webkit-autofill {
+    -webkit-text-fill-color: var(--contact-color-primary);
+    box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* ═══════════════════════════════════════════
+     FORM SELECT
+     ═══════════════════════════════════════════ */
+  .contact-select {
+    @apply w-full py-3 pr-10 pl-0 border-b rounded-none transition-all duration-300 appearance-none bg-transparent;
+    border-color: var(--color-gray-300);
+    color: var(--contact-color-primary);
+    font-size: var(--contact-text-base);
+    line-height: 1.5;
+    font-weight: var(--contact-font-normal);
+  }
+
+  .contact-select:hover {
+    border-color: var(--contact-accent-alt);
+  }
+
+  .contact-select-content {
+    @apply rounded-sm border shadow-xl;
+    border-color: var(--color-gray-300);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .contact-select-item {
+    @apply py-2 px-3 rounded-sm transition-colors cursor-pointer;
+    color: var(--contact-color-primary);
+    font-size: var(--contact-text-base);
+    line-height: 1.5;
+    font-weight: var(--contact-font-normal);
+  }
+
+  .contact-select-item:hover {
+    background: rgba(14, 165, 233, 0.08);
+    color: var(--text-strong);
+  }
+
+  .contact-select-item[data-state="checked"] {
+    background: rgba(14, 165, 233, 0.12);
+    color: var(--text-strong);
+  }
+
+  .contact-select:focus {
+    outline: none;
+    border-color: var(--contact-accent);
+    background: transparent;
+  }
+
+  /* Ensure select value text matches inputs */
+  .contact-select [data-slot="select-value"],
+  .contact-select [data-slot="select-value"] > span {
+    font-size: var(--contact-text-base);
+    line-height: 1.5;
+    font-weight: var(--contact-font-normal);
+  }
+
+  /* ═══════════════════════════════════════════
+     FORM LABEL
+     ═══════════════════════════════════════════ */
+  .contact-label {
+    @apply block uppercase mb-2 transition-colors;
+    font-size: var(--contact-text-sm);
+    font-weight: var(--contact-font-semibold);
+    letter-spacing: 0.05em;
+    color: var(--contact-color-muted);
+  }
+
+  .group:focus-within .contact-label {
+    color: var(--contact-accent);
+  }
+
+  /* ═══════════════════════════════════════════
+     PRIMARY BUTTON
+     ═══════════════════════════════════════════ */
+  .contact-btn-primary {
+    @apply relative px-12 py-5 tracking-wide transition-all duration-300 overflow-hidden cursor-pointer;
+    font-weight: var(--contact-font-normal);
+    background: var(--text-strong);
+    color: var(--color-white);
+    isolation: isolate;
+    box-shadow: 0 10px 24px -16px rgba(15, 23, 42, 0.35);
+  }
+
+  .contact-btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--contact-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+
+  .contact-btn-primary:hover::before {
+    transform: scaleX(1);
+  }
+
+  .contact-btn-primary:hover {
+    box-shadow: 0 14px 32px -18px rgba(14, 165, 233, 0.4);
+  }
+
+  .contact-btn-primary > span {
+    @apply relative z-10;
+  }
+
+  /* ═══════════════════════════════════════════
+     MAP CONTAINER
+     ═══════════════════════════════════════════ */
+  .contact-map-container {
+    @apply relative w-full h-72 rounded-sm overflow-hidden border shadow-inner;
+    border-color: var(--color-gray-300);
+    background: var(--color-gray-100);
+  }
+
+  .contact-map-btn {
+    @apply absolute bottom-4 right-4 text-white uppercase tracking-wider px-4 py-3 rounded shadow-lg flex items-center gap-2 transition-all duration-300;
+    font-size: var(--contact-text-xs);
+    font-weight: var(--contact-font-bold);
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(4px);
+  }
+
+  .contact-map-btn:hover {
+    background: var(--contact-accent);
+  }
+
+  /* ═══════════════════════════════════════════
+     ICON STYLES
+     ═══════════════════════════════════════════ */
+  .contact-icon {
+    color: var(--contact-color-muted);
+  }
+
+  /* ═══════════════════════════════════════════
+     CONTACT INFO SECTION
+     Swiss Style: Labels recede, content advances
+     ═══════════════════════════════════════════ */
+  .contact-info-icon {
+    @apply p-2 rounded-full transition-colors;
+    background: var(--color-gray-100);
+    color: var(--contact-color-muted);
+  }
+
+  .group:hover .contact-info-icon {
+    background: var(--text-strong);
+    color: var(--color-white);
+  }
+
+  /* Unified label style: uppercase, muted (Swiss Style consistency) */
+  .contact-info-heading {
+    font-size: var(--contact-text-sm);
+    font-weight: var(--contact-font-semibold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--contact-color-muted);
+  }
+
+  .group:hover .contact-info-heading {
+    color: var(--contact-color-muted);
+  }
+
+  /* Content style: larger, prominent (the actual information) */
+  .contact-info-body {
+    font-size: var(--contact-text-base);
+    line-height: 1.75rem;
+    font-weight: var(--contact-font-normal);
+    color: var(--contact-color-primary);
+  }
+
+  .contact-info-body:hover {
+    color: var(--text-strong);
+  }
+
+  /* ═══════════════════════════════════════════
+     COORDINATE DECORATION
+     ═══════════════════════════════════════════ */
+
+  /* Base coordinate style - unified typography */
+  .contact-coord {
+    font-size: var(--contact-text-xs);
+    line-height: 1rem;
+    font-weight: var(--contact-font-semibold);
+    letter-spacing: 0.05em;
+    color: var(--contact-color-subtle);
+  }
+
+  /* Wide letter-spacing variant */
+  .contact-coord--wide {
+    letter-spacing: 0.1em;
+  }
+
+  /* Extra wide letter-spacing variant */
+  .contact-coord--wider {
+    letter-spacing: 0.15em;
+  }
+
+  /* Smaller variant for background decorations */
+  .contact-coord--small {
+    font-size: var(--contact-text-xs);
+    font-weight: var(--contact-font-normal);
+  }
+
+  /* Legacy support - map to new unified classes */
+  .contact-coord-text {
+    font-size: var(--contact-text-xs);
+    line-height: 1rem;
+    font-weight: var(--contact-font-semibold);
+    letter-spacing: 0.05em;
+    color: var(--contact-color-subtle);
+  }
+
+  .contact-coord-text-light {
+    font-size: var(--contact-text-xs);
+    line-height: 1rem;
+    font-weight: var(--contact-font-semibold);
+    letter-spacing: 0.1em;
+    color: var(--contact-color-subtle);
+  }
+
+  /* Corner bracket decorations for map */
+  .contact-corner-bracket {
+    border-color: var(--color-gray-300);
+  }
+
+  /* Background coordinate decorations (fixed position) */
+  .contact-bg-coord {
+    font-size: var(--contact-text-xs);
+    line-height: 1rem;
+    font-weight: var(--contact-font-normal);
+    letter-spacing: 0.15em;
+    color: var(--contact-color-subtle);
+  }
+
+  /* ═══════════════════════════════════════════
+     FORM HEADINGS
+     ═══════════════════════════════════════════ */
+  .contact-form-heading {
+    color: var(--text-strong);
+  }
+
+  .contact-form-subheading {
+    font-size: var(--contact-text-sm);
+    font-weight: 400;
+    color: var(--contact-color-muted);
+  }
+
+  /* ═══════════════════════════════════════════
+     CHECKBOX & CONSENT
+     ═══════════════════════════════════════════ */
+  @keyframes contact-checkbox-pop {
+    0% {
+      transform: scale(0.92);
+    }
+    55% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .contact-checkbox {
+    border-color: var(--color-gray-300);
+    transform-origin: center;
+    transition:
+      transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 200ms ease,
+      border-color 200ms ease;
+    will-change: transform;
+  }
+
+  .contact-checkbox:checked {
+    background: var(--text-strong);
+    border-color: var(--text-strong);
+    animation: contact-checkbox-pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .contact-checkbox:active {
+    transform: scale(0.92);
+  }
+
+  .contact-checkbox:checked + svg {
+    animation: contact-checkbox-pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-checkbox {
+      transition:
+        background-color 200ms ease,
+        border-color 200ms ease;
+      will-change: auto;
+    }
+
+    .contact-checkbox:checked,
+    .contact-checkbox:checked + svg {
+      animation: none;
+    }
+
+    .contact-checkbox:active {
+      transform: none;
+    }
+  }
+
+  .contact-consent-label {
+    font-size: var(--contact-text-sm);
+    color: var(--contact-color-muted);
+    transition: color 0.2s ease;
+  }
+
+  .contact-consent-label:hover {
+    color: var(--contact-color-primary);
+  }
+
+  /* ═══════════════════════════════════════════
+     RESET BUTTON
+     ═══════════════════════════════════════════ */
+  .contact-reset-btn {
+    @apply px-8 py-3 rounded-none border uppercase tracking-widest cursor-pointer transition-all;
+    font-size: var(--contact-text-sm);
+    font-weight: var(--contact-font-bold);
+    border-color: var(--color-gray-300);
+    color: var(--contact-color-muted);
+  }
+
+  .contact-reset-btn:hover {
+    border-color: var(--text-strong);
+    color: var(--text-strong);
+    background: var(--color-gray-100);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION DIVIDER
+     ═══════════════════════════════════════════ */
+  .contact-section-divider {
+    @apply border-b-2 pb-6;
+    border-color: var(--color-gray-200);
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE
+     ═══════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .contact-map-container {
+      height: 12rem;
+    }
+  }
+}

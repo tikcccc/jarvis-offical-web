@@ -1,0 +1,219 @@
+/* =========================================
+   JARVIS Sense Section (Dark Theme)
+   Theme-specific styles only
+   ========================================= */
+
+/* Import shared styles */
+@import './jarvis-shared.module.css';
+
+/* ─────────────────────────────────────────
+   Section Background (Dark)
+   ───────────────────────────────────────── */
+.section {
+  composes: section from './jarvis-shared.module.css';
+  background-color: var(--jarvis-surface-dark);
+}
+
+/* Grid Background */
+.gridBg {
+  composes: jarvis-grid-bg from global;
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.container {
+  composes: container from './jarvis-shared.module.css';
+}
+
+/* ─────────────────────────────────────────
+   Header Theme (Dark)
+   ───────────────────────────────────────── */
+.header {
+  composes: header from './jarvis-shared.module.css';
+  --header-border-color: rgba(255, 255, 255, 0.1);
+  --label-color: var(--text-inverse-muted);
+  --heading-color: var(--text-inverse-strong);
+}
+
+.label {
+  composes: label from './jarvis-shared.module.css';
+}
+
+.heading {
+  composes: heading from './jarvis-shared.module.css';
+}
+
+.headingMuted {
+  color: var(--color-gray-600);
+}
+
+.headingNeon {
+  color: var(--jarvis-accent-neon);
+  font-weight: 400;
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout (Visual Left, Menu Right)
+   ───────────────────────────────────────── */
+.grid {
+  composes: grid from './jarvis-shared.module.css';
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 7fr 5fr; /* Visual larger, Menu smaller */
+  }
+}
+
+/* ─────────────────────────────────────────
+   Visual Column (Left - Dashboard)
+   ───────────────────────────────────────── */
+.dashboardColumn {
+  composes: visualColumn from './jarvis-shared.module.css';
+  position: relative;
+  padding-top: 1rem;
+  order: 1;
+}
+
+.glassPanel {
+  composes: jarvis-glass-panel from global;
+  composes: screenContainer from './jarvis-shared.module.css';
+  --screen-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+/* Top Bar */
+.topBar {
+  height: 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.topBarTitle {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--text-inverse-muted);
+}
+
+.topBarIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--jarvis-accent-neon);
+  border-radius: 9999px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.recText {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--jarvis-accent-neon);
+}
+
+/* Content Area */
+.contentArea {
+  position: absolute;
+  inset: 0;
+  top: 3rem;
+  background: var(--jarvis-surface-screen);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderText {
+  composes: placeholderText from './jarvis-shared.module.css';
+  --placeholder-color: var(--text-inverse-muted);
+}
+
+/* Grid Overlay */
+.gridOverlay {
+  composes: jarvis-grid-bg from global;
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 20;
+}
+
+/* Glow Effect */
+.glowEffect {
+  position: absolute;
+  inset: -1rem;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.05), transparent);
+  filter: blur(3rem);
+  z-index: -10;
+  border-radius: 9999px;
+}
+
+/* ─────────────────────────────────────────
+   Product List (Right Column - Menu)
+   ───────────────────────────────────────── */
+.menuColumn {
+  composes: productColumn from './jarvis-shared.module.css';
+  order: 2;
+}
+
+.menuItem {
+  composes: productItem from './jarvis-shared.module.css';
+  --item-border-color: rgba(255, 255, 255, 0.1);
+  --item-title-color: var(--text-inverse-strong);
+  --desc-color: var(--text-inverse-muted);
+}
+
+.menuItemActive {
+  composes: productItemActive from './jarvis-shared.module.css';
+  --item-border-active: var(--jarvis-item-border-active-dark);
+  background: var(--jarvis-item-glow);
+}
+
+.menuItem:hover .menuItemTitle {
+  color: var(--jarvis-accent-neon);
+}
+
+.menuItemHeader {
+  composes: productItemHeader from './jarvis-shared.module.css';
+}
+
+.menuItemTitle {
+  composes: productItemTitle from './jarvis-shared.module.css';
+}
+
+.arrow {
+  composes: arrow from './jarvis-shared.module.css';
+  --arrow-color: var(--jarvis-accent-neon);
+}
+
+.menuItemDesc {
+  composes: productItemDesc from './jarvis-shared.module.css';
+}
+
+.menuItemActive .menuItemDesc {
+  composes: productItemDesc from './jarvis-shared.module.css';
+}

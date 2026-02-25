@@ -1,0 +1,300 @@
+/* =========================================
+   JARVIS Sense Section (Dark with Neon)
+   ========================================= */
+
+.section {
+  position: relative;
+  background-color: var(--jarvis-surface-dark);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────
+   Grid Background
+   ───────────────────────────────────────── */
+.gridBg {
+  composes: jarvis-grid-bg from global;
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   Container
+   ───────────────────────────────────────── */
+.content {
+  /* Match .jarvis-section-shell exactly to ensure alignment */
+  max-width: var(--jarvis-container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 10rem var(--jarvis-container-padding);
+}
+
+/* ─────────────────────────────────────────
+   Header
+   ───────────────────────────────────────── */
+.header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.label {
+  font-family: var(--font-heading);
+  color: var(--text-inverse-muted);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .label {
+    font-size: 1rem;
+  }
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 4vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  color: var(--text-inverse-strong);
+  line-height: 1.2;
+}
+
+.headingMuted {
+  color: var(--color-gray-600);
+}
+
+.headingNeon {
+  color: var(--jarvis-accent-neon);
+  font-weight: 400;
+}
+
+/* ─────────────────────────────────────────
+   Grid Layout
+   ───────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  min-height: 760px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 7fr 5fr;
+    height: 760px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Dashboard Column (Left)
+   ───────────────────────────────────────── */
+.dashboardColumn {
+  position: relative;
+  padding-top: 1rem;
+  order: 1;
+}
+
+.glassPanel {
+  composes: jarvis-glass-panel from global;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  max-height: 560px;
+  border-radius: var(--jarvis-panel-radius);
+  overflow: hidden;
+  position: relative;
+  border: var(--jarvis-panel-border-dark);
+  box-shadow: var(--jarvis-panel-shadow-dark);
+}
+
+/* Top Bar */
+.topBar {
+  height: 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.topBarTitle {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--text-inverse-muted);
+}
+
+.topBarIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--jarvis-accent-neon);
+  border-radius: 9999px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.recText {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--jarvis-accent-neon);
+}
+
+/* Content Area */
+.contentArea {
+  position: absolute;
+  inset: 0;
+  top: 3rem;
+  background: var(--jarvis-surface-screen);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderText {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-inverse-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.placeholderText span {
+  font-size: 1.25rem;
+  opacity: 0.6;
+}
+
+/* Grid Overlay */
+.gridOverlay {
+  composes: jarvis-grid-bg from global;
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 20;
+}
+
+/* ─────────────────────────────────────────
+   Product List Column
+   ───────────────────────────────────────── */
+.productColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  order: 2;
+}
+
+/* Product Item */
+.productItem {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  padding-left: 0;
+  opacity: 0.5;
+}
+
+.productItem:hover {
+  opacity: 0.8;
+}
+
+.productItemActive {
+  opacity: 1;
+  padding-left: 1.5rem;
+  border-left-color: var(--jarvis-item-border-active-dark);
+  background: var(--jarvis-item-glow);
+}
+
+.productItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.productItemTitle {
+  font-family: var(--font-heading);
+  font-size: 1.875rem;
+  font-weight: 500;
+  color: var(--text-inverse-strong);
+  transition: color 0.3s ease;
+}
+
+.productItem:hover .productItemTitle {
+  color: var(--jarvis-accent-neon);
+}
+
+/* Arrow Icon */
+.arrow {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--jarvis-accent-neon);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.productItem:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Description */
+.productItemDesc {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--text-inverse-muted);
+  font-weight: 300;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.productItemActive .productItemDesc {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+}

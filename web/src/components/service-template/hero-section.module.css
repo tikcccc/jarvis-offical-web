@@ -1,0 +1,80 @@
+@layer components {
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+  }
+
+  .heroInner {
+    width: 100%;
+    padding: 1.5rem;
+    padding-bottom: 5rem;
+    position: relative;
+    z-index: 10;
+    color: var(--text-inverse-strong);
+    pointer-events: auto;
+  }
+
+  @media (min-width: 48em) {
+    .heroInner {
+      padding-inline: 3rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .heroInner {
+      padding-inline: 4rem;
+    }
+  }
+
+  .heroGrid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+
+  @media (min-width: 48em) {
+    .heroGrid {
+      gap: 2rem;
+    }
+  }
+
+  .heroDivider {
+    width: 6rem;
+    height: 0.25rem;
+    background: var(--text-inverse-strong);
+    margin-bottom: 2rem;
+  }
+
+  .heroTitle {
+    margin-bottom: 1rem;
+    mix-blend-mode: overlay;
+    opacity: 0.9;
+  }
+
+  .heroSubtitle {
+    color: var(--text-inverse-strong);
+  }
+
+  .heroDescWrap {
+    border-left: 2px solid var(--border-inverse-soft);
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .heroDesc {
+    color: var(--text-inverse-base);
+  }
+
+  .heroTag {
+    color: var(--text-inverse-sub);
+    margin-top: 1rem;
+    display: block;
+  }
+}

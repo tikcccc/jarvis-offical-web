@@ -1,0 +1,42 @@
+@keyframes text-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.textShimmer {
+  animation: text-shimmer 2.5s ease-out infinite alternate;
+}
+
+/* AI Suite Shimmer - 優化版 */
+@keyframes aiSuiteShimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.textShimmerLoop {
+  --shimmer-base: #e8e8e8;
+  --shimmer-highlight: #ffffff;
+
+  background: linear-gradient(
+    120deg,
+    var(--shimmer-base) 0%,
+    var(--shimmer-base) 35%,
+    var(--shimmer-highlight) 50%,
+    var(--shimmer-base) 65%,
+    var(--shimmer-base) 100%
+  );
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: aiSuiteShimmer 4s ease-in-out infinite;
+}

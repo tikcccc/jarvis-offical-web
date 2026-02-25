@@ -1,0 +1,394 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { create } from 'zustand';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Menu, Search, ArrowRight, ChevronRight, CornerDownRight } from 'lucide-react';
+
+// --- 0. Infrastructure: GSAP Loader (Experience Layer) ---
+const useGsapLoader = () => {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (window.gsap) { setLoaded(true); return; }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
+    script.async = true;
+    script.onload = () => setLoaded(true);
+    document.body.appendChild(script);
+  }, []);
+  return loaded;
+};
+
+// --- 1. State Management (Zustand) ---
+const useMenuStore = create((set) => ({
+  isOpen: false,
+  toggleMenu: () => set((state) => ({ isOpen: !state.isOpen })),
+  closeMenu: () => set({ isOpen: false }),
+  openMenu: () => set({ isOpen: true }),
+}));
+
+// --- Data Structure ---
+const menuData = {
+  structure: [
+    { title: "About Us", href: "#about", type: "link" },
+    { 
+      title: "Services and AI Products", 
+      type: "group", 
+      children: [
+        { title: "JARVIS AI Suite", action: "jarvis_suite", isHighlight: true },
+        { title: "JARVIS Project Management", href: "#jpm" },
+        { title: "BIM Consultancy", href: "#bim" },
+        { title: "Project Finance", href: "#finance" },
+        { title: "Venture Investments", href: "#ventures" },
+      ]
+    },
+    { title: "Newsroom", href: "#news", type: "link" },
+    { title: "Careers", href: "#careers", type: "link" },
+    { title: "Contact Us", href: "#contact", type: "link" },
+  ],
+  jarvisProducts: [
+    { name: "JARVIS Agent", desc: "Automated scanning & tender parsing agent." },
+    { name: "JARVIS Pay", desc: "Blockchain-enabled payment certification." },
+    { name: "JARVIS Air", desc: "Generative design with 500K+ templates." },
+    { name: "JARVIS Eagle Eye", desc: "Real-time digital twin monitoring." },
+    { name: "JARVIS SSSS", desc: "Smart Site Safety System integration." },
+    { name: "JARVIS DWSS", desc: "Digital Works Supervision System." },
+    { name: "JARVIS CDCP", desc: "Common Data Collaboration Platform." },
+    { name: "JARVIS Assets", desc: "Predictive maintenance & ESG tracking." },
+  ]
+};
+
+// --- 2. Component: TypewriterText (GSAP) ---
+const TypewriterText = ({ text, delay = 0, className = "", isGsapReady }) => {
+  const containerRef = useRef(null);
+  
+  useEffect(() => {
+    if (!containerRef.current || !isGsapReady || !window.gsap) return;
+    const chars = containerRef.current.querySelectorAll('.char');
+    const gsap = window.gsap;
+    gsap.killTweensOf(chars);
+    gsap.set(chars, { opacity: 0 });
+    const tl = gsap.timeline({ delay: delay });
+    tl.to(chars, {
+      opacity: 1,
+      duration: 0.05,
+      stagger: 0.02,
+      ease: "none"
+    });
+    return () => { tl.kill(); };
+  }, [text, delay, isGsapReady]);
+
+  return (
+    <div ref={containerRef} className={`inline-block ${className}`}>
+      {text.split("").map((char, index) => (
+        <span key={index} className="char inline-block whitespace-pre opacity-0">{char}</span>
+      ))}
+    </div>
+  );
+};
+
+// --- 3. Component: MenuOverlay (Framer Motion Layout) ---
+const MenuOverlay = ({ isGsapReady }) => {
+  const { isOpen, closeMenu } = useMenuStore();
+  const [activePreview, setActivePreview] = useState('default');
+
+  useEffect(() => {
+    if (isOpen) { document.body.style.overflow = 'hidden'; } 
+    else { document.body.style.overflow = 'unset'; setActivePreview('default'); }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
+  // --- Variants for Animations ---
+
+  // 1. Overlay Slide
+  const overlayVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
+
+  // 2. Stagger Container (Controls children timing)
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08, // 快節奏交錯
+        delayChildren: 0.1     // 面板出現後稍微延遲
+      }
+    },
+    exit: { opacity: 0 }
+  };
+
+  // 3. Fade Up Item (Applied to Text)
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" } 
+    }
+  };
+
+  // 4. Panel Slide + Stagger (For Right Column Wrappers)
+  const panelVariants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { 
+        duration: 0.4, 
+        ease: "easeOut",
+        when: "beforeChildren", // 面板先動，內容再動
+        staggerChildren: 0.1 
+      } 
+    },
+    exit: { opacity: 0, x: 10, transition: { duration: 0.2 } }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          variants={overlayVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="fixed inset-0 z-50 flex flex-col bg-[#050505] text-white overflow-hidden font-sans"
+        >
+          {/* Top Bar */}
+          <div className="flex items-center justify-between px-8 py-6 border-b border-white/10 bg-[#050505] sticky top-0 z-50 shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-blue-600 rounded-sm shadow-[0_0_10px_rgba(37,99,235,0.5)]" />
+              <span className="font-bold tracking-wider text-sm text-neutral-200">isBIM</span>
+            </div>
+            <button onClick={closeMenu} className="p-2 hover:bg-white/10 rounded-sm transition-colors group flex items-center gap-3">
+               <TypewriterText text="CLOSE SYSTEM" className="text-[10px] font-mono text-neutral-500 group-hover:text-white tracking-widest" isGsapReady={isGsapReady} />
+               <X size={24} className="text-neutral-400 group-hover:text-white" />
+            </button>
+          </div>
+
+          {/* Main Grid Layout */}
+          <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 max-w-screen-2xl mx-auto w-full min-h-0">
+            
+            {/* LEFT COLUMN: Navigation Tree */}
+            {/* [&::-webkit-scrollbar]:hidden maintains scrollability without visual clutter */}
+            <div className="lg:col-span-5 p-10 lg:p-20 border-r border-white/10 flex flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+              <div className="mb-8">
+                <TypewriterText text="NAVIGATION_INDEX" className="text-[10px] font-mono text-blue-500/80 mb-8 tracking-[0.2em]" isGsapReady={isGsapReady} delay={0.2} />
+                
+                <motion.nav 
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex flex-col gap-8"
+                >
+                  {menuData.structure.map((item, idx) => (
+                    <motion.div key={idx} variants={fadeInUp} className="flex flex-col">
+                      {/* Top Level Item */}
+                      <div className="group flex items-center gap-4 cursor-pointer">
+                        <span className="text-3xl lg:text-4xl font-medium text-neutral-400 group-hover:text-white transition-colors tracking-tight">
+                          {item.title}
+                        </span>
+                      </div>
+
+                      {/* Children */}
+                      {item.type === 'group' && (
+                        <motion.div 
+                          className="mt-6 ml-2 flex flex-col gap-4 border-l border-white/10 pl-6"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.4, duration: 0.5 }}
+                        >
+                          {item.children.map((child, cIdx) => (
+                            <div 
+                              key={cIdx}
+                              className="group/child flex items-center gap-4 cursor-pointer py-1"
+                              onMouseEnter={() => child.action === 'jarvis_suite' ? setActivePreview('jarvis_suite') : setActivePreview('default')}
+                            >
+                              <CornerDownRight size={18} className="text-neutral-600 group-hover/child:text-blue-500 transition-colors" />
+                              <span className={`text-xl transition-colors ${child.isHighlight ? 'text-white font-medium group-hover/child:text-blue-400' : 'text-neutral-500 group-hover/child:text-neutral-300'}`}>
+                                {child.title}
+                              </span>
+                              
+                              {/* Hover Indicator */}
+                              {child.action === 'jarvis_suite' && (
+                                <motion.div 
+                                  layoutId="indicator"
+                                  className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover/child:opacity-100"
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </motion.nav>
+              </div>
+              
+              {/* Footer Links */}
+              <motion.div 
+                className="mt-auto pt-16"
+                variants={fadeInUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.8 }}
+              >
+                 <div className="flex flex-col gap-3">
+                    <a href="#" className="text-sm text-neutral-600 hover:text-neutral-400 transition-colors">Legal & Compliance</a>
+                    <a href="#" className="text-sm text-neutral-600 hover:text-neutral-400 transition-colors">Privacy Policy</a>
+                 </div>
+              </motion.div>
+            </div>
+
+            {/* RIGHT COLUMN: Dynamic Content Area */}
+            <div className="lg:col-span-7 bg-[#080808] p-10 lg:p-20 hidden lg:flex flex-col relative overflow-hidden">
+              {/* Grid Texture */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+              
+              <AnimatePresence mode='wait'>
+                {activePreview === 'jarvis_suite' ? (
+                  <motion.div
+                    key="products"
+                    variants={panelVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="h-full z-10 flex flex-col"
+                  >
+                    <div className="mb-12 border-b border-white/10 pb-8 flex justify-between items-end">
+                       <div>
+                         <TypewriterText text="PRODUCT_CATALOG // SUITE_01" className="text-[10px] font-mono text-blue-400 mb-3 tracking-widest" isGsapReady={isGsapReady} />
+                         {/* Apply FadeUp to Header */}
+                         <motion.h2 variants={fadeInUp} className="text-4xl font-light text-white">
+                           JARVIS AI Suite
+                         </motion.h2>
+                       </div>
+                       <div className="text-right">
+                          <TypewriterText text="STATUS: ONLINE" className="text-[10px] font-mono text-green-500 tracking-widest block" isGsapReady={isGsapReady} />
+                       </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-x-16 gap-y-10 overflow-y-auto pr-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10">
+                       {menuData.jarvisProducts.map((prod, idx) => (
+                         <motion.div key={idx} variants={fadeInUp} className="group cursor-pointer">
+                            <div className="flex items-center gap-3 mb-2">
+                               <div className="w-1.5 h-1.5 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                               <motion.h4 className="text-lg font-medium text-neutral-300 group-hover:text-blue-400 transition-colors">
+                                  {prod.name}
+                               </motion.h4>
+                            </div>
+                            <motion.p className="text-sm text-neutral-500 pl-4 border-l border-white/5 group-hover:border-blue-500/30 transition-colors leading-relaxed">
+                               {/* Use plain text here for FadeUp effect as requested, or keep Typewriter if strictly tech data. 
+                                   User asked for 'other text' to have staggered fade up. I will apply fade up to the container text. */}
+                               {prod.desc}
+                            </motion.p>
+                         </motion.div>
+                       ))}
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="default"
+                    variants={panelVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="h-full z-10 flex flex-col"
+                  >
+                    <div className="flex justify-between items-start mb-16">
+                       <div>
+                          <TypewriterText text="LATEST_INTELLIGENCE" className="text-[10px] font-mono text-neutral-500 tracking-[0.2em] mb-4 block" isGsapReady={isGsapReady} />
+                          <motion.h2 variants={fadeInUp} className="text-4xl font-light text-white max-w-xl leading-snug">
+                             Empowering the future of construction with <span className="text-blue-500">adaptive intelligence.</span>
+                          </motion.h2>
+                       </div>
+                       <motion.button variants={fadeInUp} className="text-[10px] font-mono border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition-all text-neutral-300 uppercase tracking-widest flex items-center gap-2">
+                          Newsroom <ArrowRight size={14}/>
+                       </motion.button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-10 mt-auto">
+                       <motion.div variants={fadeInUp} className="group cursor-pointer">
+                          <div className="aspect-video bg-neutral-900 mb-5 overflow-hidden relative border border-white/10">
+                             <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" className="object-cover w-full h-full opacity-60 group-hover:scale-105 transition-transform duration-700 group-hover:opacity-80" alt="Tech" />
+                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                                <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-1 uppercase">Featured</span>
+                             </div>
+                          </div>
+                          <TypewriterText text="PRESS RELEASE // MAR 12" className="text-[9px] font-mono text-blue-400 mb-2 block" isGsapReady={isGsapReady} delay={0.5} />
+                          <h3 className="text-xl text-neutral-200 group-hover:text-white leading-snug mb-2">
+                             Coding unveils new JARVIS core architecture for mega-projects.
+                          </h3>
+                       </motion.div>
+
+                       <motion.div variants={fadeInUp} className="group cursor-pointer">
+                          <div className="aspect-video bg-neutral-900 mb-5 overflow-hidden relative border border-white/10">
+                             <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800" className="object-cover w-full h-full opacity-60 group-hover:scale-105 transition-transform duration-700 group-hover:opacity-80" alt="Chip" />
+                          </div>
+                          <TypewriterText text="BLOG // FEB 28" className="text-[9px] font-mono text-neutral-500 mb-2 block" isGsapReady={isGsapReady} delay={0.6} />
+                          <h3 className="text-xl text-neutral-200 group-hover:text-white leading-snug mb-2">
+                             How Digital Twins are reducing carbon footprints in Asia.
+                          </h3>
+                       </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// --- 4. Main App Component (Wrapper) ---
+export default function App() {
+  const { openMenu } = useMenuStore();
+  const isGsapReady = useGsapLoader();
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] font-sans text-white selection:bg-blue-500/30">
+      {/* Header / Navbar */}
+      <header className="fixed top-0 left-0 right-0 h-16 bg-[#0a0a0a]/90 backdrop-blur-md z-40 flex items-center justify-between px-6 border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+             <div className="w-2 h-2 bg-black rounded-full" />
+          </div>
+          <span className="font-bold tracking-widest text-xs">isBIM</span>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={openMenu} 
+            className="group flex items-center gap-3 pl-6 border-l border-white/10 h-8 hover:bg-white/5 transition-colors pr-2 rounded-r-sm"
+          >
+             <TypewriterText text="OPEN NAVIGATION" className="hidden md:block text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 group-hover:text-white" isGsapReady={isGsapReady} />
+             <Menu size={18} className="text-neutral-400 group-hover:text-white" />
+          </button>
+        </div>
+      </header>
+
+      {/* Hero Content Placeholder */}
+      <main className="pt-40 px-6 md:px-20 max-w-7xl mx-auto">
+        <div className="inline-flex items-center gap-3 mb-6 border border-blue-500/30 bg-blue-900/10 px-3 py-1 rounded-full">
+           <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+           <span className="text-blue-400 font-mono text-[10px] uppercase tracking-widest">System Operational</span>
+        </div>
+        
+        <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 text-white leading-[0.9]">
+          INTELLIGENT <br/>
+          INFRASTRUCTURE.
+        </h1>
+        
+        <p className="text-xl text-neutral-400 max-w-2xl leading-relaxed mb-12 font-light border-l-2 border-blue-500 pl-6">
+           <TypewriterText text="Deploying autonomous agents to optimize the built world." delay={1} isGsapReady={isGsapReady} />
+        </p>
+      </main>
+      
+      {/* The Overlay Component */}
+      <MenuOverlay isGsapReady={isGsapReady} />
+    </div>
+  );
+}

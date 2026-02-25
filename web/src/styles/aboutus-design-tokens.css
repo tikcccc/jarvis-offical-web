@@ -1,0 +1,83 @@
+@layer base {
+  :root {
+    /* About page specific palette */
+    --about-bg: var(--surfact-softgray);
+    --about-text-primary: var(--text-base);
+    --about-text-secondary: var(--text-sub);
+    --about-text-muted: var(--text-soft);
+    --about-accent: var(--brand-accent);
+    --about-border: var(--border-subtle);
+
+    /* Layout & spacing */
+    --about-section-padding: calc(var(--h-spacing) * 9);
+    --about-section-padding-lg: calc(var(--h-spacing) * 7.2);
+    --about-feature-padding: calc(var(--h-spacing) * 3.6);
+
+    /* Shape & depth */
+    --about-radius-lg: var(--radius-lg);
+    --about-shadow-card: var(--shadow-2xl);
+
+    /* Motion */
+    --about-motion-fast: var(--motion-duration-fast, 0.3s);
+    --about-motion-slow: var(--motion-duration-slow, 0.8s);
+    --about-motion-stagger: var(--motion-stagger-base, 0.12s);
+    --about-motion-snappy: calc(var(--motion-duration-fast, 0.3s) / 5);
+    --about-motion-ease-strong: var(--motion-ease-smooth, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+}
+
+@layer components {
+  /* ========================================
+   * BASE & TYPOGRAPHY TOKENS
+   * ======================================== */
+
+  /* About page base (applies when .about-page is present) */
+  body:has(.about-page) {
+    font-family: var(--font-body-en);
+    background: var(--about-bg);
+  }
+
+  /* Color utilities */
+  .about-text-primary { color: var(--about-text-primary); }
+  .about-text-secondary { color: var(--about-text-secondary); }
+  .about-text-muted { color: var(--about-text-muted); }
+  .about-text-accent { color: var(--about-accent); }
+
+  /* Surface utilities */
+  .about-surface-base { background: var(--about-bg); }
+
+  /* Border utilities */
+  .about-border { border-color: var(--about-border); }
+  .about-border-accent { border-color: var(--about-accent); }
+
+  /* Layout utilities */
+  .about-section-padding {
+    padding-block: var(--about-section-padding);
+  }
+  .about-feature-padding {
+    padding-block: var(--about-feature-padding);
+  }
+  .about-feature-row {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  @media (min-width: 1024px) {
+    .about-section-padding {
+      padding-block: var(--about-section-padding-lg);
+    }
+  }
+
+  /* Shape & depth utilities */
+  .about-radius-lg { border-radius: var(--about-radius-lg); }
+  .about-shadow-card { box-shadow: var(--about-shadow-card); }
+
+  /* Navigation index - ensure always visible */
+  .about-nav-index {
+    color: var(--about-text-primary) !important;
+    background: transparent;
+    mix-blend-mode: normal;
+  }
+}

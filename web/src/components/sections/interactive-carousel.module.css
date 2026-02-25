@@ -1,0 +1,104 @@
+﻿.tab {
+  background: var(--carousel-tab-bg);
+  border-color: var(--carousel-tab-border);
+  color: var(--carousel-tab-text);
+}
+
+.tab:hover {
+  background: var(--carousel-tab-bg-hover);
+  color: var(--carousel-tab-text-active);
+}
+
+.tabActive {
+  border-color: var(--carousel-tab-text-active);
+  color: var(--carousel-tab-text-active);
+}
+
+.tabActive:hover {
+  background: var(--carousel-tab-bg);
+  color: var(--carousel-tab-text-active);
+}
+
+.progress {
+  background: var(--carousel-progress);
+  transform-origin: left;
+}
+
+.carouselSection {
+  background: var(--carousel-surface);
+}
+
+.card {
+  background: var(--carousel-card-bg);
+  border-color: var(--carousel-card-border);
+  border-radius: var(--carousel-video-radius);
+}
+
+.overlay {
+  background: var(--carousel-overlay);
+  border-radius: var(--carousel-video-radius);
+}
+
+.borderStrong {
+  border-color: var(--carousel-border-strong);
+}
+
+.arrow {
+  background: var(--carousel-arrow-bg);
+  color: var(--text-inverse-strong);
+  border-color: var(--carousel-card-border);
+  border-radius: var(--carousel-btn-radius);
+  transition-duration: var(--carousel-arrow-fade, 0.3s);
+}
+
+.arrow:hover {
+  background: var(--carousel-arrow-hover);
+}
+
+.dot {
+  background: var(--carousel-dot);
+}
+
+.dot:hover {
+  background: var(--carousel-dot-hover);
+}
+
+.dotActive {
+  background: var(--carousel-dot-active);
+}
+
+.dotsWrapper {
+  margin-top: var(--carousel-dots-offset);
+}
+
+.labelTransition {
+  transition-duration: var(--motion-base);
+}
+
+.arrowFade {
+  transition-duration: var(--carousel-arrow-fade, 0.3s);
+}
+
+.pillRadius {
+  border-radius: var(--pill-radius);
+}
+
+/* Typography - 字體樣式已移至 utility classes */
+/* .carouselTitle → .font-container-subtitle */
+.carouselTitle {
+  /* Font styles moved to .font-container-subtitle utility class */
+}
+
+/* .carouselBigtext → .font-display-hero */
+.carouselBigtext {
+  /* Font styles moved to .font-display-hero utility class */
+}
+
+/* .carouselBody → .font-body-base */
+.carouselBody {
+  /* Font styles moved to .font-body-base utility class */
+}
+
+.slideContent {
+  padding-block: clamp(3rem, 6vw, 4.5rem);
+}
