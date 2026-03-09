@@ -1,0 +1,70 @@
+{
+    "kind": "collectionType",
+    "collectionName": "contact_submissions",
+    "info": {
+        "singularName": "contact-submission",
+        "pluralName": "contact-submissions",
+        "displayName": "Contact Submission",
+        "description": "Stored contact form submissions"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "firstName": {
+            "type": "string",
+            "required": true
+        },
+        "lastName": {
+            "type": "string",
+            "required": true
+        },
+        "email": {
+            "type": "email",
+            "required": true
+        },
+        "phoneNumber": {
+            "type": "string"
+        },
+        "companyName": {
+            "type": "string",
+            "required": true
+        },
+        "companyType": {
+            "type": "string"
+        },
+        "jobTitle": {
+            "type": "string"
+        },
+        "service": {
+            "type": "string",
+            "required": true
+        },
+        "marketingConsent": {
+            "type": "boolean",
+            "default": false
+        },
+        "locale": {
+            "type": "enumeration",
+            "enum": [
+                "en",
+                "zh"
+            ],
+            "required": true
+        },
+        "submittedAt": {
+            "type": "datetime",
+            "required": true
+        },
+        "sourcePage": {
+            "type": "string"
+        },
+        "ipHash": {
+            "type": "string"
+        },
+        "userAgent": {
+            "type": "text"
+        }
+    }
+}

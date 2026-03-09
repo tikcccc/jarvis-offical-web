@@ -4,8 +4,8 @@
   "info": {
     "singularName": "news",
     "pluralName": "news-items",
-    "displayName": "新闻",
-    "description": ""
+    "displayName": "News",
+    "description": "Newsroom articles"
   },
   "options": {
     "draftAndPublish": true
@@ -24,10 +24,13 @@
     "excerpt": {
       "type": "text"
     },
+    "subtitle": {
+      "type": "string"
+    },
     "body": {
       "type": "blocks"
     },
-    "coverImage": {
+    "mainImage": {
       "type": "media",
       "multiple": false,
       "allowedTypes": [
@@ -40,13 +43,34 @@
       "target": "api::news-category.news-category",
       "inversedBy": "news"
     },
-    "isFeatured": {
+    "featured": {
       "type": "boolean",
       "default": false
     },
-    "isDraft": {
-      "type": "boolean",
-      "default": false
+    "tags": {
+      "type": "json"
+    },
+    "author": {
+      "type": "string",
+      "default": "isBIM Team"
+    },
+    "readTime": {
+      "type": "integer",
+      "default": 5
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
     }
   }
 }

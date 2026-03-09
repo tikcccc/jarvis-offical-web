@@ -17,20 +17,14 @@
  */
 
 import type { MetadataRoute } from "next";
-import { sanityFetch, REVALIDATE } from "@/sanity/lib/fetch";
 import {
-  NEWS_SITEMAP_QUERY,
-  CASE_STUDIES_SITEMAP_QUERY,
-  CAREERS_SITEMAP_QUERY,
-} from "@/sanity/lib/queries";
+  getCareerSitemapEntries,
+  getCaseStudySitemapEntries,
+  getNewsSitemapEntries,
+} from "@/strapi/lib";
 import { ROUTES } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/env";
 import { sourceLanguageTag } from "@/paraglide/runtime";
-
-interface SitemapEntry {
-  slug: string;
-  _updatedAt: string;
-}
 
 /**
  * Generate sitemap with static pages and dynamic Sanity content
@@ -42,23 +36,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const withLocale = (route: string, locale: string) =>
     `${siteUrl}/${locale}${route === "/" ? "" : route}`;
 
-  // Fetch all dynamic content slugs from Sanity
+  // Fetch all dynamic content slugs from Strapi
   const [news, caseStudies, careers] = await Promise.all([
-    sanityFetch<SitemapEntry[]>({
-      query: NEWS_SITEMAP_QUERY,
-      tags: ["news"],
-      revalidate: REVALIDATE.HOUR,
-    }).catch(() => []),
-    sanityFetch<SitemapEntry[]>({
-      query: CASE_STUDIES_SITEMAP_QUERY,
-      tags: ["caseStudy"],
-      revalidate: REVALIDATE.HOUR,
-    }).catch(() => []),
-    sanityFetch<SitemapEntry[]>({
-      query: CAREERS_SITEMAP_QUERY,
-      tags: ["career"],
-      revalidate: REVALIDATE.DAY,
-    }).catch(() => []),
+    getNewsSitemapEntries().catch(() => []),
+    getCaseStudySitemapEntries().catch(() => []),
+    getCareerSitemapEntries().catch(() => []),
   ]);
 
   // Static pages (high priority, frequent changes)

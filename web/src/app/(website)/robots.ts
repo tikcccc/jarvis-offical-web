@@ -15,7 +15,7 @@ import { getSiteUrl } from "@/lib/env";
 
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = getSiteUrl();
-  const baseDisallow = ["/studio/", "/studio", "/api/", "/admin/"];
+  const baseDisallow = ["/api/", "/admin/"];
 
   return {
     rules: [

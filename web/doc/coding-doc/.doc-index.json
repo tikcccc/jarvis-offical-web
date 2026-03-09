@@ -1,0 +1,937 @@
+{
+  "doc_dir": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc",
+  "files_count": 8,
+  "files": [
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-archite.md",
+      "title": "isBIM Official Web Architecture (v3.14)",
+      "heading_count": 29,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM Official Web Architecture (v3.14)"
+        },
+        {
+          "line": 12,
+          "level": 2,
+          "text": "Deployment Architecture"
+        },
+        {
+          "line": 18,
+          "level": 2,
+          "text": "Tech Stack"
+        },
+        {
+          "line": 29,
+          "level": 2,
+          "text": "App Structure (high level)"
+        },
+        {
+          "line": 62,
+          "level": 3,
+          "text": "Services Template (JPM / BIM / Finance / Ventures)"
+        },
+        {
+          "line": 69,
+          "level": 3,
+          "text": "Layout / UI"
+        },
+        {
+          "line": 88,
+          "level": 3,
+          "text": "Sections (selected)"
+        },
+        {
+          "line": 100,
+          "level": 3,
+          "text": "Services & Products Page"
+        },
+        {
+          "line": 113,
+          "level": 3,
+          "text": "Newsroom Page"
+        },
+        {
+          "line": 130,
+          "level": 3,
+          "text": "Case Studies Page (Case Center)"
+        },
+        {
+          "line": 145,
+          "level": 3,
+          "text": "Product Template (JARVIS Product Pages)"
+        },
+        {
+          "line": 174,
+          "level": 3,
+          "text": "Animations"
+        },
+        {
+          "line": 185,
+          "level": 3,
+          "text": "Hooks (barrel: src/hooks/index.ts)"
+        },
+        {
+          "line": 194,
+          "level": 3,
+          "text": "Library / Config"
+        },
+        {
+          "line": 218,
+          "level": 3,
+          "text": "SEO & Sitemap"
+        },
+        {
+          "line": 224,
+          "level": 3,
+          "text": "Environment Variables"
+        },
+        {
+          "line": 255,
+          "level": 3,
+          "text": "UI Components"
+        },
+        {
+          "line": 262,
+          "level": 3,
+          "text": "Data"
+        },
+        {
+          "line": 270,
+          "level": 3,
+          "text": "Schemas"
+        },
+        {
+          "line": 276,
+          "level": 3,
+          "text": "Styles"
+        },
+        {
+          "line": 295,
+          "level": 3,
+          "text": "SEO & ISR"
+        },
+        {
+          "line": 315,
+          "level": 3,
+          "text": "Sanity Data Layer"
+        },
+        {
+          "line": 327,
+          "level": 3,
+          "text": "Sanity Schemas"
+        },
+        {
+          "line": 338,
+          "level": 4,
+          "text": "Sanity SEO/Media Fields (current)"
+        },
+        {
+          "line": 367,
+          "level": 3,
+          "text": "Public Assets"
+        },
+        {
+          "line": 378,
+          "level": 2,
+          "text": "Boundaries"
+        },
+        {
+          "line": 382,
+          "level": 2,
+          "text": "Patterns & Rules (current)"
+        },
+        {
+          "line": 433,
+          "level": 3,
+          "text": "Product Template - updated guardrails (2025-02)"
+        },
+        {
+          "line": 439,
+          "level": 2,
+          "text": "Backlog / Placeholder"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-backup-plan.md",
+      "title": "isBIM 官网备份方案 (Backup Plan)",
+      "heading_count": 28,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM 官网备份方案 (Backup Plan)"
+        },
+        {
+          "line": 15,
+          "level": 2,
+          "text": "📧 邮件服务备份方案"
+        },
+        {
+          "line": 17,
+          "level": 3,
+          "text": "当前方案: Resend"
+        },
+        {
+          "line": 35,
+          "level": 3,
+          "text": "备份方案 1: Brevo (原 Sendinblue) ✅ 已实现"
+        },
+        {
+          "line": 39,
+          "level": 4,
+          "text": "当前实现方式"
+        },
+        {
+          "line": 60,
+          "level": 4,
+          "text": "功能对比"
+        },
+        {
+          "line": 73,
+          "level": 4,
+          "text": "成本对比"
+        },
+        {
+          "line": 87,
+          "level": 4,
+          "text": "当前切换步骤 (已实现双提供商)"
+        },
+        {
+          "line": 91,
+          "level": 1,
+          "text": ".env.local 或 Vercel 环境变量"
+        },
+        {
+          "line": 98,
+          "level": 1,
+          "text": "或在 Vercel 重新部署 (生产环境)"
+        },
+        {
+          "line": 132,
+          "level": 4,
+          "text": "历史方案: 自动降级切换 (未实现)"
+        },
+        {
+          "line": 195,
+          "level": 4,
+          "text": "何时切换到 Brevo?"
+        },
+        {
+          "line": 213,
+          "level": 3,
+          "text": "备份方案 2: AWS SES (Simple Email Service)"
+        },
+        {
+          "line": 215,
+          "level": 4,
+          "text": "优点"
+        },
+        {
+          "line": 221,
+          "level": 4,
+          "text": "缺点"
+        },
+        {
+          "line": 227,
+          "level": 4,
+          "text": "迁移难度"
+        },
+        {
+          "line": 231,
+          "level": 4,
+          "text": "何时考虑?"
+        },
+        {
+          "line": 238,
+          "level": 3,
+          "text": "备份方案 3: Postmark"
+        },
+        {
+          "line": 240,
+          "level": 4,
+          "text": "优点"
+        },
+        {
+          "line": 246,
+          "level": 4,
+          "text": "缺点"
+        },
+        {
+          "line": 250,
+          "level": 4,
+          "text": "迁移难度"
+        },
+        {
+          "line": 254,
+          "level": 4,
+          "text": "何时考虑?"
+        },
+        {
+          "line": 261,
+          "level": 2,
+          "text": "推荐决策树"
+        },
+        {
+          "line": 275,
+          "level": 2,
+          "text": "🗄️ 其他模块备份方案"
+        },
+        {
+          "line": 277,
+          "level": 3,
+          "text": "CMS 备份方案 (Sanity 替代)"
+        },
+        {
+          "line": 285,
+          "level": 3,
+          "text": "CDN 备份方案 (华为云 OBS 替代)"
+        },
+        {
+          "line": 293,
+          "level": 3,
+          "text": "部署平台备份方案 (Vercel 替代)"
+        },
+        {
+          "line": 301,
+          "level": 2,
+          "text": "📝 使用指南"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-index.md",
+      "title": "Coding Docs Index (v4.0 - 2025-11-29)",
+      "heading_count": 9,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "Coding Docs Index (v4.0 - 2025-11-29)"
+        },
+        {
+          "line": 8,
+          "level": 2,
+          "text": "📁 File Responsibilities"
+        },
+        {
+          "line": 10,
+          "level": 3,
+          "text": "📘 `coding-archite.md` - Architecture Documentation"
+        },
+        {
+          "line": 23,
+          "level": 3,
+          "text": "📗 `coding-rules.md` - Coding Standards"
+        },
+        {
+          "line": 36,
+          "level": 3,
+          "text": "📕 `coding-troubleshooting.md` - Bug Fixes & Reminders"
+        },
+        {
+          "line": 49,
+          "level": 3,
+          "text": "📙 `coding-todo.md` - Task Tracking"
+        },
+        {
+          "line": 60,
+          "level": 3,
+          "text": "📓 `coding-backup-plan.md` - Service Alternatives"
+        },
+        {
+          "line": 71,
+          "level": 3,
+          "text": "📔 `coding-update.md` - Change Log"
+        },
+        {
+          "line": 82,
+          "level": 2,
+          "text": "🧭 Quick Decision Tree"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-rules.md",
+      "title": "coding-rules",
+      "heading_count": 13,
+      "headings": [
+        {
+          "line": 5,
+          "level": 2,
+          "text": "Layout & Routing"
+        },
+        {
+          "line": 9,
+          "level": 2,
+          "text": "i18n (FROZEN)"
+        },
+        {
+          "line": 16,
+          "level": 2,
+          "text": "Env & ISR"
+        },
+        {
+          "line": 25,
+          "level": 2,
+          "text": "Media & Assets"
+        },
+        {
+          "line": 33,
+          "level": 2,
+          "text": "Motion & GSAP"
+        },
+        {
+          "line": 40,
+          "level": 2,
+          "text": "Styling & Tokens"
+        },
+        {
+          "line": 47,
+          "level": 2,
+          "text": "Services & Products Page"
+        },
+        {
+          "line": 52,
+          "level": 2,
+          "text": "Service Template (JPM/BIM/Finance/Ventures)"
+        },
+        {
+          "line": 59,
+          "level": 2,
+          "text": "Product Template (JARVIS Product Pages)"
+        },
+        {
+          "line": 83,
+          "level": 2,
+          "text": "Sanity & SEO"
+        },
+        {
+          "line": 105,
+          "level": 2,
+          "text": "Contact Form Email (Dual Provider: Resend + Brevo)"
+        },
+        {
+          "line": 123,
+          "level": 2,
+          "text": "Contact Page"
+        },
+        {
+          "line": 132,
+          "level": 2,
+          "text": "Newsroom Page"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-todo.md",
+      "title": "isBIM Website TODO (Coding TODO)",
+      "heading_count": 19,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM Website TODO (Coding TODO)"
+        },
+        {
+          "line": 8,
+          "level": 2,
+          "text": "Table of Contents"
+        },
+        {
+          "line": 20,
+          "level": 2,
+          "text": "High Priority"
+        },
+        {
+          "line": 22,
+          "level": 3,
+          "text": "Huawei Cloud deployment (HK main + CN accelerated domain)"
+        },
+        {
+          "line": 38,
+          "level": 3,
+          "text": "Email system production rollout"
+        },
+        {
+          "line": 42,
+          "level": 4,
+          "text": "Option A: Resend domain verification (recommended, default)"
+        },
+        {
+          "line": 50,
+          "level": 4,
+          "text": "Option B: Brevo domain verification (optional fallback)"
+        },
+        {
+          "line": 65,
+          "level": 3,
+          "text": "Sanity dynamic content i18n alignment (News/Careers)"
+        },
+        {
+          "line": 80,
+          "level": 2,
+          "text": "SEO Tasks"
+        },
+        {
+          "line": 82,
+          "level": 3,
+          "text": "Pre-launch SEO infra (pending domain/DNS)"
+        },
+        {
+          "line": 87,
+          "level": 3,
+          "text": "Infrastructure checks"
+        },
+        {
+          "line": 90,
+          "level": 3,
+          "text": "JARVIS product pages (8)"
+        },
+        {
+          "line": 100,
+          "level": 3,
+          "text": "Services pages (4)"
+        },
+        {
+          "line": 106,
+          "level": 3,
+          "text": "Support pages"
+        },
+        {
+          "line": 112,
+          "level": 3,
+          "text": "SEO enhancements"
+        },
+        {
+          "line": 125,
+          "level": 2,
+          "text": "UI/UX Improvements"
+        },
+        {
+          "line": 131,
+          "level": 2,
+          "text": "Bug Fixes"
+        },
+        {
+          "line": 133,
+          "level": 3,
+          "text": "Brevo email sending 403 error"
+        },
+        {
+          "line": 146,
+          "level": 2,
+          "text": "Other Tasks"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-token-archite.md",
+      "title": "Design Token System Architecture",
+      "heading_count": 66,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "Design Token System Architecture"
+        },
+        {
+          "line": 10,
+          "level": 2,
+          "text": "📋 目錄"
+        },
+        {
+          "line": 25,
+          "level": 2,
+          "text": "系統概述"
+        },
+        {
+          "line": 29,
+          "level": 3,
+          "text": "核心理念"
+        },
+        {
+          "line": 38,
+          "level": 2,
+          "text": "分層架構"
+        },
+        {
+          "line": 61,
+          "level": 3,
+          "text": "Layer 1: Foundations（基礎層）"
+        },
+        {
+          "line": 79,
+          "level": 3,
+          "text": "Layer 2: Semantic Layer（語義層）"
+        },
+        {
+          "line": 103,
+          "level": 3,
+          "text": "Layer 3: Utilities（工具層）"
+        },
+        {
+          "line": 131,
+          "level": 3,
+          "text": "Layer 4: Themes（主題層）"
+        },
+        {
+          "line": 152,
+          "level": 2,
+          "text": "命名規範"
+        },
+        {
+          "line": 154,
+          "level": 3,
+          "text": "Foundations 層命名"
+        },
+        {
+          "line": 156,
+          "level": 4,
+          "text": "顏色"
+        },
+        {
+          "line": 162,
+          "level": 4,
+          "text": "間距"
+        },
+        {
+          "line": 168,
+          "level": 4,
+          "text": "字體"
+        },
+        {
+          "line": 174,
+          "level": 4,
+          "text": "字重"
+        },
+        {
+          "line": 180,
+          "level": 4,
+          "text": "斷點"
+        },
+        {
+          "line": 186,
+          "level": 3,
+          "text": "Semantic 層命名"
+        },
+        {
+          "line": 188,
+          "level": 4,
+          "text": "文字顏色"
+        },
+        {
+          "line": 194,
+          "level": 4,
+          "text": "表面顏色"
+        },
+        {
+          "line": 200,
+          "level": 4,
+          "text": "動畫"
+        },
+        {
+          "line": 206,
+          "level": 3,
+          "text": "Utilities 層命名"
+        },
+        {
+          "line": 208,
+          "level": 4,
+          "text": "Class 命名（BEM 簡化版）"
+        },
+        {
+          "line": 216,
+          "level": 2,
+          "text": "斷點系統"
+        },
+        {
+          "line": 218,
+          "level": 3,
+          "text": "四斷點策略"
+        },
+        {
+          "line": 232,
+          "level": 3,
+          "text": "容器 Max-Width 策略"
+        },
+        {
+          "line": 243,
+          "level": 3,
+          "text": "實際應用範例"
+        },
+        {
+          "line": 274,
+          "level": 3,
+          "text": "筆電區間保護機制"
+        },
+        {
+          "line": 297,
+          "level": 2,
+          "text": "字體系統"
+        },
+        {
+          "line": 299,
+          "level": 3,
+          "text": "Font Families"
+        },
+        {
+          "line": 310,
+          "level": 3,
+          "text": "8 種 Font Type Utilities"
+        },
+        {
+          "line": 323,
+          "level": 3,
+          "text": "中文環境行高保護"
+        },
+        {
+          "line": 350,
+          "level": 2,
+          "text": "顏色系統"
+        },
+        {
+          "line": 352,
+          "level": 3,
+          "text": "Color Primitives（顏色原語）"
+        },
+        {
+          "line": 384,
+          "level": 3,
+          "text": "Semantic Colors（語義顏色）"
+        },
+        {
+          "line": 405,
+          "level": 2,
+          "text": "間距系統"
+        },
+        {
+          "line": 407,
+          "level": 3,
+          "text": "Spacing Scale"
+        },
+        {
+          "line": 435,
+          "level": 3,
+          "text": "響應式 Gutter"
+        },
+        {
+          "line": 457,
+          "level": 2,
+          "text": "文件結構"
+        },
+        {
+          "line": 502,
+          "level": 2,
+          "text": "使用指南"
+        },
+        {
+          "line": 504,
+          "level": 3,
+          "text": "如何選擇正確的變數"
+        },
+        {
+          "line": 506,
+          "level": 4,
+          "text": "❌ 錯誤做法"
+        },
+        {
+          "line": 516,
+          "level": 4,
+          "text": "✅ 正確做法"
+        },
+        {
+          "line": 528,
+          "level": 3,
+          "text": "如何新增設計變數"
+        },
+        {
+          "line": 530,
+          "level": 4,
+          "text": "步驟 1: 確定變數層級"
+        },
+        {
+          "line": 536,
+          "level": 4,
+          "text": "步驟 2: 在對應文件中定義"
+        },
+        {
+          "line": 554,
+          "level": 3,
+          "text": "如何使用 Font Type Utilities"
+        },
+        {
+          "line": 556,
+          "level": 4,
+          "text": "在 TSX 組件中使用"
+        },
+        {
+          "line": 576,
+          "level": 4,
+          "text": "在 Module CSS 中使用"
+        },
+        {
+          "line": 594,
+          "level": 3,
+          "text": "響應式設計最佳實踐"
+        },
+        {
+          "line": 596,
+          "level": 4,
+          "text": "使用 clamp() 實現流動尺寸"
+        },
+        {
+          "line": 623,
+          "level": 4,
+          "text": "容器使用建議"
+        },
+        {
+          "line": 649,
+          "level": 2,
+          "text": "遷移紀錄"
+        },
+        {
+          "line": 651,
+          "level": 3,
+          "text": "v2.0 (2025-12-11) - Token System 重構"
+        },
+        {
+          "line": 653,
+          "level": 4,
+          "text": "主要改動"
+        },
+        {
+          "line": 677,
+          "level": 4,
+          "text": "文件變更清單"
+        },
+        {
+          "line": 693,
+          "level": 4,
+          "text": "破壞性變更"
+        },
+        {
+          "line": 701,
+          "level": 2,
+          "text": "常見問題 (FAQ)"
+        },
+        {
+          "line": 703,
+          "level": 3,
+          "text": "Q1: 為什麼要分層？直接用 Tailwind 不行嗎？"
+        },
+        {
+          "line": 711,
+          "level": 3,
+          "text": "Q2: 什麼時候用 CSS 變數，什麼時候用 Tailwind Class？"
+        },
+        {
+          "line": 725,
+          "level": 3,
+          "text": "Q3: 中文行高保護會影響所有中文內容嗎？"
+        },
+        {
+          "line": 731,
+          "level": 3,
+          "text": "Q4: 如何決定使用哪個容器 Class？"
+        },
+        {
+          "line": 742,
+          "level": 3,
+          "text": "Q5: 如何測試響應式斷點？"
+        },
+        {
+          "line": 754,
+          "level": 2,
+          "text": "貢獻指南"
+        },
+        {
+          "line": 756,
+          "level": 3,
+          "text": "新增設計變數時，請遵循："
+        },
+        {
+          "line": 763,
+          "level": 3,
+          "text": "Code Review Checklist"
+        },
+        {
+          "line": 774,
+          "level": 2,
+          "text": "參考資源"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-troubleshooting.md",
+      "title": "Troubleshooting & Bug Fixes (Updated 2025-11-29)",
+      "heading_count": 1,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "Troubleshooting & Bug Fixes (Updated 2025-11-29)"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-update.md",
+      "title": "isBIM 官网更新日志 (Change Log)",
+      "heading_count": 10,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM 官网更新日志 (Change Log)"
+        },
+        {
+          "line": 15,
+          "level": 2,
+          "text": "2025-11-30 (v4.2)"
+        },
+        {
+          "line": 27,
+          "level": 2,
+          "text": "2025-11-29 (v4.1)"
+        },
+        {
+          "line": 35,
+          "level": 2,
+          "text": "2025-11-29 (v4.0)"
+        },
+        {
+          "line": 40,
+          "level": 2,
+          "text": "2025-11-26 (v3.7)"
+        },
+        {
+          "line": 44,
+          "level": 2,
+          "text": "2025-11-26 (v3.6)"
+        },
+        {
+          "line": 47,
+          "level": 2,
+          "text": "2025-11-26 (v3.5)"
+        },
+        {
+          "line": 50,
+          "level": 2,
+          "text": "2025-11-26 (v3.4)"
+        },
+        {
+          "line": 56,
+          "level": 2,
+          "text": "2025-11-26 (v3.3)"
+        },
+        {
+          "line": 60,
+          "level": 2,
+          "text": "2025-11-26 (v3.2)"
+        }
+      ]
+    }
+  ]
+}

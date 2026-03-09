@@ -2,35 +2,12 @@
 
 import Image from 'next/image';
 import { Link } from '@/lib/i18n';
-import { urlFor } from '@/sanity/lib/image';
+import { urlFor } from '@/strapi/lib/image';
 import { ArrowRight } from 'lucide-react';
-import type { Image as SanityImage } from 'sanity';
-
-interface NewsItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-}
+import type { CmsNewsItem } from '@/strapi/lib';
 
 interface NewsCardProps {
-  news: NewsItem;
+  news: CmsNewsItem;
 }
 
 export default function NewsCard({ news }: NewsCardProps) {

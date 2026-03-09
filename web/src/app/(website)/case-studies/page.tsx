@@ -2,14 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { generateCaseStudiesPageSEO } from "@/lib/seo-generators";
 import { JsonLd, createBreadcrumbSchema } from "@/components/seo/json-ld";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import {
-  CASE_STUDY_LIST_QUERY,
-  CASE_STUDY_CATEGORIES_QUERY,
-  FEATURED_CASE_STUDY_QUERY,
-} from "@/sanity/lib/queries";
 import CaseStudiesPageClient from "./case-studies-page-client";
-import type { Image as SanityImage } from 'sanity';
 import {
   isAvailableLanguageTag,
   sourceLanguageTag,
@@ -18,44 +11,18 @@ import {
 import { getSiteUrl } from "@/lib/env";
 import { buildHref } from "@/lib/i18n/route-builder";
 import * as m from "@/paraglide/messages";
+import {
+  getCaseStudies,
+  getCaseStudyCategories,
+  getFeaturedCaseStudy,
+  type CmsCaseStudyItem,
+  type CmsCategory,
+} from "@/strapi/lib";
 
 export const revalidate = 0; // Disable ISR: always fetch fresh data
 export const dynamic = "force-dynamic";
 
 type MessageFn = (params?: Record<string, never>, options?: { languageTag?: AvailableLanguageTag }) => string;
-
-// Types for Sanity data
-interface CaseStudyItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-  featured?: boolean;
-}
-
-interface CaseStudyCategory {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description?: string;
-  color: string;
-}
 
 /**
  * Case Studies Page Metadata
@@ -87,27 +54,14 @@ export default async function CaseStudiesPage() {
   const locale = (isAvailableLanguageTag(headerLocale) ? headerLocale : sourceLanguageTag) as AvailableLanguageTag;
   const t = (fn: MessageFn) => fn({}, { languageTag: locale });
 
-  // Fetch data from Sanity CMS
+  // Fetch data from Strapi CMS
   const [caseStudies, categories, featuredCaseStudy] = await Promise.all([
-    sanityFetch<CaseStudyItem[]>({
-      query: CASE_STUDY_LIST_QUERY,
-      params: { start: 0, end: 12 },
-      tags: ["caseStudy"],
-      cache: "no-store",
-    }),
-    sanityFetch<CaseStudyCategory[]>({
-      query: CASE_STUDY_CATEGORIES_QUERY,
-      tags: ["caseStudyCategory"],
-      cache: "no-store",
-    }),
-    sanityFetch<CaseStudyItem | null>({
-      query: FEATURED_CASE_STUDY_QUERY,
-      tags: ["caseStudy"],
-      cache: "no-store",
-    }),
+    getCaseStudies(12),
+    getCaseStudyCategories(),
+    getFeaturedCaseStudy(),
   ]).catch(() => {
-    // Fallback to empty data if Sanity fetch fails
-    return [[], [], null] as [CaseStudyItem[], CaseStudyCategory[], CaseStudyItem | null];
+    // Fallback to empty data if Strapi fetch fails
+    return [[], [], null] as [CmsCaseStudyItem[], CmsCategory[], CmsCaseStudyItem | null];
   });
 
   // Breadcrumb Schema for navigation

@@ -11,7 +11,6 @@ import {
   Timer,
   Users,
 } from "lucide-react";
-import type { Career } from "@/sanity/lib/types";
 import { Link } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/locale-context";
@@ -28,6 +27,7 @@ import {
   type AvailableLanguageTag,
 } from "@/paraglide/runtime";
 import * as m from "@/paraglide/messages";
+import type { CmsCareer as Career } from "@/strapi/lib";
 
 type FilterOption = {
   value: string;

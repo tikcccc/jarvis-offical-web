@@ -4,11 +4,11 @@
   "info": {
     "singularName": "team",
     "pluralName": "teams",
-    "displayName": "团队",
-    "description": ""
+    "displayName": "Team",
+    "description": "Career team or subgroup"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -16,8 +16,23 @@
       "type": "string",
       "required": true
     },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
     "description": {
       "type": "text"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 999
+    },
+    "pillar": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pillar.pillar",
+      "inversedBy": "teams"
     },
     "careers": {
       "type": "relation",

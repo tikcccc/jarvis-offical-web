@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
@@ -9,13 +10,6 @@ import {
   Timer,
   Users,
 } from "lucide-react";
-import {
-  generateCareerMetadata,
-  sanityFetch,
-  CAREER_BY_SLUG_QUERY,
-  APPLICATION_SETTINGS_QUERY,
-} from "@/sanity/lib";
-import type { Career, ApplicationSettings } from "@/sanity/lib/types";
 import { Link } from "@/lib/i18n";
 import {
   formatDate,
@@ -31,6 +25,15 @@ import {
   type AvailableLanguageTag,
 } from "@/paraglide/runtime";
 import * as m from "@/paraglide/messages";
+import { getSiteUrl } from "@/lib/env";
+import { buildHref } from "@/lib/i18n/route-builder";
+import { generateHreflangAlternates } from "@/lib/seo";
+import {
+  getApplicationSettings,
+  getCareerBySlug,
+  type CmsPortableTextImage,
+} from "@/strapi/lib";
+import { urlFor } from "@/strapi/lib/image";
 
 export const revalidate = 0;
 
@@ -42,18 +45,94 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-
   const headersList = await headers();
   const headerLocale = headersList.get("x-language-tag");
   const locale = (isAvailableLanguageTag(headerLocale) ? headerLocale : sourceLanguageTag) as AvailableLanguageTag;
+  const siteUrl = getSiteUrl();
+  const localizedPath = buildHref(`/careers/${slug}`, locale);
+  const canonicalUrl = `${siteUrl}${localizedPath}`;
+  const alternates = generateHreflangAlternates(`/careers/${slug}`, locale);
+  const career = await getCareerBySlug(slug);
 
-  return generateCareerMetadata(slug, locale);
+  if (!career) {
+    return { title: m.careers_role_details({}, { languageTag: locale }) };
+  }
+
+  const title = career.seo?.metaTitle || career.title;
+  const description = career.seo?.metaDescription || `Join isBIM as ${career.title}.`;
+  const ogImageSource =
+    career.seo?.openGraphImage?.asset || career.contentImage?.asset;
+  const fallbackOgImage = `${siteUrl}/images/og/careers.jpg`;
+  const ogImageUrl =
+    ogImageSource
+      ? urlFor(ogImageSource).width(1200).height(630).fit("crop").url() ||
+        fallbackOgImage
+      : fallbackOgImage;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: canonicalUrl,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
+    },
+  };
 }
 
 const portableTextComponents: PortableTextComponents = {
+  marks: {
+    strong: ({ children }) => (
+      <strong className={styles.proseStrong}>{children}</strong>
+    ),
+    link: ({ children, value }) => (
+      <a
+        href={value?.href}
+        target="_blank"
+        rel="noreferrer"
+        className={styles.proseLink}
+      >
+        {children}
+      </a>
+    ),
+  },
   block: {
     normal: ({ children }) => (
       <p className={cn(styles.proseParagraph, "font-body-lg mb-4")}>{children}</p>
+    ),
+    h2: ({ children }) => (
+      <h2 className={cn(styles.sectionHeading, "font-body-xxlg mt-12 mb-6")}>
+        {children}
+      </h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className={cn(styles.sectionHeading, "font-body-xlg mt-10 mb-5")}>
+        {children}
+      </h3>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className={cn(styles.proseParagraph, "border-l-4 pl-4 italic my-6")}>
+        {children}
+      </blockquote>
     ),
   },
   list: {
@@ -78,20 +157,23 @@ const portableTextComponents: PortableTextComponents = {
       <li className={cn(styles.proseParagraph, "font-body-lg")}>{children}</li>
     ),
   },
-  marks: {
-    strong: ({ children }) => (
-      <strong className={styles.proseStrong}>{children}</strong>
-    ),
-    link: ({ children, value }) => (
-      <a
-        href={value?.href}
-        target="_blank"
-        rel="noreferrer"
-        className={styles.proseLink}
-      >
-        {children}
-      </a>
-    ),
+  types: {
+    image: ({ value }: { value?: CmsPortableTextImage }) => {
+      const imageUrl = value?.asset ? urlFor(value.asset).url() : null;
+      if (!imageUrl) return null;
+
+      return (
+        <div className="my-8">
+          <Image
+            src={imageUrl}
+            alt={value?.alt || "Career content image"}
+            width={value?.asset.width || 1200}
+            height={value?.asset.height || 675}
+            className="w-full h-auto rounded-sm"
+          />
+        </div>
+      );
+    },
   },
 };
 
@@ -102,23 +184,12 @@ export default async function CareerDetailPage({ params }: PageProps) {
   const locale = (isAvailableLanguageTag(headerLocale) ? headerLocale : sourceLanguageTag) as AvailableLanguageTag;
   const t = (fn: MessageFn) => fn({}, { languageTag: locale });
 
-  type CareerQueryResult = Career & { isDraft?: boolean };
   const [career, applicationSettings] = await Promise.all([
-    sanityFetch<CareerQueryResult | null>({
-      query: CAREER_BY_SLUG_QUERY,
-      params: { slug },
-      tags: ["career", `career:${slug}`],
-      revalidate,
-      cache: "no-store",
-    }).catch(() => null),
-    sanityFetch<ApplicationSettings | null>({
-      query: APPLICATION_SETTINGS_QUERY,
-      tags: ["applicationSettings"],
-      cache: "no-store",
-    }).catch(() => null),
+    getCareerBySlug(slug).catch(() => null),
+    getApplicationSettings().catch(() => null),
   ]);
 
-  if (!career || career.isDraft) {
+  if (!career) {
     notFound();
   }
 

@@ -11,8 +11,7 @@ import { ROUTES } from "@/lib/constants";
 import * as messages from "@/paraglide/messages";
 import { m } from "@/components/motion/lazy-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { urlFor } from "@/sanity/lib";
-import type { Image as SanityImage } from "sanity";
+import { urlFor, type StrapiMediaAsset } from "@/strapi/lib";
 import styles from "./menu-overlay.module.css";
 import { useLocale } from "@/lib/i18n/locale-context";
 
@@ -55,7 +54,7 @@ export interface MenuNewsPreview {
   excerpt?: string;
   featured?: boolean;
   mainImage?: {
-    asset?: SanityImage;
+    asset?: StrapiMediaAsset;
     alt?: string;
   };
   category?: {

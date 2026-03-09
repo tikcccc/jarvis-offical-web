@@ -4,8 +4,8 @@
   "info": {
     "singularName": "news-category",
     "pluralName": "news-categories",
-    "displayName": "新闻分类",
-    "description": ""
+    "displayName": "News Category",
+    "description": "News categories shown on newsroom pages"
   },
   "options": {
     "draftAndPublish": true
@@ -23,6 +23,13 @@
     },
     "color": {
       "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 999
     },
     "news": {
       "type": "relation",

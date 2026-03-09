@@ -2,14 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { generateNewsroomPageSEO } from "@/lib/seo-generators";
 import { JsonLd, createBreadcrumbSchema } from "@/components/seo/json-ld";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import {
-  NEWS_LIST_QUERY,
-  NEWS_CATEGORIES_QUERY,
-  FEATURED_NEWS_QUERY,
-} from "@/sanity/lib/queries";
 import NewsroomPageClient from "./newsroom-page-client";
-import type { Image as SanityImage } from 'sanity';
 import {
   isAvailableLanguageTag,
   sourceLanguageTag,
@@ -18,44 +11,18 @@ import {
 import { getSiteUrl } from "@/lib/env";
 import { buildHref } from "@/lib/i18n/route-builder";
 import * as m from "@/paraglide/messages";
+import {
+  getFeaturedNews,
+  getNewsCategories,
+  getNewsList,
+  type CmsCategory,
+  type CmsNewsItem,
+} from "@/strapi/lib";
 
 export const revalidate = 0; // Disable ISR: always fetch fresh data
 export const dynamic = "force-dynamic";
 
 type MessageFn = (params?: Record<string, never>, options?: { languageTag?: AvailableLanguageTag }) => string;
-
-// Types for Sanity data
-interface NewsItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-  featured?: boolean;
-}
-
-interface NewsCategory {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description?: string;
-  color: string;
-}
 
 /**
  * Newsroom Page Metadata
@@ -87,27 +54,14 @@ export default async function NewsroomPage() {
   const locale = (isAvailableLanguageTag(headerLocale) ? headerLocale : sourceLanguageTag) as AvailableLanguageTag;
   const t = (fn: MessageFn) => fn({}, { languageTag: locale });
 
-  // Fetch data from Sanity CMS
+  // Fetch data from Strapi CMS
   const [newsList, categories, featuredNews] = await Promise.all([
-    sanityFetch<NewsItem[]>({
-      query: NEWS_LIST_QUERY,
-      params: { start: 0, end: 12 },
-      tags: ["sanity:news"],
-      cache: "no-store",
-    }),
-    sanityFetch<NewsCategory[]>({
-      query: NEWS_CATEGORIES_QUERY,
-      tags: ["sanity:newsCategory"],
-      cache: "no-store",
-    }),
-    sanityFetch<NewsItem | null>({
-      query: FEATURED_NEWS_QUERY,
-      tags: ["sanity:news"],
-      cache: "no-store",
-    }),
+    getNewsList(12),
+    getNewsCategories(),
+    getFeaturedNews(),
   ]).catch(() => {
-    // Fallback to empty data if Sanity fetch fails
-    return [[], [], null] as [NewsItem[], NewsCategory[], NewsItem | null];
+    // Fallback to empty data if Strapi fetch fails
+    return [[], [], null] as [CmsNewsItem[], CmsCategory[], CmsNewsItem | null];
   });
 
   // Breadcrumb Schema for navigation

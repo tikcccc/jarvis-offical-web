@@ -4,8 +4,8 @@
     "info": {
         "singularName": "application-setting",
         "pluralName": "application-settings",
-        "displayName": "申请设置",
-        "description": ""
+        "displayName": "Application Setting",
+        "description": "Global application form URL"
     },
     "options": {},
     "pluginOptions": {},

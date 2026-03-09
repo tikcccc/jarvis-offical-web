@@ -1,4 +1,4 @@
-import type { Career } from "@/sanity/lib/types";
+import type { CmsCareer as Career } from "@/strapi/lib";
 import * as m from "@/paraglide/messages";
 import {
   isAvailableLanguageTag,

@@ -4,8 +4,8 @@
     "info": {
         "singularName": "career",
         "pluralName": "careers",
-        "displayName": "职位",
-        "description": ""
+        "displayName": "Career",
+        "description": "Career positions for the public website"
     },
     "options": {
         "draftAndPublish": true
@@ -36,15 +36,53 @@
             "target": "api::location.location",
             "inversedBy": "careers"
         },
+        "workModel": {
+            "type": "enumeration",
+            "enum": [
+                "onsite",
+                "hybrid",
+                "remote"
+            ],
+            "default": "onsite",
+            "required": true
+        },
         "postedAt": {
             "type": "datetime"
         },
         "expiresAt": {
             "type": "datetime"
         },
-        "isDraft": {
-            "type": "boolean",
-            "default": false
+        "experienceLevel": {
+            "type": "enumeration",
+            "enum": [
+                "intern",
+                "junior",
+                "mid",
+                "senior",
+                "lead",
+                "director"
+            ]
+        },
+        "sortOrder": {
+            "type": "integer",
+            "default": 999
+        },
+        "sections": {
+            "type": "component",
+            "repeatable": true,
+            "component": "shared.rich-text-section"
+        },
+        "contentImage": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "seo": {
+            "type": "component",
+            "repeatable": false,
+            "component": "shared.seo"
         }
     }
 }

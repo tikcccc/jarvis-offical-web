@@ -8,45 +8,15 @@ import {
   MoveRight,
 } from 'lucide-react';
 import Image from 'next/image';
-import { urlFor } from '@/sanity/lib/image';
 import { Link } from '@/lib/i18n';
-import type { PortableTextBlock } from '@portabletext/types';
-import type { Image as SanityImage } from 'sanity';
 import { useLocale } from "@/lib/i18n/locale-context";
 import * as m18n from "@/paraglide/messages";
+import { urlFor } from '@/strapi/lib/image';
+import type { CmsCaseStudyItem, CmsCategory } from "@/strapi/lib";
 
 // --- Types ---
-interface CaseStudyPost {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  publishedAt: string;
-  excerpt?: string;
-  body?: PortableTextBlock[];
-  readTime: number;
-  tags?: string[];
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  author: string;
-  featured?: boolean;
-}
-
-interface CaseStudyCategory {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description?: string;
-  color: string;
-}
+type CaseStudyPost = CmsCaseStudyItem;
+type CaseStudyCategory = CmsCategory;
 
 type LayoutMode = 'grid' | 'feed' | 'magazine';
 type CategoryFilter = string | 'All';

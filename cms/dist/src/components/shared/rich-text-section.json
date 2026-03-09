@@ -1,0 +1,18 @@
+{
+    "collectionName": "components_shared_rich_text_sections",
+    "info": {
+        "displayName": "Rich Text Section",
+        "description": "Titled rich text content block"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "content": {
+            "type": "blocks",
+            "required": true
+        }
+    }
+}

@@ -1,22 +1,10 @@
 /**
- * Type-Safe Environment Variables
+ * Type-safe environment variable access for the China deployment.
  *
- * Purpose:
- * - Centralized environment variable access
- * - Runtime validation of required environment variables
- * - TypeScript type safety for env vars
- * - Prevent runtime errors from missing/invalid env vars
- *
- * Usage:
- * ```tsx
- * import { env } from "@/lib/env";
- *
- * // Server-side
- * const apiKey = env.SANITY_API_TOKEN;
- *
- * // Client-side
- * const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
- * ```
+ * The active runtime only depends on:
+ * - Strapi configuration for CMS reads/writes and webhook revalidation
+ * - Site/media URLs for frontend rendering
+ * - Optional email configuration kept for legacy utility files
  */
 
 /**
@@ -24,8 +12,10 @@
  * These are only available on the server and should NEVER be exposed to the client.
  */
 const serverEnv = {
-  // Sanity
-  SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
+  // Strapi CMS
+  STRAPI_URL: process.env.STRAPI_URL,
+  STRAPI_API_TOKEN: process.env.STRAPI_API_TOKEN,
+  STRAPI_WEBHOOK_SECRET: process.env.STRAPI_WEBHOOK_SECRET,
 
   // Resend
   RESEND_API_KEY: process.env.RESEND_API_KEY,
@@ -52,11 +42,6 @@ const serverEnv = {
  * These are prefixed with NEXT_PUBLIC_ and safe to expose to the browser.
  */
 const clientEnv = {
-  // Sanity CMS
-  NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
-
   // Site
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 
@@ -78,16 +63,10 @@ function validateEnv() {
   const errors: string[] = [];
 
   // Required server-side variables
-  const requiredServer: (keyof typeof serverEnv)[] = [
-    // Add required server env vars here
-    // "SANITY_API_TOKEN",
-  ];
+  const requiredServer: (keyof typeof serverEnv)[] = [];
 
   // Required client-side variables
-  const requiredClient: (keyof typeof clientEnv)[] = [
-    "NEXT_PUBLIC_SANITY_PROJECT_ID",
-    "NEXT_PUBLIC_SANITY_DATASET",
-  ];
+  const requiredClient: (keyof typeof clientEnv)[] = [];
 
   // Check server variables (only in server context)
   if (typeof window === "undefined") {
@@ -132,13 +111,6 @@ export const env = {
  * Type-safe getter for environment variables
  * Returns undefined instead of throwing for optional vars.
  *
- * @example
- * ```tsx
- * const apiKey = getEnv("SANITY_API_TOKEN");
- * if (apiKey) {
- *   // Use apiKey
- * }
- * ```
  */
 export function getEnv<T extends keyof typeof env>(
   key: T
@@ -199,15 +171,25 @@ export function getSiteUrl(): string {
   return "https://isbim.com";
 }
 
-/**
- * Sanity configuration from environment
- */
-export const sanityConfig = {
-  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  dataset: env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  apiVersion: env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-01",
-  token: env.SANITY_API_TOKEN,
-} as const;
+export function getStrapiUrl(): string {
+  const url = env.STRAPI_URL;
+
+  if (!url) {
+    throw new Error(
+      "STRAPI_URL is not set. Please configure it in your environment variables."
+    );
+  }
+
+  return url;
+}
+
+export function getStrapiApiToken(): string {
+  return env.STRAPI_API_TOKEN || "";
+}
+
+export function getStrapiWebhookSecret(): string {
+  return env.STRAPI_WEBHOOK_SECRET || "";
+}
 
 /**
  * Get Resend API key

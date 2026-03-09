@@ -2,15 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { JsonLd, createBreadcrumbSchema } from "@/components/seo/json-ld";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import {
-  CASE_STUDY_DETAIL_QUERY,
-  CASE_STUDY_METADATA_QUERY,
-  CASE_STUDY_LIST_QUERY,
-} from "@/sanity/lib/queries";
 import CaseDetailClient from "./case-detail-client";
-import type { Image as SanityImage } from "sanity";
-import type { PortableTextBlock } from "@portabletext/types";
 import { getSiteUrl } from "@/lib/env";
 import { buildHref } from "@/lib/i18n/route-builder";
 import {
@@ -19,70 +11,17 @@ import {
   type AvailableLanguageTag,
 } from "@/paraglide/runtime";
 import { generateHreflangAlternates } from "@/lib/seo";
-import { urlFor } from "@/sanity/lib/image";
 import * as m from "@/paraglide/messages";
+import {
+  getCaseStudies,
+  getCaseStudyBySlug,
+} from "@/strapi/lib";
+import { urlFor } from "@/strapi/lib/image";
 
 export const revalidate = 0; // Always fresh per locale
 export const dynamic = "force-dynamic";
 
 type MessageFn = (params?: Record<string, never>, options?: { languageTag?: AvailableLanguageTag }) => string;
-
-// Types for Sanity data
-interface CaseStudyItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  body?: PortableTextBlock[]; // Rich text array
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-  featured?: boolean;
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    openGraphImage?: {
-      asset: SanityImage;
-      alt?: string;
-    };
-    keywords?: string[];
-  };
-}
-
-interface CaseStudyMetadata {
-  title?: string;
-  subtitle?: string;
-  excerpt?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt?: string;
-  };
-  publishedAt?: string;
-  author?: string;
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    openGraphImage?: {
-      asset: SanityImage;
-      alt?: string;
-    };
-    keywords?: string[];
-  };
-  _updatedAt?: string;
-}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -101,11 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const canonicalUrl = `${siteUrl}${localizedPath}`;
   const alternates = generateHreflangAlternates(`/case-studies/${slug}`, locale);
 
-  const caseData = await sanityFetch<CaseStudyMetadata | null>({
-    query: CASE_STUDY_METADATA_QUERY,
-    params: { slug },
-    tags: [`caseStudy:${slug}`],
-  });
+  const caseData = await getCaseStudyBySlug(slug);
 
   if (!caseData) {
     return { title: m.case_not_found_title({}, { languageTag: locale }) };
@@ -175,23 +110,13 @@ export default async function CaseDetailPage({ params }: PageProps) {
   const locale = (isAvailableLanguageTag(headerLocale) ? headerLocale : sourceLanguageTag) as AvailableLanguageTag;
   const t = (fn: MessageFn) => fn({}, { languageTag: locale });
 
-  const caseDetail = await sanityFetch<CaseStudyItem | null>({
-    query: CASE_STUDY_DETAIL_QUERY,
-    params: { slug },
-    tags: [`caseStudy:${slug}`],
-    cache: "no-store",
-  });
+  const caseDetail = await getCaseStudyBySlug(slug);
 
   if (!caseDetail) {
     notFound();
   }
 
-  const recentCasesRaw = await sanityFetch<CaseStudyItem[]>({
-    query: CASE_STUDY_LIST_QUERY,
-    params: { start: 0, end: 4 },
-    tags: ["caseStudy"],
-    cache: "no-store",
-  });
+  const recentCasesRaw = await getCaseStudies(4);
 
   const recentCases = recentCasesRaw
     .filter((item) => item._id !== caseDetail._id)
@@ -214,7 +139,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
   const ogImageSource = caseDetail.seo?.openGraphImage?.asset || caseDetail.mainImage?.asset;
   const fallbackOgImage = `${siteUrl}/images/og/case-studies.jpg`;
   const ogImageUrl = ogImageSource
-    ? (urlFor(ogImageSource as SanityImage)?.width(1200).height(630).fit("crop").url() || fallbackOgImage)
+    ? (urlFor(ogImageSource)?.width(1200).height(630).fit("crop").url() || fallbackOgImage)
     : fallbackOgImage;
 
   // Article Schema for SEO

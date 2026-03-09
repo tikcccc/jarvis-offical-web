@@ -11,8 +11,8 @@ import { AppProviders } from "@/providers/app-providers";
 import { Topbar } from "@/components/layout/topbar";
 import { FooterRenderer } from "@/components/layout/footer-renderer";
 import { Toaster } from "@/components/ui/sonner";
-import { sanityFetch, MENU_LATEST_NEWS_QUERY } from "@/sanity/lib";
 import type { MenuNewsPreview } from "@/components/layout/menu-overlay";
+import { getMenuNews } from "@/strapi/lib";
 
 export default async function WebsiteLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
@@ -22,11 +22,7 @@ export default async function WebsiteLayout({ children }: { children: React.Reac
   // Sync paraglide locale for downstream translations.
   setLanguageTag(() => locale);
 
-  const menuNews = await sanityFetch<MenuNewsPreview[]>({
-    query: MENU_LATEST_NEWS_QUERY,
-    tags: ["news"],
-    cache: "no-store",
-  }).catch(() => [] as MenuNewsPreview[]);
+  const menuNews = await getMenuNews().catch(() => [] as MenuNewsPreview[]);
 
   return (
     <LanguageProvider>

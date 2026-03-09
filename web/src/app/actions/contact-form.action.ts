@@ -5,7 +5,7 @@
  * - Handle contact form submissions server-side
  * - Validate form data with Zod
  * - Implement rate limiting (IP-based)
- * - Send emails via Resend
+ * - Persist submissions to Strapi CMS
  * - Provide typed responses for client-side handling
  *
  * Usage:
@@ -21,9 +21,10 @@
 
 "use server";
 
+import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { contactFormSchema } from "@/schemas/contact-form.schema";
-import { sendContactFormEmails } from "@/lib/email";
+import { createContactSubmission } from "@/strapi/lib";
 
 /**
  * Server action response type
@@ -118,7 +119,7 @@ async function getClientIp(): Promise<string> {
  * Submit contact form
  *
  * Server action for handling contact form submissions.
- * Validates data, checks rate limits, and sends emails.
+ * Validates data, checks rate limits, and stores the payload in Strapi.
  *
  * @param formData - Raw form data (unknown type for safety)
  * @param locale - User's locale for i18n error messages
@@ -158,15 +159,30 @@ export async function submitContactForm(
     // Extract validated data
     const validatedData = validation.data;
 
-    // Send emails
-    const emailResult = await sendContactFormEmails(validatedData, locale);
+    const headersList = await headers();
+    const referer = headersList.get("referer") || undefined;
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipHash =
+      clientIp !== "unknown"
+        ? createHash("sha256").update(clientIp).digest("hex")
+        : undefined;
 
-    if (!emailResult.success) {
-      return {
-        success: false,
-        error: emailResult.error,
-      };
-    }
+    await createContactSubmission({
+      firstName: validatedData.firstName,
+      lastName: validatedData.lastName,
+      email: validatedData.email,
+      phoneNumber: validatedData.phoneNumber || undefined,
+      companyName: validatedData.companyName,
+      companyType: validatedData.companyType || undefined,
+      jobTitle: validatedData.jobTitle || undefined,
+      service: validatedData.service,
+      marketingConsent: validatedData.marketingConsent ?? false,
+      locale,
+      submittedAt: new Date().toISOString(),
+      sourcePage: referer,
+      ipHash,
+      userAgent,
+    });
 
     // Success response
     return {

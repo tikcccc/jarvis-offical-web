@@ -4,46 +4,14 @@ import { useState } from 'react';
 import * as m from '@/paraglide/messages';
 import FeaturedNewsCard from './featured-news-card';
 import NewsCard from './news-card';
-import type { Image as SanityImage } from 'sanity';
+import type { CmsCategory, CmsNewsItem } from '@/strapi/lib';
 
 type LayoutMode = 'grid' | 'magazine' | 'feed';
 
-interface NewsItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-  featured?: boolean;
-}
-
-interface NewsCategory {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description?: string;
-  color: string;
-}
-
 interface NewsroomListProps {
-  initialNews: NewsItem[];
-  categories: NewsCategory[];
-  featuredNews: NewsItem | null;
+  initialNews: CmsNewsItem[];
+  categories: CmsCategory[];
+  featuredNews: CmsNewsItem | null;
 }
 
 export default function NewsroomList({

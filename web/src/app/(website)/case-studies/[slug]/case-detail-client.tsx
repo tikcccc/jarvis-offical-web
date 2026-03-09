@@ -4,47 +4,23 @@ import { m as motion } from "@/components/motion/lazy-motion";
 import { ArrowLeft, Share2, Home, Tag } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/lib/i18n";
-import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
 import type { ReactNode } from "react";
-import type { Image as SanityImage } from "sanity";
-import type { PortableTextBlock } from "@portabletext/types";
 import { useEffect } from "react";
 import { useLocale } from "@/lib/i18n/locale-context";
 import * as m from "@/paraglide/messages";
+import { urlFor } from "@/strapi/lib/image";
+import type {
+  CmsCaseStudyItem,
+  CmsPortableTextImage,
+} from "@/strapi/lib";
 
 type MessageFn = (params?: Record<string, never>, options?: { languageTag?: "en" | "zh" }) => string;
 
-// Types for Sanity data
-interface CaseStudyItem {
-  _id: string;
-  _type: string;
-  title: string;
-  slug: { current: string };
-  subtitle?: string;
-  publishedAt: string;
-  excerpt?: string;
-  body?: PortableTextBlock[]; // Rich text array
-  mainImage?: {
-    asset: SanityImage;
-    alt: string;
-  };
-  category: {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    color: string;
-  };
-  tags?: string[];
-  author: string;
-  readTime: number;
-  featured?: boolean;
-}
-
 interface CaseDetailClientProps {
-  caseDetail: CaseStudyItem;
-  recentCases: CaseStudyItem[];
+  caseDetail: CmsCaseStudyItem;
+  recentCases: CmsCaseStudyItem[];
 }
 
 // Utility component for mono labels
@@ -288,7 +264,7 @@ function RelatedCard({
   intlLocale,
   readStoryLabel,
 }: {
-  post: CaseStudyItem;
+  post: CmsCaseStudyItem;
   intlLocale: string;
   readStoryLabel: string;
 }) {
@@ -390,6 +366,46 @@ const portableTextComponents: PortableTextComponents = {
         {children}
       </blockquote>
     ),
+  },
+  list: {
+    bullet: ({ children }: { children?: ReactNode }) => (
+      <ul className="list-disc pl-6 mb-6 space-y-2">{children}</ul>
+    ),
+    number: ({ children }: { children?: ReactNode }) => (
+      <ol className="list-decimal pl-6 mb-6 space-y-2">{children}</ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }: { children?: ReactNode }) => (
+      <li className="case-font-body-lg leading-relaxed text-[var(--text-muted)]">
+        {children}
+      </li>
+    ),
+    number: ({ children }: { children?: ReactNode }) => (
+      <li className="case-font-body-lg leading-relaxed text-[var(--text-muted)]">
+        {children}
+      </li>
+    ),
+  },
+  types: {
+    image: ({ value }: { value?: CmsPortableTextImage }) => {
+      const imageUrl = value?.asset ? urlFor(value.asset).url() : null;
+      if (!imageUrl) return null;
+
+      return (
+        <div className="my-8">
+          <div className="relative aspect-[16/9] w-full overflow-hidden case-studies-media-frame">
+            <Image
+              src={imageUrl}
+              alt={value?.alt || "Case study image"}
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
+      );
+    },
   },
 };
 
