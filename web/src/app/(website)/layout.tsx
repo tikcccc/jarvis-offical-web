@@ -11,8 +11,8 @@ import { AppProviders } from "@/providers/app-providers";
 import { Topbar } from "@/components/layout/topbar";
 import { FooterRenderer } from "@/components/layout/footer-renderer";
 import { Toaster } from "@/components/ui/sonner";
-import type { MenuNewsPreview } from "@/components/layout/menu-overlay";
-import { getMenuNews } from "@/strapi/lib";
+import type { MenuPreviewItem } from "@/components/layout/menu-overlay";
+import { getMenuCaseStudies, getMenuNews } from "@/strapi/lib";
 
 export default async function WebsiteLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
@@ -22,14 +22,20 @@ export default async function WebsiteLayout({ children }: { children: React.Reac
   // Sync paraglide locale for downstream translations.
   setLanguageTag(() => locale);
 
-  const menuNews = await getMenuNews().catch(() => [] as MenuNewsPreview[]);
+  const [menuNews, menuCaseStudies] = await Promise.all([
+    getMenuNews().catch(() => [] as MenuPreviewItem[]),
+    getMenuCaseStudies().catch(() => [] as MenuPreviewItem[]),
+  ]);
 
   return (
     <LanguageProvider>
       <LocaleProvider locale={locale}>
         <AppProviders>
           <div className="min-h-screen text-zinc-900 footer-alliance-font">
-            <Topbar newsPreview={menuNews} />
+            <Topbar
+              newsPreview={menuNews}
+              caseStudyPreview={menuCaseStudies}
+            />
             {children}
             <FooterRenderer />
           </div>

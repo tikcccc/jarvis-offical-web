@@ -313,6 +313,13 @@ function CaseStudiesListView({
   // Remaining list data (exclude the featured card post)
   const gridListData = newestPost ? filteredWithoutHero.slice(1) : [];
   const listData = filteredWithoutHero;
+  const readStoryLabel = m18n.case_read_story({}, { languageTag: locale });
+  const gridViewTitle = m18n.case_studies_layout_grid({}, { languageTag: locale });
+  const magazineViewTitle = m18n.case_studies_layout_magazine(
+    {},
+    { languageTag: locale }
+  );
+  const feedViewTitle = m18n.case_studies_layout_feed({}, { languageTag: locale });
 
   return (
     <m.div
@@ -325,7 +332,7 @@ function CaseStudiesListView({
       {heroPost && (
         <HeroSection
           post={heroPost}
-          readFeaturedLabel={m18n.case_read_story({}, { languageTag: locale })}
+          readFeaturedLabel={readStoryLabel}
           heading={m18n.case_studies_title({}, { languageTag: locale })}
         />
       )}
@@ -367,7 +374,8 @@ function CaseStudiesListView({
               type="button"
               onClick={() => setLayout('grid')}
               className={`case-studies-layout-btn ${layout === 'grid' ? 'active' : ''}`}
-              title="Grid View"
+              title={gridViewTitle}
+              aria-label={gridViewTitle}
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
@@ -375,7 +383,8 @@ function CaseStudiesListView({
               type="button"
               onClick={() => setLayout('magazine')}
               className={`case-studies-layout-btn ${layout === 'magazine' ? 'active' : ''}`}
-              title="Strategic View"
+              title={magazineViewTitle}
+              aria-label={magazineViewTitle}
             >
               <AlignJustify className="w-4 h-4" />
             </button>
@@ -383,7 +392,8 @@ function CaseStudiesListView({
               type="button"
               onClick={() => setLayout('feed')}
               className={`case-studies-layout-btn ${layout === 'feed' ? 'active' : ''}`}
-              title="Data Feed"
+              title={feedViewTitle}
+              aria-label={feedViewTitle}
             >
               <List className="w-4 h-4" />
             </button>
@@ -410,13 +420,13 @@ function CaseStudiesListView({
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                   {newestPost && (
                     <m.div variants={itemVariants} key={newestPost._id} className="col-span-1 md:col-span-2 lg:col-span-3">
-                      <FeaturedGridCard post={newestPost} />
+                      <FeaturedGridCard post={newestPost} readStoryLabel={readStoryLabel} />
                     </m.div>
                   )}
 
                   {gridListData.map((post) => (
                     <m.div variants={itemVariants} key={post._id}>
-                      <GridCard post={post} />
+                      <GridCard post={post} readStoryLabel={readStoryLabel} />
                     </m.div>
                   ))}
                 </div>
@@ -426,7 +436,7 @@ function CaseStudiesListView({
                 <div className="flex flex-col gap-12 max-w-5xl">
                   {listData.map((post) => (
                     <m.div variants={itemVariants} key={post._id}>
-                      <MagazineCard post={post} />
+                      <MagazineCard post={post} readStoryLabel={readStoryLabel} />
                     </m.div>
                   ))}
                 </div>
@@ -451,7 +461,13 @@ function CaseStudiesListView({
 
 // --- Cards & Components ---
 
-function FeaturedGridCard({ post }: { post: CaseStudyPost }) {
+function FeaturedGridCard({
+  post,
+  readStoryLabel,
+}: {
+  post: CaseStudyPost;
+  readStoryLabel: string;
+}) {
   const imageUrl = post.mainImage
     ? urlFor(post.mainImage.asset)?.width(1200).height(675).url()
     : null;
@@ -502,7 +518,7 @@ function FeaturedGridCard({ post }: { post: CaseStudyPost }) {
 
         <div className="case-studies-card-footer">
           <span className="case-font-label-lg case-studies-text-primary group-hover:case-studies-text-accent transition-colors">
-            Read Case
+            {readStoryLabel}
           </span>
           <ArrowRight className="w-4 h-4 group-hover:case-studies-text-accent group-hover:translate-x-1 transition-all" />
         </div>
@@ -511,7 +527,13 @@ function FeaturedGridCard({ post }: { post: CaseStudyPost }) {
   );
 }
 
-function GridCard({ post }: { post: CaseStudyPost }) {
+function GridCard({
+  post,
+  readStoryLabel,
+}: {
+  post: CaseStudyPost;
+  readStoryLabel: string;
+}) {
   const imageUrl = post.mainImage
     ? urlFor(post.mainImage.asset)?.width(800).height(533).url()
     : null;
@@ -563,7 +585,7 @@ function GridCard({ post }: { post: CaseStudyPost }) {
 
       <div className="mt-auto pt-3 border-t case-studies-border-subtle flex items-center justify-between group-hover:case-studies-surface-quiet -mx-0 px-2 pb-2 transition-colors rounded-b-sm">
         <span className="case-font-label case-studies-text-subtle group-hover:case-studies-text-accent transition-colors">
-          Read Case
+          {readStoryLabel}
         </span>
         <ArrowRight className="w-3 h-3 case-studies-text-soft group-hover:case-studies-text-accent group-hover:translate-x-1 transition-all" />
       </div>
@@ -571,7 +593,13 @@ function GridCard({ post }: { post: CaseStudyPost }) {
   );
 }
 
-function MagazineCard({ post }: { post: CaseStudyPost }) {
+function MagazineCard({
+  post,
+  readStoryLabel,
+}: {
+  post: CaseStudyPost;
+  readStoryLabel: string;
+}) {
   const imageUrl = post.mainImage
     ? urlFor(post.mainImage.asset)?.width(800).height(500).url()
     : null;
@@ -614,7 +642,7 @@ function MagazineCard({ post }: { post: CaseStudyPost }) {
           {post.excerpt ? post.excerpt.substring(0, hasImage ? 180 : 300) : post.subtitle}...
         </p>
         <span className="flex items-center gap-2 case-font-label font-semibold mt-auto group-hover:translate-x-2 transition-transform case-studies-text-accent">
-          Read Case <ArrowRight className="w-3 h-3" />
+          {readStoryLabel} <ArrowRight className="w-3 h-3" />
         </span>
       </div>
     </Link>

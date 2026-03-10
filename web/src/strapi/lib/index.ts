@@ -10,6 +10,7 @@ export {
   getCaseStudySitemapEntries,
   getFeaturedCaseStudy,
   getFeaturedNews,
+  getMenuCaseStudies,
   getMenuNews,
   getNewsBySlug,
   getNewsCategories,

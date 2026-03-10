@@ -48,7 +48,6 @@ const CAREER_POPULATE = createPopulateEntries([
   "team",
   "team.pillar",
   "locations",
-  "contentImage",
   "seo",
 ]);
 
@@ -379,7 +378,6 @@ function mapCareer(value: unknown): CmsCareer {
     sections: sections
       .map((section) => mapCareerSection(section))
       .filter((section): section is CmsCareerSection => Boolean(section)),
-    contentImage: mapMedia(item.contentImage),
     postedAt: asString(item.postedAt) || undefined,
     expiresAt: asString(item.expiresAt) || undefined,
     seo: mapSeo(item.seo),
@@ -479,6 +477,27 @@ export async function getMenuNews(): Promise<CmsNewsItem[]> {
 
   return [featured, ...latestItems].filter(
     (item): item is CmsNewsItem => Boolean(item)
+  );
+}
+
+export async function getMenuCaseStudies(): Promise<CmsCaseStudyItem[]> {
+  const [featured, latest] = await Promise.all([
+    getFeaturedCaseStudy(),
+    strapiFetch<StrapiEnvelope<unknown[]>>(CASE_STUDY_ENDPOINT, [
+      ...CASE_STUDY_POPULATE,
+      ["filters[publishedAt][$notNull]", true],
+      ["filters[featured][$eq]", false],
+      ["sort[0]", "publishedAt:desc"],
+      ["pagination[pageSize]", 1],
+    ]),
+  ]);
+
+  const latestItems = flattenCollection<Record<string, unknown>>(latest).map(
+    (item) => mapCaseStudy(item)
+  );
+
+  return [featured, ...latestItems].filter(
+    (item): item is CmsCaseStudyItem => Boolean(item)
   );
 }
 

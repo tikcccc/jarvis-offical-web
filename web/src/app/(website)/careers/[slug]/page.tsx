@@ -60,8 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = career.seo?.metaTitle || career.title;
   const description = career.seo?.metaDescription || `Join isBIM as ${career.title}.`;
-  const ogImageSource =
-    career.seo?.openGraphImage?.asset || career.contentImage?.asset;
+  const ogImageSource = career.seo?.openGraphImage?.asset;
   const fallbackOgImage = `${siteUrl}/images/og/careers.jpg`;
   const ogImageUrl =
     ogImageSource

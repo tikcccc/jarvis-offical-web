@@ -472,13 +472,14 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    contentImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    employmentType: Schema.Attribute.String;
+    employmentType: Schema.Attribute.Enumeration<
+      ['全职', '兼职', '合同制', '实习', '临时']
+    >;
     experienceLevel: Schema.Attribute.Enumeration<
-      ['intern', 'junior', 'mid', 'senior', 'lead', 'director']
+      ['实习生', '初级', '中级', '高级', '主管', '总监']
     >;
     expiresAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -502,9 +503,11 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    workModel: Schema.Attribute.Enumeration<['onsite', 'hybrid', 'remote']> &
+    workModel: Schema.Attribute.Enumeration<
+      ['现场办公', '混合办公', '远程办公']
+    > &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'onsite'>;
+      Schema.Attribute.DefaultTo<'现场办公'>;
   };
 }
 

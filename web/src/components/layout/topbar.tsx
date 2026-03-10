@@ -1,12 +1,12 @@
 "use client";
 
 import * as messages from "@/paraglide/messages";
-import { Search, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { m } from "@/components/motion/lazy-motion";
 import { Link } from "@/lib/i18n";
 import Image from "next/image";
 import { LocaleSwitcher } from "./locale-switcher";
-import { MenuOverlay, type MenuNewsPreview } from "./menu-overlay";
+import { MenuOverlay, type MenuPreviewItem } from "./menu-overlay";
 import { useMenuStore } from "@/stores/menu-store";
 import { TypewriterText } from "@/components/ui/typewriter-text";
 import { ROUTES } from "@/lib/constants";
@@ -19,11 +19,17 @@ import { useLocale } from "@/lib/i18n/locale-context";
  * - Fixed at the top with margin for floating effect
  * - Transparent background with backdrop blur
  * - Logo on the left
- * - Get Started button, LocaleSwitcher, Search, and Menu on the right
+ * - Get Started button, LocaleSwitcher, and Menu on the right
  * - When menu is open: becomes solid black and sits at top of menu overlay
  */
 
-export function Topbar({ newsPreview = [] }: { newsPreview?: MenuNewsPreview[] }) {
+export function Topbar({
+  newsPreview = [],
+  caseStudyPreview = [],
+}: {
+  newsPreview?: MenuPreviewItem[];
+  caseStudyPreview?: MenuPreviewItem[];
+}) {
   const { isOpen, openMenu, closeMenu } = useMenuStore();
   const radius10 = { borderRadius: "10px" };
   // Subscribe to locale changes so translations re-render
@@ -86,18 +92,6 @@ export function Topbar({ newsPreview = [] }: { newsPreview?: MenuNewsPreview[] }
           {/* Locale Switcher - hidden when menu is open */}
           {!isOpen && <LocaleSwitcher />}
 
-          {/* Search button */}
-          <m.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-10 h-10 flex items-center justify-center border border-white/20 rounded-lg
-                     hover:bg-white/10 transition-colors text-white"
-            style={radius10}
-            aria-label="Search"
-          >
-            <Search className="w-4 h-4 md:w-5 md:h-5" />
-          </m.button>
-
           {/* Menu / Close button */}
           <m.button
             whileHover={{ scale: 1.05 }}
@@ -110,12 +104,14 @@ export function Topbar({ newsPreview = [] }: { newsPreview?: MenuNewsPreview[] }
                   : "w-10 h-10 border border-white/20 hover:bg-white/10"
               }`}
             style={radius10}
-            aria-label={isOpen ? "Close Menu" : "Open Menu"}
+            aria-label={
+              isOpen ? messages.topbar_close_menu() : messages.topbar_open_menu()
+            }
           >
             {isOpen ? (
               <>
                 <TypewriterText
-                  text="CLOSE"
+                  text={messages.topbar_close()}
                   className="text-[10px] layout-nav-label text-neutral-300 group-hover:text-white tracking-widest hidden md:block"
                 />
                 <X className="w-5 h-5" />
@@ -128,7 +124,10 @@ export function Topbar({ newsPreview = [] }: { newsPreview?: MenuNewsPreview[] }
       </m.nav>
 
       {/* Menu Overlay */}
-      <MenuOverlay newsPreview={newsPreview} />
+      <MenuOverlay
+        newsPreview={newsPreview}
+        caseStudyPreview={caseStudyPreview}
+      />
 
       <style jsx global>{`
         .logo-mask-shine {

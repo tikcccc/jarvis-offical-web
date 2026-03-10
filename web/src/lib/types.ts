@@ -193,14 +193,32 @@ export interface SanityCareer {
     title?: string;
     slug?: { current?: string };
   }>;
-  workModel?: "onsite" | "hybrid" | "remote";
-  employmentType?: "full-time" | "part-time" | "contract" | "internship" | "temporary";
-  experienceLevel?: "intern" | "junior" | "mid" | "senior" | "lead" | "director";
+  workModel?: "onsite" | "hybrid" | "remote" | "现场办公" | "混合办公" | "远程办公";
+  employmentType?:
+    | "full-time"
+    | "part-time"
+    | "contract"
+    | "internship"
+    | "temporary"
+    | "全职"
+    | "兼职"
+    | "合同制"
+    | "实习"
+    | "临时";
+  experienceLevel?:
+    | "intern"
+    | "junior"
+    | "mid"
+    | "senior"
+    | "lead"
+    | "director"
+    | "实习生"
+    | "初级"
+    | "中级"
+    | "高级"
+    | "主管"
+    | "总监";
   sections?: unknown;
-  contentImage?: {
-    asset?: { url?: string };
-    alt?: string;
-  };
   postedAt?: string;
   expiresAt?: string;
 }

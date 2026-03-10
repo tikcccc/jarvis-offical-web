@@ -117,6 +117,40 @@ export interface CmsCareerSection {
   content?: CmsPortableText;
 }
 
+export type CmsCareerWorkModel =
+  | "onsite"
+  | "hybrid"
+  | "remote"
+  | "现场办公"
+  | "混合办公"
+  | "远程办公";
+
+export type CmsCareerEmploymentType =
+  | "full-time"
+  | "part-time"
+  | "contract"
+  | "internship"
+  | "temporary"
+  | "全职"
+  | "兼职"
+  | "合同制"
+  | "实习"
+  | "临时";
+
+export type CmsCareerExperienceLevel =
+  | "intern"
+  | "junior"
+  | "mid"
+  | "senior"
+  | "lead"
+  | "director"
+  | "实习生"
+  | "初级"
+  | "中级"
+  | "高级"
+  | "主管"
+  | "总监";
+
 export interface CmsCareer {
   _id: string;
   _type: "career";
@@ -124,23 +158,11 @@ export interface CmsCareer {
   slug: CmsSlug;
   team?: CmsCareerTeam;
   locations?: CmsCareerLocation[];
-  workModel?: "onsite" | "hybrid" | "remote";
-  employmentType?:
-    | "full-time"
-    | "part-time"
-    | "contract"
-    | "internship"
-    | "temporary";
-  experienceLevel?:
-    | "intern"
-    | "junior"
-    | "mid"
-    | "senior"
-    | "lead"
-    | "director";
+  workModel?: CmsCareerWorkModel;
+  employmentType?: CmsCareerEmploymentType;
+  experienceLevel?: CmsCareerExperienceLevel;
   sortOrder?: number;
   sections?: CmsCareerSection[];
-  contentImage?: CmsImage;
   postedAt?: string;
   expiresAt?: string;
   seo?: CmsSeo;

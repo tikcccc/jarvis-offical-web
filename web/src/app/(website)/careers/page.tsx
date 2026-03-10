@@ -50,6 +50,11 @@ export default async function CareersPage() {
     "contract": "CONTRACTOR",
     "internship": "INTERN",
     "temporary": "TEMPORARY",
+    "全职": "FULL_TIME",
+    "兼职": "PART_TIME",
+    "合同制": "CONTRACTOR",
+    "实习": "INTERN",
+    "临时": "TEMPORARY",
   };
 
   const jobPostings = publishedCareers.map((career) => {

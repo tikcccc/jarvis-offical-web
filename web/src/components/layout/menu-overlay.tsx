@@ -65,6 +65,141 @@ export interface MenuNewsPreview {
   readTime?: number;
 }
 
+export type MenuPreviewItem = MenuNewsPreview;
+
+interface PreviewFeedSectionProps {
+  items: MenuPreviewItem[];
+  sectionLabel: string;
+  fallbackTag: string;
+  featuredLabel: string;
+  viewAllHref: string;
+  emptyTitle: string;
+  emptyDesc: string;
+  fallbackHref: string;
+  onNavigate: () => void;
+  formatDate: (date?: string) => string;
+  delayBase: number;
+  className?: string;
+}
+
+function PreviewFeedSection({
+  items,
+  sectionLabel,
+  fallbackTag,
+  featuredLabel,
+  viewAllHref,
+  emptyTitle,
+  emptyDesc,
+  fallbackHref,
+  onNavigate,
+  formatDate,
+  delayBase,
+  className = "",
+}: PreviewFeedSectionProps) {
+  return (
+    <div className={className}>
+      <div className="flex justify-between items-center mb-7 pt-7 border-t border-white/10">
+        <TypewriterText
+          text={sectionLabel}
+          className={styles.newsKicker}
+          delay={delayBase}
+        />
+        <m.div variants={fadeInUp}>
+          <Link
+            href={viewAllHref}
+            onClick={onNavigate}
+            prefetch
+            className={styles.newsViewAll}
+          >
+            {messages.menu_view_all()} <ArrowRight size={12} />
+          </Link>
+        </m.div>
+      </div>
+
+      {items.length > 0 ? (
+        <div className="grid grid-cols-2 gap-6">
+          {items.map((item, idx) => {
+            const href =
+              item.slug?.current && item.slug.current.length > 0
+                ? `${fallbackHref}/${item.slug.current}`
+                : fallbackHref;
+            const imageUrl = item.mainImage?.asset
+              ? urlFor(item.mainImage.asset)?.width(900).height(540).url()
+              : null;
+            const tag = item.category?.title || fallbackTag;
+            const formattedDate = formatDate(item.publishedAt);
+            const meta = formattedDate ? `${tag} // ${formattedDate}` : tag;
+            const isFeatured = item.featured === true;
+
+            return (
+              <m.div
+                key={item._id}
+                variants={fadeInUp}
+                className={`group cursor-pointer ${styles.newsCard}`}
+              >
+                <Link href={href} onClick={onNavigate} prefetch className="block">
+                  <div className="aspect-video bg-neutral-900 mb-5 overflow-hidden relative border border-white/10">
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={item.mainImage?.alt || item.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                        className="object-cover opacity-70 group-hover:scale-105 transition-transform duration-700 group-hover:opacity-90"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-white/5" />
+                    )}
+                    {isFeatured && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                        <span className={styles.featuredTag}>{featuredLabel}</span>
+                      </div>
+                    )}
+                  </div>
+                  <TypewriterText
+                    text={meta}
+                    className={styles.newsMeta}
+                    delay={delayBase + 0.1 + idx * 0.1}
+                  />
+                  <m.h3
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.35,
+                      delay: delayBase + 0.2 + idx * 0.1,
+                      ease: "easeOut",
+                    }}
+                    className={styles.newsTitle}
+                  >
+                    {item.title}
+                  </m.h3>
+                  {item.excerpt && (
+                    <p className={`${styles.newsExcerpt} line-clamp-2`}>
+                      {item.excerpt}
+                    </p>
+                  )}
+                </Link>
+              </m.div>
+            );
+          })}
+        </div>
+      ) : (
+        <m.div
+          variants={fadeInUp}
+          className="rounded-lg border border-white/10 bg-white/[0.02] px-8 py-12 text-center"
+        >
+          <TypewriterText
+            text={emptyTitle}
+            className="text-xs font-medium tracking-[0.2em] uppercase text-blue-400"
+            delay={delayBase + 0.15}
+          />
+          <p className="mt-3 text-sm text-neutral-400">{emptyDesc}</p>
+        </m.div>
+      )}
+    </div>
+  );
+}
+
 // --- Helper function to get menu data with i18n ---
 const getMenuData = () => ({
   structure: [
@@ -136,16 +271,32 @@ const getMenuData = () => ({
   ] as JarvisProduct[],
   // Stats data from copywriting
   stats: [
-    { value: "2,600+", label: "LIVE_PROJECTS", desc: messages.menu_stat_live_projects() },
-    { value: "1.2B", label: "TOTAL_SQFT", desc: messages.menu_stat_sqft() },
-    { value: "100%", label: "DEFECT_ELIMINATION", desc: messages.menu_stat_defect() },
-    { value: "45%", label: "FASTER_DELIVERY", desc: messages.menu_stat_delivery() },
+    {
+      value: "2,600+",
+      label: messages.menu_stat_live_projects_label(),
+      desc: messages.menu_stat_live_projects(),
+    },
+    {
+      value: "1.2B",
+      label: messages.menu_stat_total_sqft_label(),
+      desc: messages.menu_stat_sqft(),
+    },
+    {
+      value: "100%",
+      label: messages.menu_stat_defect_label(),
+      desc: messages.menu_stat_defect(),
+    },
+    {
+      value: "45%",
+      label: messages.menu_stat_delivery_label(),
+      desc: messages.menu_stat_delivery(),
+    },
   ],
   // Impact metrics
   impact: [
     { value: "25-35%", label: messages.menu_impact_emissions() },
     { value: "35-45%", label: messages.menu_impact_waste() },
-    { value: "60 Days", label: messages.menu_impact_payment() },
+    { value: messages.menu_impact_payment_value(), label: messages.menu_impact_payment() },
     { value: "99.8%", label: messages.menu_impact_accuracy() },
   ],
 });
@@ -208,7 +359,13 @@ const panelVariants = {
  * - Grid texture background
  * - Type-safe routing with automatic locale handling
  */
-export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPreview[] }) {
+export function MenuOverlay({
+  newsPreview = [],
+  caseStudyPreview = [],
+}: {
+  newsPreview?: MenuPreviewItem[];
+  caseStudyPreview?: MenuPreviewItem[];
+}) {
   const { isOpen, closeMenu, activePreview, setActivePreview } = useMenuStore();
   const { lenis } = useLenis();
   // Recompute menu labels when locale changes so translations stay in sync
@@ -228,6 +385,10 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
   // Subscribe to locale changes so translations update
   const localeTag = locale;
   const newsItems = useMemo(() => (newsPreview ?? []).slice(0, 2), [newsPreview]);
+  const caseStudyItems = useMemo(
+    () => (caseStudyPreview ?? []).slice(0, 2),
+    [caseStudyPreview]
+  );
 
   const formatDate = (date?: string) => {
     if (!date) return "";
@@ -364,7 +525,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
             <div className="lg:col-span-5 p-10 lg:p-16 lg:pt-10 border-r border-white/10 flex flex-col pb-12">
               <div className="mb-8">
                 <TypewriterText
-                  text="NAVIGATION_INDEX"
+                  text={messages.menu_navigation_index()}
                   className={`${styles.navIndexLabel} layout-nav-label`}
                   delay={0.2}
                 />
@@ -468,7 +629,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                                         );
                                       }}
                                       className="p-2 hover:bg-white/5 rounded transition-colors"
-                                      aria-label="展开/收起产品列表"
+                                      aria-label={messages.menu_products_toggle()}
                                       aria-expanded={expandedGroup === 'jarvis_suite'}
                                     >
                                       <ChevronDown
@@ -607,7 +768,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                     className={styles.footerLink}
                   >
                     <TypewriterText
-                      text="Privacy & Cookie Policy"
+                      text={messages.privacy_cookie_title()}
                       delay={1.0}
                     />
                   </Link>
@@ -647,7 +808,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                     <div className="mb-10 border-b border-white/10 pb-6 flex justify-between items-end">
                       <div>
                         <TypewriterText
-                          text="PRODUCT_CATALOG"
+                          text={messages.menu_product_catalog()}
                           className={styles.productCatalogKicker}
                         />
                         <m.h2
@@ -664,7 +825,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                       </div>
                       <div className="text-right gap-4 flex ">
                         <TypewriterText
-                          text="2,600+ DEPLOYMENTS"
+                          text={messages.menu_deployments_meta()}
                           className={styles.deploymentsMeta}
                           delay={0.1}
                         />
@@ -692,7 +853,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                               </div>
                             </div>
                             <TypewriterText
-                              text={`Module ${String(idx + 1).padStart(2, '0')}`}
+                              text={`${messages.menu_product_module_prefix()} ${String(idx + 1).padStart(2, '0')}`}
                               className={styles.productCardModule}
                               delay={0.35 + idx * 0.08}
                             />
@@ -719,7 +880,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                     <div className="flex justify-between items-start mb-[2.75rem]">
                       <div>
                         <TypewriterText
-                          text="LATEST_INTELLIGENCE"
+                          text={messages.menu_latest_intelligence()}
                           className={styles.defaultKicker}
                         />
                         <m.h2
@@ -739,7 +900,7 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                           prefetch
                           className={styles.exploreCta}
                         >
-                          Explore <ArrowRight size={14} />
+                          {messages.menu_explore()} <ArrowRight size={14} />
                         </Link>
                       </m.div>
                     </div>
@@ -795,105 +956,34 @@ export function MenuOverlay({ newsPreview = [] }: { newsPreview?: MenuNewsPrevie
                       ))}
                     </m.div>
 
-                    {/* News Section Header */}
-                    <div className="flex justify-between items-center mb-7 pt-7 border-t border-white/10">
-                      <TypewriterText
-                        text="NEWSROOM_FEED"
-                        className={styles.newsKicker}
-                        delay={0.8}
-                      />
-                      <m.div variants={fadeInUp}>
-                        <Link
-                          href={ROUTES.NEWSROOM}
-                          onClick={closeMenu}
-                          prefetch
-                          className={styles.newsViewAll}
-                        >
-                          {messages.menu_view_all()} <ArrowRight size={12} />
-                        </Link>
-                      </m.div>
-                    </div>
+                    <PreviewFeedSection
+                      items={newsItems}
+                      sectionLabel={messages.menu_newsroom_feed()}
+                      fallbackTag={messages.menu_nav_newsroom()}
+                      featuredLabel={messages.menu_featured()}
+                      viewAllHref={ROUTES.NEWSROOM}
+                      emptyTitle={messages.menu_news_empty_title()}
+                      emptyDesc={messages.menu_news_empty_desc()}
+                      fallbackHref={ROUTES.NEWSROOM}
+                      onNavigate={closeMenu}
+                      formatDate={formatDate}
+                      delayBase={0.8}
+                    />
 
-                    {/* News Cards */}
-                    {newsItems.length > 0 ? (
-                      <div className="grid grid-cols-2 gap-6">
-                        {newsItems.map((news, idx) => {
-                        const href =
-                          news.slug?.current && news.slug.current.length > 0
-                            ? `/newsroom/${news.slug.current}`
-                            : ROUTES.NEWSROOM;
-                        const imageUrl = news.mainImage?.asset
-                          ? urlFor(news.mainImage.asset)?.width(900).height(540).url()
-                          : null;
-                          const tag = news.category?.title || "NEWS";
-                          const formattedDate = formatDate(news.publishedAt);
-                          const meta = formattedDate ? `${tag} // ${formattedDate}` : tag;
-                          const isFeatured = news.featured === true;
-                        return (
-                          <m.div
-                            key={news._id}
-                            variants={fadeInUp}
-                            className={`group cursor-pointer ${styles.newsCard}`}
-                          >
-                            <Link href={href} onClick={closeMenu} prefetch className="block">
-                              <div className="aspect-video bg-neutral-900 mb-5 overflow-hidden relative border border-white/10">
-                                {imageUrl ? (
-                                  <Image
-                                    src={imageUrl}
-                                    alt={news.mainImage?.alt || news.title}
-                                    fill
-                                    sizes="(max-width: 1024px) 100vw, 33vw"
-                                    className="object-cover opacity-70 group-hover:scale-105 transition-transform duration-700 group-hover:opacity-90"
-                                  />
-                                ) : (
-                                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-white/5" />
-                                )}
-                                {isFeatured && (
-                                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
-                                    <span className={styles.featuredTag}>
-                                      FEATURED
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              <TypewriterText
-                                text={meta}
-                                className={styles.newsMeta}
-                                delay={0.5 + idx * 0.1}
-                              />
-                              <m.h3
-                                initial={{ opacity: 0, y: 8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.35, delay: 0.6 + idx * 0.1, ease: "easeOut" }}
-                                className={styles.newsTitle}
-                              >
-                                {news.title}
-                              </m.h3>
-                              {news.excerpt && (
-                                <p className={`${styles.newsExcerpt} line-clamp-2`}>
-                                  {news.excerpt}
-                                </p>
-                              )}
-                            </Link>
-                          </m.div>
-                        );
-                        })}
-                      </div>
-                    ) : (
-                      <m.div
-                        variants={fadeInUp}
-                        className="rounded-lg border border-white/10 bg-white/[0.02] px-8 py-12 text-center"
-                      >
-                        <TypewriterText
-                          text={messages.menu_news_empty_title()}
-                          className="text-xs font-medium tracking-[0.2em] uppercase text-blue-400"
-                          delay={0.95}
-                        />
-                        <p className="mt-3 text-sm text-neutral-400">
-                          {messages.menu_news_empty_desc()}
-                        </p>
-                      </m.div>
-                    )}
+                    <PreviewFeedSection
+                      items={caseStudyItems}
+                      sectionLabel={messages.menu_case_studies_feed()}
+                      fallbackTag={messages.menu_nav_case_studies()}
+                      featuredLabel={messages.menu_featured()}
+                      viewAllHref={ROUTES.CASE_STUDIES}
+                      emptyTitle={messages.menu_case_empty_title()}
+                      emptyDesc={messages.menu_case_empty_desc()}
+                      fallbackHref={ROUTES.CASE_STUDIES}
+                      onNavigate={closeMenu}
+                      formatDate={formatDate}
+                      delayBase={1.05}
+                      className="mt-10"
+                    />
                   </m.div>
                 )}
               </AnimatePresence>
