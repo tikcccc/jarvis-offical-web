@@ -48,6 +48,7 @@ const CAREER_POPULATE = createPopulateEntries([
   "team",
   "team.pillar",
   "locations",
+  "sections",
   "seo",
 ]);
 

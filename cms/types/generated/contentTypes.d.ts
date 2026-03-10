@@ -476,12 +476,37 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     employmentType: Schema.Attribute.Enumeration<
-      ['全职', '兼职', '合同制', '实习', '临时']
-    >;
+      ['full-time', 'part-time', 'contract', 'internship', 'temporary']
+    > &
+      Schema.Attribute.CustomField<
+        'global::localized-enum',
+        {
+          labels: {
+            contract: '\u5408\u540C\u5236';
+            'full-time': '\u5168\u804C';
+            internship: '\u5B9E\u4E60';
+            'part-time': '\u517C\u804C';
+            temporary: '\u4E34\u65F6';
+          };
+        }
+      >;
     experienceLevel: Schema.Attribute.Enumeration<
-      ['实习生', '初级', '中级', '高级', '主管', '总监']
-    >;
-    expiresAt: Schema.Attribute.DateTime;
+      ['intern', 'junior', 'mid', 'senior', 'lead', 'director']
+    > &
+      Schema.Attribute.CustomField<
+        'global::localized-enum',
+        {
+          labels: {
+            director: '\u603B\u76D1';
+            intern: '\u5B9E\u4E60\u751F';
+            junior: '\u521D\u7EA7';
+            lead: '\u4E3B\u7BA1';
+            mid: '\u4E2D\u7EA7';
+            senior: '\u9AD8\u7EA7';
+          };
+        }
+      >;
+    expiresAt: Schema.Attribute.Date;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -492,7 +517,7 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::location.location'
     >;
-    postedAt: Schema.Attribute.DateTime;
+    postedAt: Schema.Attribute.Date;
     publishedAt: Schema.Attribute.DateTime;
     sections: Schema.Attribute.Component<'shared.rich-text-section', true>;
     seo: Schema.Attribute.Component<'shared.seo', false>;
@@ -503,11 +528,19 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    workModel: Schema.Attribute.Enumeration<
-      ['现场办公', '混合办公', '远程办公']
-    > &
+    workModel: Schema.Attribute.Enumeration<['onsite', 'hybrid', 'remote']> &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'现场办公'>;
+      Schema.Attribute.CustomField<
+        'global::localized-enum',
+        {
+          labels: {
+            hybrid: '\u6DF7\u5408\u529E\u516C';
+            onsite: '\u73B0\u573A\u529E\u516C';
+            remote: '\u8FDC\u7A0B\u529E\u516C';
+          };
+        }
+      > &
+      Schema.Attribute.DefaultTo<'onsite'>;
   };
 }
 

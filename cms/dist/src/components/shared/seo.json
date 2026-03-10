@@ -1,0 +1,64 @@
+{
+    "collectionName": "components_shared_seos",
+    "info": {
+        "displayName": "共享｜SEO设置",
+        "description": "通用 SEO 元数据"
+    },
+    "options": {},
+    "config": {
+        "metadatas": {
+            "metaTitle": {
+                "edit": {
+                    "label": "SEO 标题"
+                },
+                "list": {
+                    "label": "SEO 标题"
+                }
+            },
+            "metaDescription": {
+                "edit": {
+                    "label": "SEO 描述"
+                },
+                "list": {
+                    "label": "SEO 描述"
+                }
+            },
+            "openGraphImage": {
+                "edit": {
+                    "label": "Open Graph 图片"
+                },
+                "list": {
+                    "label": "Open Graph 图片"
+                }
+            },
+            "keywords": {
+                "edit": {
+                    "label": "SEO 关键词",
+                    "description": "多个关键词可用逗号、顿号或换行分隔",
+                    "placeholder": "例如：BIM，数字化建造，香港建筑科技"
+                },
+                "list": {
+                    "label": "SEO 关键词"
+                }
+            }
+        }
+    },
+    "attributes": {
+        "metaTitle": {
+            "type": "string"
+        },
+        "metaDescription": {
+            "type": "text"
+        },
+        "openGraphImage": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "keywords": {
+            "type": "text"
+        }
+    }
+}

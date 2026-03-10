@@ -258,7 +258,16 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    strapi.customFields.register({
+      name: 'localized-enum',
+      type: 'enumeration',
+      inputSize: {
+        default: 4,
+        isResizable: true,
+      },
+    });
+  },
 
   /**
    * An asynchronous bootstrap function that runs before

@@ -1,0 +1,219 @@
+{
+    "kind": "collectionType",
+    "collectionName": "case_studies",
+    "info": {
+        "singularName": "case-study",
+        "pluralName": "case-studies",
+        "displayName": "12 案例｜案例内容",
+        "description": "案例文章内容"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "config": {
+        "settings": {
+            "bulkable": true,
+            "filterable": true,
+            "mainField": "title",
+            "defaultSortBy": "title",
+            "defaultSortOrder": "ASC",
+            "pageSize": 10,
+            "searchable": true,
+            "relationOpenMode": "modal"
+        },
+        "layouts": {
+            "list": [
+                "title",
+                "category",
+                "featured",
+                "slug"
+            ],
+            "edit": [
+                [
+                    {
+                        "name": "title",
+                        "size": 6
+                    },
+                    {
+                        "name": "slug",
+                        "size": 6
+                    }
+                ],
+                [
+                    {
+                        "name": "category",
+                        "size": 12
+                    }
+                ],
+                [
+                    {
+                        "name": "subtitle",
+                        "size": 12
+                    }
+                ],
+                [
+                    {
+                        "name": "mainImage",
+                        "size": 8
+                    },
+                    {
+                        "name": "featured",
+                        "size": 4
+                    }
+                ],
+                [
+                    {
+                        "name": "author",
+                        "size": 8
+                    },
+                    {
+                        "name": "readTime",
+                        "size": 4
+                    }
+                ],
+                [
+                    {
+                        "name": "body",
+                        "size": 12
+                    }
+                ],
+                [
+                    {
+                        "name": "seo",
+                        "size": 12
+                    }
+                ]
+            ]
+        },
+        "metadatas": {
+            "title": {
+                "edit": {
+                    "label": "标题"
+                },
+                "list": {
+                    "label": "标题"
+                }
+            },
+            "slug": {
+                "edit": {
+                    "label": "URL 标识",
+                    "description": "用于页面链接；可留空，保存时会自动生成如 case-study-1 的值，也可手动覆写"
+                },
+                "list": {
+                    "label": "URL 标识"
+                }
+            },
+            "subtitle": {
+                "edit": {
+                    "label": "副标题"
+                },
+                "list": {
+                    "label": "副标题"
+                }
+            },
+            "body": {
+                "edit": {
+                    "label": "正文"
+                },
+                "list": {
+                    "label": "正文"
+                }
+            },
+            "mainImage": {
+                "edit": {
+                    "label": "主图"
+                },
+                "list": {
+                    "label": "主图"
+                }
+            },
+            "category": {
+                "edit": {
+                    "label": "分类"
+                },
+                "list": {
+                    "label": "分类"
+                }
+            },
+            "featured": {
+                "edit": {
+                    "label": "头条"
+                },
+                "list": {
+                    "label": "头条"
+                }
+            },
+            "author": {
+                "edit": {
+                    "label": "作者"
+                },
+                "list": {
+                    "label": "作者"
+                }
+            },
+            "readTime": {
+                "edit": {
+                    "label": "阅读时长"
+                },
+                "list": {
+                    "label": "阅读时长"
+                }
+            },
+            "seo": {
+                "edit": {
+                    "label": "SEO"
+                },
+                "list": {
+                    "label": "SEO"
+                }
+            }
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "string",
+            "unique": true
+        },
+        "subtitle": {
+            "type": "string"
+        },
+        "body": {
+            "type": "blocks"
+        },
+        "mainImage": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "category": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::case-study-category.case-study-category",
+            "inversedBy": "caseStudies"
+        },
+        "featured": {
+            "type": "boolean",
+            "default": false
+        },
+        "author": {
+            "type": "string",
+            "default": "isBIM Team"
+        },
+        "readTime": {
+            "type": "integer",
+            "default": 5
+        },
+        "seo": {
+            "type": "component",
+            "repeatable": false,
+            "component": "shared.seo"
+        }
+    }
+}

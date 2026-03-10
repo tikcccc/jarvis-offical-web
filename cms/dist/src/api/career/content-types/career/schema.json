@@ -1,0 +1,301 @@
+{
+    "kind": "collectionType",
+    "collectionName": "careers",
+    "info": {
+        "singularName": "career",
+        "pluralName": "careers",
+        "displayName": "24 招聘｜职位",
+        "description": "官网公开展示的职位"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "config": {
+        "settings": {
+            "bulkable": true,
+            "filterable": true,
+            "mainField": "title",
+            "defaultSortBy": "sortOrder",
+            "defaultSortOrder": "ASC",
+            "pageSize": 10,
+            "searchable": true,
+            "relationOpenMode": "modal"
+        },
+        "layouts": {
+            "list": [
+                "title",
+                "team",
+                "locations",
+                "employmentType",
+                "workModel",
+                "postedAt"
+            ],
+            "edit": [
+                [
+                    {
+                        "name": "title",
+                        "size": 8
+                    },
+                    {
+                        "name": "slug",
+                        "size": 4
+                    }
+                ],
+                [
+                    {
+                        "name": "team",
+                        "size": 6
+                    },
+                    {
+                        "name": "locations",
+                        "size": 6
+                    }
+                ],
+                [
+                    {
+                        "name": "employmentType",
+                        "size": 4
+                    },
+                    {
+                        "name": "workModel",
+                        "size": 4
+                    },
+                    {
+                        "name": "experienceLevel",
+                        "size": 4
+                    }
+                ],
+                [
+                    {
+                        "name": "postedAt",
+                        "size": 6
+                    },
+                    {
+                        "name": "expiresAt",
+                        "size": 6
+                    }
+                ],
+                [
+                    {
+                        "name": "sortOrder",
+                        "size": 4
+                    }
+                ],
+                [
+                    {
+                        "name": "sections",
+                        "size": 12
+                    }
+                ],
+                [
+                    {
+                        "name": "seo",
+                        "size": 12
+                    }
+                ]
+            ]
+        },
+        "metadatas": {
+            "title": {
+                "edit": {
+                    "label": "职位名称"
+                },
+                "list": {
+                    "label": "职位名称"
+                }
+            },
+            "slug": {
+                "edit": {
+                    "label": "URL 标识",
+                    "description": "用于页面链接；可留空，保存时会自动生成如 career-1 的值，也可手动覆写"
+                },
+                "list": {
+                    "label": "URL 标识"
+                }
+            },
+            "team": {
+                "edit": {
+                    "label": "所属团队"
+                },
+                "list": {
+                    "label": "所属团队"
+                }
+            },
+            "locations": {
+                "edit": {
+                    "label": "工作地点"
+                },
+                "list": {
+                    "label": "工作地点"
+                }
+            },
+            "employmentType": {
+                "edit": {
+                    "label": "雇佣类型"
+                },
+                "list": {
+                    "label": "雇佣类型"
+                }
+            },
+            "workModel": {
+                "edit": {
+                    "label": "工作模式"
+                },
+                "list": {
+                    "label": "工作模式"
+                }
+            },
+            "postedAt": {
+                "edit": {
+                    "label": "发布日期"
+                },
+                "list": {
+                    "label": "发布日期"
+                }
+            },
+            "expiresAt": {
+                "edit": {
+                    "label": "截止日期"
+                },
+                "list": {
+                    "label": "截止日期"
+                }
+            },
+            "experienceLevel": {
+                "edit": {
+                    "label": "经验级别"
+                },
+                "list": {
+                    "label": "经验级别"
+                }
+            },
+            "sortOrder": {
+                "edit": {
+                    "label": "排序"
+                },
+                "list": {
+                    "label": "排序"
+                }
+            },
+            "sections": {
+                "edit": {
+                    "label": "详情分区"
+                },
+                "list": {
+                    "label": "详情分区"
+                }
+            },
+            "seo": {
+                "edit": {
+                    "label": "SEO"
+                },
+                "list": {
+                    "label": "SEO"
+                }
+            }
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "string",
+            "unique": true
+        },
+        "team": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::team.team",
+            "inversedBy": "careers"
+        },
+        "locations": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::location.location",
+            "inversedBy": "careers"
+        },
+        "employmentType": {
+            "type": "customField",
+            "customField": "global::localized-enum",
+            "enum": [
+                "full-time",
+                "part-time",
+                "contract",
+                "internship",
+                "temporary"
+            ],
+            "options": {
+                "labels": {
+                    "full-time": "全职",
+                    "part-time": "兼职",
+                    "contract": "合同制",
+                    "internship": "实习",
+                    "temporary": "临时"
+                }
+            }
+        },
+        "workModel": {
+            "type": "customField",
+            "customField": "global::localized-enum",
+            "enum": [
+                "onsite",
+                "hybrid",
+                "remote"
+            ],
+            "default": "onsite",
+            "options": {
+                "labels": {
+                    "onsite": "现场办公",
+                    "hybrid": "混合办公",
+                    "remote": "远程办公"
+                }
+            },
+            "required": true
+        },
+        "experienceLevel": {
+            "type": "customField",
+            "customField": "global::localized-enum",
+            "enum": [
+                "intern",
+                "junior",
+                "mid",
+                "senior",
+                "lead",
+                "director"
+            ],
+            "options": {
+                "labels": {
+                    "intern": "实习生",
+                    "junior": "初级",
+                    "mid": "中级",
+                    "senior": "高级",
+                    "lead": "主管",
+                    "director": "总监"
+                }
+            }
+        },
+        "postedAt": {
+            "type": "date"
+        },
+        "expiresAt": {
+            "type": "date"
+        },
+        "sortOrder": {
+            "type": "integer",
+            "default": 999
+        },
+        "sections": {
+            "type": "component",
+            "repeatable": true,
+            "component": "shared.rich-text-section"
+        },
+        "seo": {
+            "type": "component",
+            "repeatable": false,
+            "component": "shared.seo"
+        }
+    }
+}
