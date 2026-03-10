@@ -140,7 +140,7 @@
 - **Design tokens**: Uses `newsroom-design-tokens.css` for magazine editorial styling.
 - **Styling**: White background (#FDFDFD), Alliance font family, transparent cards with white featured card, noise overlay texture.
 - **Data Schema**:
-  - `newsType`: title, slug, subtitle, mainImage (with alt), excerpt, body (rich text), category (reference), tags, author, readTime, publishedAt, featured, status (draft/published/archived), seo (metaTitle, metaDescription, openGraphImage, keywords)
+  - `newsType`: title, slug, subtitle, mainImage (with alt), excerpt, body (rich text), category (reference), tags, author, readTime, publishedAt, featured, seo (metaTitle, metaDescription, openGraphImage, keywords)
   - `newsCategoryType`: title, slug, description, color (hex for badges)
 - **Features**:
   - Three layout modes: Grid (auto-fill cards), Magazine (12-col asymmetric), Feed (list view)
@@ -152,7 +152,7 @@
 - **CSS utilities**: `.newsroom-container`, `.newsroom-content`, `.newsroom-article-container`, `.newsroom-title`, `.newsroom-article-title`, `.newsroom-card-title`, `.newsroom-card`, `.newsroom-card-featured`, `.newsroom-category-badge`, `.newsroom-filter-btn`, `.newsroom-layout-btn`, `.newsroom-image-cover`, `.newsroom-image-featured`, `.newsroom-grid`, `.newsroom-magazine`, `.newsroom-feed`.
 - **Queries**: Use typed queries from `queries.ts`:
   - `NEWS_CATEGORIES_QUERY`: Fetch all categories (for filter UI)
-  - `FEATURED_NEWS_QUERY`: Single featured article (status=published, featured=true)
+  - `FEATURED_NEWS_QUERY`: Single featured article (publishedAt != null, featured=true)
   - `NEWS_LIST_QUERY`: Paginated news list with `$start` and `$end` params
   - `NEWS_BY_CATEGORY_QUERY`: Filtered by category `$categoryId` with pagination
   - `NEWS_DETAIL_QUERY`: Single article with full SEO and body content
@@ -166,4 +166,3 @@
   - 组件：使用 CSS Modules，颜色/间距/圆角/动效参数用 `var(--token)`，数值响应式用 clamp token；布局方向类可用 media query。
   - Keyframes：通用的放页面动画文件并作用域（如 `.home-page`），专用的放组件 module。
   - Tailwind bridge：在 `tailwind.config.js` 把需要的 colors/spacing/radius/shadow 映射到 CSS vars。
-

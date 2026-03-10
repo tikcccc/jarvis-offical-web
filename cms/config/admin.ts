@@ -1,4 +1,5 @@
 export default ({ env }) => ({
+  locales: ['zh-Hans'],
   auth: {
     secret: env('ADMIN_JWT_SECRET'),
   },

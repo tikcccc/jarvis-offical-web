@@ -15,8 +15,14 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
   },
 ];
 
-if (process.env.STRAPI_URL) {
-  const strapiUrl = new URL(process.env.STRAPI_URL);
+const remoteBaseUrls = [
+  process.env.STRAPI_URL,
+  process.env.NEXT_PUBLIC_STRAPI_URL,
+  process.env.NEXT_PUBLIC_MEDIA_URL,
+].filter((value): value is string => Boolean(value));
+
+for (const baseUrl of new Set(remoteBaseUrls)) {
+  const strapiUrl = new URL(baseUrl);
   remotePatterns.push({
     protocol: strapiUrl.protocol.replace(":", "") as "http" | "https",
     hostname: strapiUrl.hostname,

@@ -153,17 +153,6 @@ function HeroSection({ post, readFeaturedLabel }: { post: NewsPost; readFeatured
               </span>
             </m.div>
 
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <m.div className="flex gap-3 mb-6" variants={heroItemVariants}>
-            {post.tags.map(tag => (
-              <span key={tag} className="newsroom-hero-badge news-font-mono-xs">
-                {tag}
-              </span>
-            ))}
-          </m.div>
-        )}
-
         {/* Date */}
         <m.div className="mb-4" variants={heroItemVariants}>
           <span className="news-font-label newsroom-text-inverse-sub">
@@ -279,7 +268,6 @@ function NewsListView({
                 title: post.category.title,
                 slug: post.category.slug,
                 description: "",
-                color: post.category.color,
               } as NewsCategory,
             ])
           ).values()
@@ -308,7 +296,7 @@ function NewsListView({
     ? filteredData.filter((post) => post._id !== heroPost._id)
     : filteredData;
 
-  const hasFilteredResults = filteredWithoutHero.length > 0;
+  const hasFilteredResults = filteredData.length > 0;
 
   // Featured card logic for grid view:
   // Use the newest article from the filtered remaining list

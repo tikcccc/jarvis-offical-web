@@ -7,11 +7,11 @@
 - 保持简洁,使用列表和代码块
 - 删除过时的架构信息
 
-**Last Updated**: 2026-02-09 (Case Studies architecture added as a Newsroom-parallel Sanity module)
+**Last Updated**: 2026-03-09 (CMS slug policy updated to blank-by-default, auto-sequenced Strapi slugs with manual override)
 
 ## Deployment Architecture
 - **Deployment Target**: Huawei Cloud (华为云)
-- **Architecture**: Pure frontend application with Next.js Server Actions (no separate backend)
+- **Architecture**: Next.js frontend application + Strapi CMS backend
 - **Rendering**: SSG + ISR (Incremental Static Regeneration) for optimal performance
 - **Serverless Compatibility**: ⚠️ Current rate limiting uses in-memory Map (not serverless-compatible); requires distributed cache (Redis) or container deployment with session affinity for multi-instance scenarios
 
@@ -20,7 +20,7 @@
 - Paraglide v1 i18n (LocaleContext pattern + PrefixStrategy) - /en and /zh are always prefixed routes
 - Animations: Lenis (smooth scroll), GSAP, Framer Motion via `MotionProvider` + `m`
 - Data/UI: TanStack Query, Zustand (`menu-store.ts`, `footer-store.ts`)
-- CMS: Sanity only for dynamic content (Newsroom posts, Case Studies entries, Careers positions); other pages use local/static data
+- CMS: Strapi only for dynamic content (Newsroom posts, Case Studies entries, Careers positions, supporting taxonomies); other pages use local/static data
 - Media: videos via CDN (`media-config` + `NEXT_PUBLIC_VIDEO_CDN_URL`/`NEXT_PUBLIC_MEDIA_URL`), images prefer local `/public` assets
 - Email: Dual-provider system (Resend primary, Brevo backup) - switch via `EMAIL_PROVIDER` env var
 - SEO: `generatePageMetadata`, JSON-LD schemas, sitemap/robots generators
@@ -299,7 +299,7 @@ src/lib/seo-generators.ts          # SEO metadata generators with hierarchical k
 src/components/seo/json-ld.tsx     # JsonLd component + helpers: Organization/Product/JobPosting/Breadcrumb/SoftwareApplication schemas
 src/app/(website)/robots.ts        # disallow Studio/API/_next/admin/json/revalidate; includes CN search engines and AI bots
 src/app/layout.tsx                 # renders Organization schema (JsonLd)
-src/app/api/revalidate/route.ts    # webhook endpoint with SANITY_WEBHOOK_SECRET for tag-based revalidation
+src/app/api/revalidate/route.ts    # webhook endpoint with STRAPI_WEBHOOK_SECRET for on-demand revalidation
 ```
 
 **SEO Strategy** (Phase 1 Complete):
@@ -312,57 +312,56 @@ src/app/api/revalidate/route.ts    # webhook endpoint with SANITY_WEBHOOK_SECRET
 - **Sitemap**: Excludes `/jarvis-ai-suite` (redesign), lowers `/contact` priority, locale-prefixed URLs only
 - **Generators**: `generateProductPageSEO()`, `generateServicePageSEO()`, `generateAboutPageSEO()`, `generateServicesPageSEO()`, `generateNewsroomPageSEO()`, `generateCaseStudiesPageSEO()`, `generateCareersPageSEO()`
 
-### Sanity Data Layer
+### Strapi Data Layer
 ```
-src/sanity/lib/
-  client.ts            # Sanity clients (read/write) with env-based CDN
-  fetch.ts             # Type-safe fetch wrapper with Next.js cache + tags
-  queries.ts           # Typed GROQ queries (defineQuery): NEWS_* + CASE_STUDY_* (mirrored from NEWS_*) + CAREER_* + sitemap queries
-  types.ts             # TypeScript types for all schemas
-  image.ts             # Image URL builder
+src/strapi/lib/
+  api.ts               # Type-safe REST fetchers for news/case-studies/careers/settings/sitemap
+  types.ts             # TypeScript types for Strapi response mapping
+  image.ts             # Media URL builder for Strapi assets
+  blocks.ts            # Strapi blocks -> PortableText mapper used by frontend detail pages
   index.ts             # Barrel export
-  README.md            # Data layer documentation
 ```
 
-### Sanity Schemas
+### Strapi Content Types
 ```
-src/sanity/schemaTypes/
-  newsType.ts          # News posts with comprehensive fields (title, slug, subtitle, mainImage, excerpt, body, category reference, tags, author, readTime, featured, status, SEO group)
-  newsCategoryType.ts  # News categories (title, slug, description, color for badges)
-  caseStudyType.ts     # Case Studies entries, same field structure as newsType
-  caseStudyCategoryType.ts # Case Studies categories, same structure as newsCategoryType
-  careerType.ts        # Career positions (live)
-  index.ts             # register schemas
+cms/src/api/
+  news/content-types/news/schema.json                         # News articles
+  news-category/content-types/news-category/schema.json       # News categories
+  case-study/content-types/case-study/schema.json             # Case study articles
+  case-study-category/content-types/case-study-category/schema.json # Case study categories
+  career/content-types/career/schema.json                     # Careers positions
+  team/content-types/team/schema.json                         # Career teams
+  location/content-types/location/schema.json                 # Career locations
+  pillar/content-types/pillar/schema.json                     # Career business pillars
+cms/src/index.ts                                              # Bootstrap: sync content-manager labels + managed slug lifecycles
+cms/src/utils/slug.ts                                         # Blank-by-default slug generation/validation
 ```
 
-#### Sanity SEO/Media Fields (current)
+#### Strapi SEO/Slug Fields (current)
 | Document | Field | Type | Notes | File |
 |---|---|---|---|---|
-| news | `title` | string | max 100 chars | src/sanity/schemaTypes/newsType.ts |
-| news | `slug` | slug | auto-generated from title | src/sanity/schemaTypes/newsType.ts |
-| news | `subtitle` | string | optional, max 200 chars | src/sanity/schemaTypes/newsType.ts |
-| news | `mainImage` | image | with alt text (required) | src/sanity/schemaTypes/newsType.ts |
-| news | `excerpt` | text | optional, falls back to subtitle | src/sanity/schemaTypes/newsType.ts |
-| news | `body` | array | rich text with images, H2/H3, quotes | src/sanity/schemaTypes/newsType.ts |
-| news | `category` | reference | to newsCategory (required) | src/sanity/schemaTypes/newsType.ts |
-| news | `tags` | array<string> | optional tags | src/sanity/schemaTypes/newsType.ts |
-| news | `author` | string | default: "isBIM Team" | src/sanity/schemaTypes/newsType.ts |
-| news | `readTime` | number | minutes (1-60) | src/sanity/schemaTypes/newsType.ts |
-| news | `publishedAt` | datetime | required | src/sanity/schemaTypes/newsType.ts |
-| news | `featured` | boolean | show as featured article | src/sanity/schemaTypes/newsType.ts |
-| news | `status` | string | draft/published/archived | src/sanity/schemaTypes/newsType.ts |
-| news | `seo.metaTitle` | string | max ~60 chars | src/sanity/schemaTypes/newsType.ts |
-| news | `seo.metaDescription` | text | max ~160 chars | src/sanity/schemaTypes/newsType.ts |
-| news | `seo.openGraphImage` | image | recommended 1200x630 | src/sanity/schemaTypes/newsType.ts |
-| news | `seo.keywords` | array<string> | optional list | src/sanity/schemaTypes/newsType.ts |
-| newsCategory | `title` | string | required | src/sanity/schemaTypes/newsCategoryType.ts |
-| newsCategory | `slug` | slug | auto-generated from title | src/sanity/schemaTypes/newsCategoryType.ts |
-| newsCategory | `description` | text | optional | src/sanity/schemaTypes/newsCategoryType.ts |
-| newsCategory | `color` | string | hex color for badges (e.g., #10b981) | src/sanity/schemaTypes/newsCategoryType.ts |
-| caseStudy | same field set as `news` | mixed | 1:1 mirror of newsroom content model | src/sanity/schemaTypes/caseStudyType.ts |
-| caseStudyCategory | same field set as `newsCategory` | mixed | 1:1 mirror of newsroom category model | src/sanity/schemaTypes/caseStudyCategoryType.ts |
-| career | `metaTitle` | string | max ~60 chars | src/sanity/schemaTypes/careerType.ts |
-| career | `metaDescription` | text | max ~160 chars | src/sanity/schemaTypes/careerType.ts |
+| news | `slug` | string | blank by default; if blank on save, auto-generates `news-{sequence}`; manual override allowed; unique within `news` | cms/src/api/news/content-types/news/schema.json |
+| news | `subtitle` | string | optional secondary deck line shown in cards/detail hero | cms/src/api/news/content-types/news/schema.json |
+| news | `featured` | boolean | labeled as `头条` in CMS; controls homepage/list hero selection | cms/src/api/news/content-types/news/schema.json |
+| newsCategory | `slug` | string | blank by default; auto-generates `news-category-{sequence}` when empty; manual override allowed | cms/src/api/news-category/content-types/news-category/schema.json |
+| caseStudy | `slug` | string | blank by default; auto-generates `case-study-{sequence}` when empty; manual override allowed | cms/src/api/case-study/content-types/case-study/schema.json |
+| caseStudy | `subtitle` | string | optional secondary deck line shown in cards/detail hero | cms/src/api/case-study/content-types/case-study/schema.json |
+| caseStudy | `featured` | boolean | labeled as `头条` in CMS; controls list hero selection | cms/src/api/case-study/content-types/case-study/schema.json |
+| caseStudyCategory | `slug` | string | blank by default; auto-generates `case-study-category-{sequence}` when empty; manual override allowed | cms/src/api/case-study-category/content-types/case-study-category/schema.json |
+| career | `slug` | string | blank by default; auto-generates `career-{sequence}` when empty; manual override allowed | cms/src/api/career/content-types/career/schema.json |
+| team | `slug` | string | blank by default; auto-generates `team-{sequence}` when empty; manual override allowed | cms/src/api/team/content-types/team/schema.json |
+| location | `slug` | string | blank by default; auto-generates `location-{sequence}` when empty; manual override allowed | cms/src/api/location/content-types/location/schema.json |
+| pillar | `slug` | string | blank by default; auto-generates `pillar-{sequence}` when empty; manual override allowed | cms/src/api/pillar/content-types/pillar/schema.json |
+
+**Slug policy**:
+- Admin input stays blank by default.
+- If editor leaves slug empty, Strapi bootstrap lifecycle generates `<content-type>-<sequence>` on save.
+- Editors can manually override the value; manual input is normalized to lowercase ASCII slug format and must stay unique inside the same content type.
+- Frontend routes remain namespaced (`/newsroom/[slug]`, `/case-studies/[slug]`, `/careers/[slug]`), so slug uniqueness is per content type, not global across all entities.
+
+**Editorial summary policy**:
+- News and Case Studies no longer expose a manual `excerpt` field in CMS.
+- Frontend summary text is derived from `subtitle` first-screen copy plus body plain-text extraction for cards/menu/SEO fallbacks.
 
 ### Public Assets
 ```
@@ -381,8 +380,8 @@ public/
 
 ## Patterns & Rules (current)
 - **Content sources & Rendering Patterns**:
-  - **Static Product Pages** (Jarvis Pay, etc.): Client Component pattern (ProductPageLayout), Paraglide m.* translations, no Sanity
-  - **Dynamic Content Pages** (Newsroom, Case Studies, Careers): Server Component + Sanity CMS + ISR, use `sanityFetch()` with cache tags
+  - **Static Product Pages** (Jarvis Pay, etc.): Client Component pattern (ProductPageLayout), Paraglide m.* translations, no CMS dependency
+  - **Dynamic Content Pages** (Newsroom, Case Studies, Careers): Server Component + Strapi CMS + no-store fetch pattern via `src/strapi/lib/api.ts`
   - Videos: CDN links (via `media-config`/`JARVIS_VIDEOS`)
   - Images: prefer local `/public` assets
 - **Email (Contact Form)**:
@@ -422,13 +421,13 @@ public/
 - **SEO Schemas**: Use helpers from `json-ld.tsx` (`createOrganizationSchema`, `createSoftwareApplicationSchema`, `createBreadcrumbSchema`) and render with `<JsonLd data={schema} id="unique-id" />`. Organization schema for company pages, SoftwareApplication for JARVIS products, Breadcrumb for navigation hierarchy.
 - **Careers JobPosting**: List page emits `JobPosting` graph for all published roles with localized URLs.
 - **SEO Sitemap**: Exclude `/jarvis-ai-suite` (redesign) and lower `/contact` priority; keep robots exclusions for Studio/API/Next assets/admin/json/revalidate.
-- **ISR**: Sanity webhook hits `api/revalidate` with `SANITY_WEBHOOK_SECRET` (HMAC) and revalidates tags from payload.
+- **ISR**: Strapi webhook hits `api/revalidate` with `STRAPI_WEBHOOK_SECRET` and revalidates affected localized paths.
 - **Media**: Do not hardcode `/videos/*`; use `getVideoUrl` or `JARVIS_VIDEOS` so CDN overrides work (spaces auto-encoded).
 - **Services page**: Keep dark cyberpunk theme (`bg-[#050505]`, emerald accents); wrap with `BackgroundLayers`, `ServicesGrid`, `CtaSection`; use `ServiceCard`/`SpotlightCard`/`CornerBrackets` for interactive cards and `servicesData` for content. Page layout uses `<FooterConfig variant="charcoal" />` + global `FooterRenderer` (no HideDefaultFooter).
 - **About Us**: Use the shared `Section` wrapper with `TypewriterWidth` for headings; keep defaults (1.5s, 40 steps, blue cursor, ScrollTrigger once) and reuse existing reveal timelines (no bespoke GSAP per section).
 - **Contact page**: Light architectural theme (`bg-[#f8fafc]`, product template purple→cyan gradient accents); uses `contact-design-tokens.css` for panel/form/badge utilities + layout/stack/form-grid/shape/shadow/motion tokens (underline + CTA overlays). Client Component with `useLocale()` + inline i18n. Form uses Server Action (`submitContactForm`), Zod validation, OpenStreetMap embed + Google Maps link.
-- **Newsroom page**: A-class content page aligned with Home (white background #FDFDFD); uses `newsroom-design-tokens.css` for magazine editorial styling (color/type + layout/spacing + shape/shadow + motion). Server Component + Sanity CMS + ISR pattern (NOT Product Template client pattern). Architecture: List page (`newsroom/page.tsx`) fetches news via `NEWS_LIST_QUERY`/`NEWS_BY_CATEGORY_QUERY`/`FEATURED_NEWS_QUERY`/`NEWS_CATEGORIES_QUERY`; Detail page (`newsroom/[slug]/page.tsx`) uses `NEWS_DETAIL_QUERY` + `RELATED_NEWS_QUERY`. Features: Three layout modes (Grid/Magazine/Feed), category filtering with dynamic color badges, transparent cards with white featured card, Framer Motion staggered animations (durations/stagger aligned to tokens), noise overlay texture. Design reference: `doc/reference-doc/pages/newsroom/newsroom-redesign.html`. Data: Sanity newsType (title, slug, subtitle, mainImage, excerpt, body, category reference, tags, author, readTime, featured, status, SEO) + newsCategoryType (title, slug, description, color).
-- **Case Studies page**: Mirrors Newsroom architecture 1:1 under `/case-studies` with independent file namespace and Sanity document types (`caseStudy`, `caseStudyCategory`). Implemented as a code-copy module from Newsroom (list/detail/client/query/schema/SEO flow) to keep modification boundaries clear; only extract shared helpers when both modules have stable common behavior.
+- **Newsroom page**: A-class content page aligned with Home (white background #FDFDFD); uses `newsroom-design-tokens.css` for magazine editorial styling. Server Component + Strapi CMS pattern. Data comes from `src/strapi/lib/api.ts`; editorial summary text is derived from subtitle/body rather than a separate manual excerpt field.
+- **Case Studies page**: Mirrors Newsroom architecture 1:1 under `/case-studies` with independent file namespace and Strapi content types (`case-study`, `case-study-category`). Same summary policy as Newsroom: no manual excerpt field in CMS, fallback summary generated from subtitle/body.
 
 ### Product Template - updated guardrails (2025-02)
 - Server wrapper (`page.tsx`): only `generateMetadata` may call `m.*()`. JSON-LD text should use static strings; build URLs with `getSiteUrl()` + `buildHref()` (no hand-crafted `/${locale}`).

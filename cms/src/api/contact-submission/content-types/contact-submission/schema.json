@@ -4,13 +4,153 @@
   "info": {
     "singularName": "contact-submission",
     "pluralName": "contact-submissions",
-    "displayName": "Contact Submission",
-    "description": "Stored contact form submissions"
+    "displayName": "41 运营｜联系表单",
+    "description": "网站联系表单提交记录"
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
+  "config": {
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "mainField": "companyName",
+      "defaultSortBy": "submittedAt",
+      "defaultSortOrder": "DESC",
+      "pageSize": 10,
+      "searchable": true,
+      "relationOpenMode": "modal"
+    },
+    "metadatas": {
+      "firstName": {
+        "edit": {
+          "label": "名",
+          "editable": false
+        },
+        "list": {
+          "label": "名"
+        }
+      },
+      "lastName": {
+        "edit": {
+          "label": "姓",
+          "editable": false
+        },
+        "list": {
+          "label": "姓"
+        }
+      },
+      "email": {
+        "edit": {
+          "label": "邮箱",
+          "editable": false
+        },
+        "list": {
+          "label": "邮箱"
+        }
+      },
+      "phoneNumber": {
+        "edit": {
+          "label": "电话",
+          "editable": false
+        },
+        "list": {
+          "label": "电话"
+        }
+      },
+      "companyName": {
+        "edit": {
+          "label": "公司名称",
+          "editable": false
+        },
+        "list": {
+          "label": "公司名称"
+        }
+      },
+      "companyType": {
+        "edit": {
+          "label": "公司类型",
+          "editable": false
+        },
+        "list": {
+          "label": "公司类型"
+        }
+      },
+      "jobTitle": {
+        "edit": {
+          "label": "职位名称",
+          "editable": false
+        },
+        "list": {
+          "label": "职位名称"
+        }
+      },
+      "service": {
+        "edit": {
+          "label": "咨询服务",
+          "editable": false
+        },
+        "list": {
+          "label": "咨询服务"
+        }
+      },
+      "marketingConsent": {
+        "edit": {
+          "label": "市场同意",
+          "editable": false
+        },
+        "list": {
+          "label": "市场同意"
+        }
+      },
+      "locale": {
+        "edit": {
+          "label": "语言",
+          "editable": false
+        },
+        "list": {
+          "label": "语言"
+        }
+      },
+      "submittedAt": {
+        "edit": {
+          "label": "提交时间",
+          "editable": false
+        },
+        "list": {
+          "label": "提交时间"
+        }
+      },
+      "sourcePage": {
+        "edit": {
+          "label": "来源页面",
+          "editable": false
+        },
+        "list": {
+          "label": "来源页面"
+        }
+      },
+      "ipHash": {
+        "edit": {
+          "label": "IP 哈希",
+          "editable": false
+        },
+        "list": {
+          "label": "IP 哈希"
+        }
+      },
+      "userAgent": {
+        "edit": {
+          "label": "终端信息",
+          "editable": false
+        },
+        "list": {
+          "label": "终端信息"
+        }
+      }
+    }
+  },
   "attributes": {
     "firstName": {
       "type": "string",

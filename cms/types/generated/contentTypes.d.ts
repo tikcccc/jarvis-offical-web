@@ -434,8 +434,8 @@ export interface ApiApplicationSettingApplicationSetting
   extends Struct.SingleTypeSchema {
   collectionName: 'application_settings';
   info: {
-    description: '';
-    displayName: '\u7533\u8BF7\u8BBE\u7F6E';
+    description: '\u5168\u5C40\u804C\u4F4D\u7533\u8BF7\u94FE\u63A5';
+    displayName: '25 \u62DB\u8058\uFF5C\u7533\u8BF7\u8BBE\u7F6E';
     pluralName: 'application-settings';
     singularName: 'application-setting';
   };
@@ -463,8 +463,8 @@ export interface ApiApplicationSettingApplicationSetting
 export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
   collectionName: 'careers';
   info: {
-    description: '';
-    displayName: '\u804C\u4F4D';
+    description: '\u5B98\u7F51\u516C\u5F00\u5C55\u793A\u7684\u804C\u4F4D';
+    displayName: '24 \u62DB\u8058\uFF5C\u804C\u4F4D';
     pluralName: 'careers';
     singularName: 'career';
   };
@@ -472,12 +472,15 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    contentImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     employmentType: Schema.Attribute.String;
+    experienceLevel: Schema.Attribute.Enumeration<
+      ['intern', 'junior', 'mid', 'senior', 'lead', 'director']
+    >;
     expiresAt: Schema.Attribute.DateTime;
-    isDraft: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -490,8 +493,51 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     >;
     postedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sections: Schema.Attribute.Component<'shared.rich-text-section', true>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<999>;
     team: Schema.Attribute.Relation<'manyToOne', 'api::team.team'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    workModel: Schema.Attribute.Enumeration<['onsite', 'hybrid', 'remote']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'onsite'>;
+  };
+}
+
+export interface ApiCaseStudyCategoryCaseStudyCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'case_study_categories';
+  info: {
+    description: '\u6848\u4F8B\u9875\u4F7F\u7528\u7684\u5206\u7C7B';
+    displayName: '11 \u6848\u4F8B\uFF5C\u6848\u4F8B\u5206\u7C7B';
+    pluralName: 'case-study-categories';
+    singularName: 'case-study-category';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    caseStudies: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::case-study.case-study'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::case-study-category.case-study-category'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<999>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -499,16 +545,100 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
+  collectionName: 'case_studies';
+  info: {
+    description: '\u6848\u4F8B\u6587\u7AE0\u5185\u5BB9';
+    displayName: '12 \u6848\u4F8B\uFF5C\u6848\u4F8B\u5185\u5BB9';
+    pluralName: 'case-studies';
+    singularName: 'case-study';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    author: Schema.Attribute.String & Schema.Attribute.DefaultTo<'isBIM Team'>;
+    body: Schema.Attribute.Blocks;
+    category: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::case-study-category.case-study-category'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::case-study.case-study'
+    > &
+      Schema.Attribute.Private;
+    mainImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    readTime: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<5>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactSubmissionContactSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissions';
+  info: {
+    description: '\u7F51\u7AD9\u8054\u7CFB\u8868\u5355\u63D0\u4EA4\u8BB0\u5F55';
+    displayName: '41 \u8FD0\u8425\uFF5C\u8054\u7CFB\u8868\u5355';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    companyName: Schema.Attribute.String & Schema.Attribute.Required;
+    companyType: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    ipHash: Schema.Attribute.String;
+    jobTitle: Schema.Attribute.String;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    > &
+      Schema.Attribute.Private;
+    marketingConsent: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    phoneNumber: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    service: Schema.Attribute.String & Schema.Attribute.Required;
+    sourcePage: Schema.Attribute.String;
+    submittedAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    userAgent: Schema.Attribute.Text;
+  };
+}
+
 export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
   collectionName: 'locations';
   info: {
-    description: '';
-    displayName: '\u5730\u70B9';
+    description: '\u62DB\u8058\u9875\u4F7F\u7528\u7684\u529E\u516C\u5730\u70B9';
+    displayName: '23 \u62DB\u8058\uFF5C\u5730\u70B9';
     pluralName: 'locations';
     singularName: 'location';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     address: Schema.Attribute.Text;
@@ -523,6 +653,7 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -534,8 +665,8 @@ export interface ApiNewsCategoryNewsCategory
   extends Struct.CollectionTypeSchema {
   collectionName: 'news_categories';
   info: {
-    description: '';
-    displayName: '\u65B0\u95FB\u5206\u7C7B';
+    description: '\u65B0\u95FB\u9875\u4F7F\u7528\u7684\u5206\u7C7B';
+    displayName: '01 \u65B0\u95FB\uFF5C\u65B0\u95FB\u5206\u7C7B';
     pluralName: 'news-categories';
     singularName: 'news-category';
   };
@@ -543,10 +674,10 @@ export interface ApiNewsCategoryNewsCategory
     draftAndPublish: true;
   };
   attributes: {
-    color: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -555,7 +686,8 @@ export interface ApiNewsCategoryNewsCategory
       Schema.Attribute.Private;
     news: Schema.Attribute.Relation<'oneToMany', 'api::news.news'>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<999>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -566,8 +698,8 @@ export interface ApiNewsCategoryNewsCategory
 export interface ApiNewsNews extends Struct.CollectionTypeSchema {
   collectionName: 'news';
   info: {
-    description: '';
-    displayName: '\u65B0\u95FB';
+    description: '\u65B0\u95FB\u4E2D\u5FC3\u6587\u7AE0';
+    displayName: '02 \u65B0\u95FB\uFF5C\u65B0\u95FB\u5185\u5BB9';
     pluralName: 'news-items';
     singularName: 'news';
   };
@@ -575,23 +707,25 @@ export interface ApiNewsNews extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    author: Schema.Attribute.String & Schema.Attribute.DefaultTo<'isBIM Team'>;
     body: Schema.Attribute.Blocks;
     category: Schema.Attribute.Relation<
       'manyToOne',
       'api::news-category.news-category'
     >;
-    coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    excerpt: Schema.Attribute.Text;
-    isDraft: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    isFeatured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::news.news'> &
       Schema.Attribute.Private;
+    mainImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    readTime: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<5>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -602,13 +736,13 @@ export interface ApiNewsNews extends Struct.CollectionTypeSchema {
 export interface ApiPillarPillar extends Struct.CollectionTypeSchema {
   collectionName: 'pillars';
   info: {
-    description: '';
-    displayName: '\u652F\u67F1';
+    description: '\u62DB\u8058\u677F\u5757\u7684\u4E1A\u52A1\u652F\u67F1';
+    displayName: '21 \u62DB\u8058\uFF5C\u4E1A\u52A1\u652F\u67F1';
     pluralName: 'pillars';
     singularName: 'pillar';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -622,6 +756,8 @@ export interface ApiPillarPillar extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<999>;
     teams: Schema.Attribute.Relation<'oneToMany', 'api::team.team'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -633,13 +769,13 @@ export interface ApiPillarPillar extends Struct.CollectionTypeSchema {
 export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
   collectionName: 'teams';
   info: {
-    description: '';
-    displayName: '\u56E2\u961F';
+    description: '\u62DB\u8058\u9875\u4F7F\u7528\u7684\u56E2\u961F';
+    displayName: '22 \u62DB\u8058\uFF5C\u56E2\u961F';
     pluralName: 'teams';
     singularName: 'team';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     careers: Schema.Attribute.Relation<'oneToMany', 'api::career.career'>;
@@ -650,7 +786,10 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::team.team'> &
       Schema.Attribute.Private;
+    pillar: Schema.Attribute.Relation<'manyToOne', 'api::pillar.pillar'>;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.String & Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<999>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -921,6 +1060,7 @@ export interface PluginUploadFile extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     ext: Schema.Attribute.String;
+    focalPoint: Schema.Attribute.JSON;
     folder: Schema.Attribute.Relation<'manyToOne', 'plugin::upload.folder'> &
       Schema.Attribute.Private;
     folderPath: Schema.Attribute.String &
@@ -1170,6 +1310,9 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::application-setting.application-setting': ApiApplicationSettingApplicationSetting;
       'api::career.career': ApiCareerCareer;
+      'api::case-study-category.case-study-category': ApiCaseStudyCategoryCaseStudyCategory;
+      'api::case-study.case-study': ApiCaseStudyCaseStudy;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::location.location': ApiLocationLocation;
       'api::news-category.news-category': ApiNewsCategoryNewsCategory;
       'api::news.news': ApiNewsNews;

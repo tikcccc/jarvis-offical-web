@@ -4,28 +4,80 @@
   "info": {
     "singularName": "case-study-category",
     "pluralName": "case-study-categories",
-    "displayName": "Case Study Category",
-    "description": "Categories for case studies"
+    "displayName": "11 案例｜案例分类",
+    "description": "案例页使用的分类"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
+  "config": {
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "mainField": "title",
+      "defaultSortBy": "sortOrder",
+      "defaultSortOrder": "ASC",
+      "pageSize": 10,
+      "searchable": true,
+      "relationOpenMode": "modal"
+    },
+    "metadatas": {
+      "title": {
+        "edit": {
+          "label": "标题"
+        },
+        "list": {
+          "label": "标题"
+        }
+      },
+      "slug": {
+        "edit": {
+          "label": "URL 标识",
+          "description": "用于页面链接；可留空，保存时会自动生成如 case-study-category-1 的值，也可手动覆写"
+        },
+        "list": {
+          "label": "URL 标识"
+        }
+      },
+      "description": {
+        "edit": {
+          "label": "描述"
+        },
+        "list": {
+          "label": "描述"
+        }
+      },
+      "sortOrder": {
+        "edit": {
+          "label": "排序"
+        },
+        "list": {
+          "label": "排序"
+        }
+      },
+      "caseStudies": {
+        "edit": {
+          "label": "关联案例",
+          "visible": false
+        },
+        "list": {
+          "label": "关联案例"
+        }
+      }
+    }
+  },
   "attributes": {
     "title": {
       "type": "string",
       "required": true
     },
     "slug": {
-      "type": "uid",
-      "targetField": "title",
-      "required": true
+      "type": "string",
+      "unique": true
     },
     "description": {
       "type": "text"
-    },
-    "color": {
-      "type": "string"
     },
     "sortOrder": {
       "type": "integer",

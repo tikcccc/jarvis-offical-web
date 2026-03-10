@@ -10,7 +10,6 @@ interface NewsCategory {
   title: string;
   slug: { current: string };
   description?: string;
-  color: string;
 }
 
 interface NewsroomFiltersProps {
@@ -46,13 +45,6 @@ export default function NewsroomFilters({
             className={`newsroom-filter-btn ${
               selectedCategory === category._id ? 'active' : ''
             }`}
-            style={{
-              ...(selectedCategory === category._id && {
-                backgroundColor: category.color,
-                borderColor: category.color,
-                color: '#ffffff',
-              }),
-            }}
           >
             {category.title}
           </button>

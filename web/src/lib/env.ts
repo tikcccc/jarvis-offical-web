@@ -46,6 +46,7 @@ const clientEnv = {
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 
   // Media
+  NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL,
   NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL:
     process.env.NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL,
   NEXT_PUBLIC_VIDEO_CDN_URL: process.env.NEXT_PUBLIC_VIDEO_CDN_URL,
@@ -172,11 +173,13 @@ export function getSiteUrl(): string {
 }
 
 export function getStrapiUrl(): string {
-  const url = env.STRAPI_URL;
+  const url = isServer()
+    ? env.STRAPI_URL || env.NEXT_PUBLIC_STRAPI_URL
+    : env.NEXT_PUBLIC_STRAPI_URL;
 
   if (!url) {
     throw new Error(
-      "STRAPI_URL is not set. Please configure it in your environment variables."
+      "Strapi base URL is not set. Configure STRAPI_URL for server requests and NEXT_PUBLIC_STRAPI_URL for client-rendered Strapi images."
     );
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { m as motion } from "@/components/motion/lazy-motion";
-import { ArrowLeft, Share2, Home, Tag } from "lucide-react";
+import { ArrowLeft, Share2, Home } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/lib/i18n";
 import { PortableText } from "@portabletext/react";
@@ -196,22 +196,6 @@ export default function CaseDetailClient({
           </div>
         </div>
 
-        {/* Tags Section */}
-        {caseDetail.tags && caseDetail.tags.length > 0 && (
-          <div className="mt-12 pt-8 border-t case-studies-border-subtle">
-            <div className="flex items-center gap-3 flex-wrap">
-              <Tag className="w-4 h-4 case-studies-text-soft" />
-              {caseDetail.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 case-font-label case-studies-surface-muted case-studies-text-muted hover:bg-[var(--case-studies-surface-quiet)] transition-colors cursor-pointer"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </article>
 
       {/* Recent Cases Section */}

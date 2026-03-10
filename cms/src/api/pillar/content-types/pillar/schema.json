@@ -4,22 +4,77 @@
   "info": {
     "singularName": "pillar",
     "pluralName": "pillars",
-    "displayName": "Pillar",
-    "description": "Career pillar grouping"
+    "displayName": "21 招聘｜业务支柱",
+    "description": "招聘板块的业务支柱"
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
+  "config": {
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "mainField": "title",
+      "defaultSortBy": "sortOrder",
+      "defaultSortOrder": "ASC",
+      "pageSize": 10,
+      "searchable": true,
+      "relationOpenMode": "modal"
+    },
+    "metadatas": {
+      "title": {
+        "edit": {
+          "label": "名称"
+        },
+        "list": {
+          "label": "名称"
+        }
+      },
+      "slug": {
+        "edit": {
+          "label": "URL 标识",
+          "description": "用于页面链接；可留空，保存时会自动生成如 pillar-1 的值，也可手动覆写"
+        },
+        "list": {
+          "label": "URL 标识"
+        }
+      },
+      "description": {
+        "edit": {
+          "label": "描述"
+        },
+        "list": {
+          "label": "描述"
+        }
+      },
+      "sortOrder": {
+        "edit": {
+          "label": "排序"
+        },
+        "list": {
+          "label": "排序"
+        }
+      },
+      "teams": {
+        "edit": {
+          "label": "团队",
+          "visible": false
+        },
+        "list": {
+          "label": "团队"
+        }
+      }
+    }
+  },
   "attributes": {
     "title": {
       "type": "string",
       "required": true
     },
     "slug": {
-      "type": "uid",
-      "targetField": "title",
-      "required": true
+      "type": "string",
+      "unique": true
     },
     "description": {
       "type": "text"

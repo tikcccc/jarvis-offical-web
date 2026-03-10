@@ -1,10 +1,30 @@
 {
     "collectionName": "components_shared_rich_text_sections",
     "info": {
-        "displayName": "Rich Text Section",
-        "description": "Titled rich text content block"
+        "displayName": "共享｜富文本分区",
+        "description": "带标题的富文本内容块"
     },
     "options": {},
+    "config": {
+        "metadatas": {
+            "title": {
+                "edit": {
+                    "label": "分区标题"
+                },
+                "list": {
+                    "label": "分区标题"
+                }
+            },
+            "content": {
+                "edit": {
+                    "label": "分区内容"
+                },
+                "list": {
+                    "label": "分区内容"
+                }
+            }
+        }
+    },
     "attributes": {
         "title": {
             "type": "string",

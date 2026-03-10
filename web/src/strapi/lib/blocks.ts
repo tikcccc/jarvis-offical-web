@@ -206,6 +206,43 @@ function convertNode(node: StrapiBlocksNode): CmsPortableText {
   }
 }
 
+function flattenPlainTextFromList(
+  listNode: StrapiListBlockNode
+): string[] {
+  const result: string[] = [];
+
+  for (const child of listNode.children) {
+    if (child.type === "list") {
+      result.push(...flattenPlainTextFromList(child));
+      continue;
+    }
+
+    const line = child.children.map((item) => getInlineText(item)).join(" ").trim();
+    if (line) {
+      result.push(line);
+    }
+  }
+
+  return result;
+}
+
+function getPlainTextFromNode(node: StrapiBlocksNode): string[] {
+  switch (node.type) {
+    case "paragraph":
+    case "quote":
+    case "heading":
+    case "code": {
+      const text = node.children.map((child) => getInlineText(child)).join(" ").trim();
+      return text ? [text] : [];
+    }
+    case "list":
+      return flattenPlainTextFromList(node);
+    case "image":
+    default:
+      return [];
+  }
+}
+
 export function blocksToPortableText(
   value: StrapiBlocksContent | null | undefined
 ): CmsPortableText {
@@ -216,4 +253,18 @@ export function blocksToPortableText(
   keyCounter = 0;
 
   return value.flatMap((node) => convertNode(node));
+}
+
+export function blocksToPlainText(
+  value: StrapiBlocksContent | null | undefined
+): string {
+  if (!Array.isArray(value)) {
+    return "";
+  }
+
+  return value
+    .flatMap((node) => getPlainTextFromNode(node))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
 }

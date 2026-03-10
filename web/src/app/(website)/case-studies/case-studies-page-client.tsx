@@ -161,17 +161,6 @@ function HeroSection({
               </span>
             </m.div>
 
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <m.div className="flex gap-3 mb-6" variants={heroItemVariants}>
-            {post.tags.map(tag => (
-              <span key={tag} className="case-studies-hero-badge case-font-mono-xs">
-                {tag}
-              </span>
-            ))}
-          </m.div>
-        )}
-
         {/* Date */}
         <m.div className="mb-4" variants={heroItemVariants}>
           <span className="case-font-label case-studies-text-inverse-sub">
@@ -287,7 +276,6 @@ function CaseStudiesListView({
                 title: post.category.title,
                 slug: post.category.slug,
                 description: "",
-                color: post.category.color,
               } as CaseStudyCategory,
             ])
           ).values()

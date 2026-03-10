@@ -1,7 +1,7 @@
 "use client";
 
 import { m as motion } from "@/components/motion/lazy-motion";
-import { ArrowLeft, Share2, Home, Tag } from "lucide-react";
+import { ArrowLeft, Share2, Home } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/lib/i18n";
 import { PortableText } from "@portabletext/react";
@@ -193,22 +193,6 @@ export default function NewsDetailClient({
           </div>
         </div>
 
-        {/* Tags Section */}
-        {newsDetail.tags && newsDetail.tags.length > 0 && (
-          <div className="mt-12 pt-8 border-t newsroom-border-subtle">
-            <div className="flex items-center gap-3 flex-wrap">
-              <Tag className="w-4 h-4 newsroom-text-soft" />
-              {newsDetail.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 news-font-label newsroom-surface-muted newsroom-text-muted hover:bg-[var(--newsroom-surface-quiet)] transition-colors cursor-pointer"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </article>
 
       {/* Recent News Section */}

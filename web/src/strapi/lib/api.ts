@@ -1,5 +1,5 @@
 import { getStrapiApiToken, getStrapiUrl } from "@/lib/env";
-import { blocksToPortableText } from "./blocks";
+import { blocksToPlainText, blocksToPortableText } from "./blocks";
 import type {
   ApplicationSettings,
   CmsCareer,
@@ -34,24 +34,29 @@ const CAREER_ENDPOINT = "careers";
 const APPLICATION_SETTING_ENDPOINT = "application-setting";
 const CONTACT_SUBMISSION_ENDPOINT = "contact-submissions";
 
-const NEWS_POPULATE: QueryEntry[] = [
-  ["populate[mainImage]", "*"],
-  ["populate[category]", "*"],
-  ["populate[seo][populate][openGraphImage]", "*"],
-];
+function createPopulateEntries(paths: string[]): QueryEntry[] {
+  return paths.map((path, index) => [`populate[${index}]`, path]);
+}
 
-const CAREER_POPULATE: QueryEntry[] = [
-  ["populate[team][populate][pillar]", "*"],
-  ["populate[locations]", "*"],
-  ["populate[contentImage]", "*"],
-  ["populate[seo][populate][openGraphImage]", "*"],
-];
+const NEWS_POPULATE = createPopulateEntries([
+  "mainImage",
+  "category",
+  "seo",
+]);
 
-const CASE_STUDY_POPULATE: QueryEntry[] = [
-  ["populate[mainImage]", "*"],
-  ["populate[category]", "*"],
-  ["populate[seo][populate][openGraphImage]", "*"],
-];
+const CAREER_POPULATE = createPopulateEntries([
+  "team",
+  "team.pillar",
+  "locations",
+  "contentImage",
+  "seo",
+]);
+
+const CASE_STUDY_POPULATE = createPopulateEntries([
+  "mainImage",
+  "category",
+  "seo",
+]);
 
 const asString = (value: unknown) =>
   typeof value === "string" ? value : "";
@@ -101,6 +106,40 @@ function arrayOfStrings(value: unknown): string[] | undefined {
     .filter(Boolean);
 
   return strings.length > 0 ? strings : undefined;
+}
+
+function parseDelimitedText(value: unknown): string[] | undefined {
+  if (Array.isArray(value)) return arrayOfStrings(value);
+  if (typeof value !== "string") return undefined;
+
+  const items = value
+    .split(/[\n,，、]+/g)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return items.length > 0 ? items : undefined;
+}
+
+function truncateText(value: string, maxLength: number) {
+  if (value.length <= maxLength) {
+    return value;
+  }
+
+  return value.slice(0, maxLength).trimEnd();
+}
+
+function deriveExcerpt(
+  explicitExcerpt: unknown,
+  body: StrapiBlocksContent | undefined,
+  subtitle: string | undefined
+) {
+  const manualExcerpt = asString(explicitExcerpt).trim();
+  if (manualExcerpt) return manualExcerpt;
+
+  const bodyText = truncateText(blocksToPlainText(body), 280);
+  if (bodyText) return bodyText;
+
+  return subtitle;
 }
 
 function appendQuery(url: URL, entries: QueryEntry[]) {
@@ -189,7 +228,7 @@ function mapSeo(value: unknown): CmsSeo | undefined {
     metaTitle: asString(seo.metaTitle) || undefined,
     metaDescription: asString(seo.metaDescription) || undefined,
     openGraphImage: mapMedia(seo.openGraphImage),
-    keywords: arrayOfStrings(seo.keywords),
+    keywords: parseDelimitedText(seo.keywords),
   };
 
   if (
@@ -212,26 +251,26 @@ function mapCategory(value: unknown): CmsCategory {
     title: asString(category.title),
     slug: mapSlug(category.slug),
     description: asString(category.description) || undefined,
-    color: asString(category.color) || "#0f766e",
     sortOrder: typeof category.sortOrder === "number" ? category.sortOrder : undefined,
   };
 }
 
 function mapNews(value: unknown): CmsNewsItem {
   const item = flattenEntity<Record<string, unknown>>(value) ?? {};
+  const subtitle = asString(item.subtitle) || undefined;
+  const body = item.body as StrapiBlocksContent | undefined;
 
   return {
     _id: mapId(item),
     _type: "news",
     title: asString(item.title),
     slug: mapSlug(item.slug),
-    subtitle: asString(item.subtitle) || undefined,
+    subtitle,
     publishedAt: asString(item.publishedAt),
-    excerpt: asString(item.excerpt) || undefined,
-    body: blocksToPortableText(item.body as StrapiBlocksContent | undefined),
+    excerpt: deriveExcerpt(item.excerpt, body, subtitle),
+    body: blocksToPortableText(body),
     mainImage: mapMedia(item.mainImage),
     category: mapCategory(item.category),
-    tags: arrayOfStrings(item.tags),
     author: asString(item.author) || "isBIM Team",
     readTime: asNumber(item.readTime, 5),
     featured: Boolean(item.featured),
@@ -243,19 +282,20 @@ function mapNews(value: unknown): CmsNewsItem {
 
 function mapCaseStudy(value: unknown): CmsCaseStudyItem {
   const item = flattenEntity<Record<string, unknown>>(value) ?? {};
+  const subtitle = asString(item.subtitle) || undefined;
+  const body = item.body as StrapiBlocksContent | undefined;
 
   return {
     _id: mapId(item),
     _type: "caseStudy",
     title: asString(item.title),
     slug: mapSlug(item.slug),
-    subtitle: asString(item.subtitle) || undefined,
+    subtitle,
     publishedAt: asString(item.publishedAt),
-    excerpt: asString(item.excerpt) || undefined,
-    body: blocksToPortableText(item.body as StrapiBlocksContent | undefined),
+    excerpt: deriveExcerpt(item.excerpt, body, subtitle),
+    body: blocksToPortableText(body),
     mainImage: mapMedia(item.mainImage),
     category: mapCategory(item.category),
-    tags: arrayOfStrings(item.tags),
     author: asString(item.author) || "isBIM Team",
     readTime: asNumber(item.readTime, 5),
     featured: Boolean(item.featured),
@@ -371,7 +411,6 @@ function mapSitemapEntry(value: unknown): SitemapEntry {
 export async function getNewsList(limit = 12): Promise<CmsNewsItem[]> {
   const response = await strapiFetch<StrapiEnvelope<unknown[]>>(NEWS_ENDPOINT, [
     ...NEWS_POPULATE,
-    ["filters[status][$eq]", "published"],
     ["filters[publishedAt][$notNull]", true],
     ["sort[0]", "publishedAt:desc"],
     ["pagination[pageSize]", limit],
@@ -385,7 +424,6 @@ export async function getNewsList(limit = 12): Promise<CmsNewsItem[]> {
 export async function getFeaturedNews(): Promise<CmsNewsItem | null> {
   const response = await strapiFetch<StrapiEnvelope<unknown[]>>(NEWS_ENDPOINT, [
     ...NEWS_POPULATE,
-    ["filters[status][$eq]", "published"],
     ["filters[publishedAt][$notNull]", true],
     ["filters[featured][$eq]", true],
     ["sort[0]", "publishedAt:desc"],
@@ -415,7 +453,6 @@ export async function getNewsBySlug(slug: string): Promise<CmsNewsItem | null> {
   const response = await strapiFetch<StrapiEnvelope<unknown[]>>(NEWS_ENDPOINT, [
     ...NEWS_POPULATE,
     ["filters[slug][$eq]", slug],
-    ["filters[status][$eq]", "published"],
     ["filters[publishedAt][$notNull]", true],
     ["pagination[pageSize]", 1],
   ]);
@@ -429,7 +466,6 @@ export async function getMenuNews(): Promise<CmsNewsItem[]> {
     getFeaturedNews(),
     strapiFetch<StrapiEnvelope<unknown[]>>(NEWS_ENDPOINT, [
       ...NEWS_POPULATE,
-      ["filters[status][$eq]", "published"],
       ["filters[publishedAt][$notNull]", true],
       ["filters[featured][$eq]", false],
       ["sort[0]", "publishedAt:desc"],
@@ -451,7 +487,6 @@ export async function getCaseStudies(limit = 12): Promise<CmsCaseStudyItem[]> {
     CASE_STUDY_ENDPOINT,
     [
       ...CASE_STUDY_POPULATE,
-      ["filters[status][$eq]", "published"],
       ["filters[publishedAt][$notNull]", true],
       ["sort[0]", "publishedAt:desc"],
       ["pagination[pageSize]", limit],
@@ -468,7 +503,6 @@ export async function getFeaturedCaseStudy(): Promise<CmsCaseStudyItem | null> {
     CASE_STUDY_ENDPOINT,
     [
       ...CASE_STUDY_POPULATE,
-      ["filters[status][$eq]", "published"],
       ["filters[publishedAt][$notNull]", true],
       ["filters[featured][$eq]", true],
       ["sort[0]", "publishedAt:desc"],
@@ -503,7 +537,6 @@ export async function getCaseStudyBySlug(
     [
       ...CASE_STUDY_POPULATE,
       ["filters[slug][$eq]", slug],
-      ["filters[status][$eq]", "published"],
       ["filters[publishedAt][$notNull]", true],
       ["pagination[pageSize]", 1],
     ]
@@ -552,7 +585,6 @@ export async function getNewsSitemapEntries(): Promise<SitemapEntry[]> {
   const response = await strapiFetch<StrapiEnvelope<unknown[]>>(NEWS_ENDPOINT, [
     ["fields[0]", "slug"],
     ["fields[1]", "updatedAt"],
-    ["filters[status][$eq]", "published"],
     ["filters[publishedAt][$notNull]", true],
     ["pagination[pageSize]", 500],
   ]);
@@ -568,7 +600,6 @@ export async function getCaseStudySitemapEntries(): Promise<SitemapEntry[]> {
     [
       ["fields[0]", "slug"],
       ["fields[1]", "updatedAt"],
-      ["filters[status][$eq]", "published"],
       ["filters[publishedAt][$notNull]", true],
       ["pagination[pageSize]", 500],
     ]

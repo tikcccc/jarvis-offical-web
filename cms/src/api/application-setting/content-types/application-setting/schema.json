@@ -4,11 +4,33 @@
   "info": {
     "singularName": "application-setting",
     "pluralName": "application-settings",
-    "displayName": "Application Setting",
-    "description": "Global application form URL"
+    "displayName": "25 招聘｜申请设置",
+    "description": "全局职位申请链接"
   },
   "options": {},
   "pluginOptions": {},
+  "config": {
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "mainField": "url",
+      "defaultSortBy": "url",
+      "defaultSortOrder": "ASC",
+      "pageSize": 10,
+      "searchable": true,
+      "relationOpenMode": "modal"
+    },
+    "metadatas": {
+      "url": {
+        "edit": {
+          "label": "申请链接"
+        },
+        "list": {
+          "label": "申请链接"
+        }
+      }
+    }
+  },
   "attributes": {
     "url": {
       "type": "string",

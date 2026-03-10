@@ -115,40 +115,40 @@
         {
           "line": 315,
           "level": 3,
-          "text": "Sanity Data Layer"
+          "text": "Strapi Data Layer"
         },
         {
-          "line": 327,
+          "line": 325,
           "level": 3,
-          "text": "Sanity Schemas"
+          "text": "Strapi Content Types"
         },
         {
-          "line": 338,
+          "line": 340,
           "level": 4,
-          "text": "Sanity SEO/Media Fields (current)"
+          "text": "Strapi SEO/Slug Fields (current)"
         },
         {
-          "line": 367,
+          "line": 366,
           "level": 3,
           "text": "Public Assets"
         },
         {
-          "line": 378,
+          "line": 377,
           "level": 2,
           "text": "Boundaries"
         },
         {
-          "line": 382,
+          "line": 381,
           "level": 2,
           "text": "Patterns & Rules (current)"
         },
         {
-          "line": 433,
+          "line": 432,
           "level": 3,
           "text": "Product Template - updated guardrails (2025-02)"
         },
         {
-          "line": 439,
+          "line": 438,
           "level": 2,
           "text": "Backlog / Placeholder"
         }

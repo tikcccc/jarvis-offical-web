@@ -48,7 +48,6 @@ export interface CmsCategory {
   title: string;
   slug: CmsSlug;
   description?: string;
-  color: string;
   sortOrder?: number;
 }
 
@@ -63,7 +62,6 @@ export interface CmsNewsItem {
   body?: CmsPortableText;
   mainImage?: CmsImage;
   category: CmsCategory;
-  tags?: string[];
   author: string;
   readTime: number;
   featured?: boolean;
@@ -82,7 +80,6 @@ export interface CmsCaseStudyItem {
   body?: CmsPortableText;
   mainImage?: CmsImage;
   category: CmsCategory;
-  tags?: string[];
   author: string;
   readTime: number;
   featured?: boolean;
