@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +9,7 @@ import {
   MapPin,
   Phone,
   Mail,
+  QrCode,
   ExternalLink,
   ArrowRight,
   Check,
@@ -30,18 +32,14 @@ import {
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/ui/page-header";
 
-// Map coordinates for 430 Nathan Road, Yau Ma Tei
-const lat = 22.30973871039109;
-const lon = 114.17166002409992;
-const displayLat = lat.toFixed(2);
-const displayLon = lon.toFixed(2);
-// Expand the bounding box so the embed shows a broader, almost continental view around Hong Kong
-const mapViewDelta = 50;
-const bbox = `${Math.max(-180, lon - mapViewDelta)}%2C${Math.max(-85, lat - mapViewDelta)}%2C${Math.min(180, lon + mapViewDelta)}%2C${Math.min(85, lat + mapViewDelta)}`;
-const googleMapsQuery = encodeURIComponent(
-  "Hong Kong, 19/F, Nathan Commercial Building, 430 Nathan Road, Yau Ma Tei, Kowloon"
+const mainlandOfficeQuery = encodeURIComponent(
+  "广东省广州市番禺区禺山西路228号海乐荟3座10楼1004-1008"
 );
-const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${googleMapsQuery}`;
+const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${mainlandOfficeQuery}`;
+const lat = 22.9387253;
+const lon = 113.3785422;
+const mapViewDelta = 0.06;
+const bbox = `${lon - mapViewDelta}%2C${lat - mapViewDelta}%2C${lon + mapViewDelta}%2C${lat + mapViewDelta}`;
 
 export default function ContactClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -139,6 +137,15 @@ export default function ContactClient() {
   const marketingConsent = watch("marketingConsent");
   const prefillEmail =
     searchParams.get("email") ?? searchParams.get("prefillEmail");
+  const addressLines = [
+    messages.contact_address_line1(),
+    messages.contact_address_line2(),
+    messages.contact_address_line3(),
+    messages.contact_address_city(),
+  ].filter(Boolean);
+  const contactPhoneHref = messages.contact_phone_href();
+  const contactPhoneDisplay = messages.contact_phone_display();
+  const contactEmailDisplay = messages.contact_email_display();
 
   useEffect(() => {
     if (prefillEmail) {
@@ -208,13 +215,11 @@ export default function ContactClient() {
                     </h3>
                   </div>
                   <address className="pl-[52px] not-italic contact-info-body leading-relaxed">
-                    {messages.contact_address_line1()}
-                    <br />
-                    {messages.contact_address_line2()}
-                    <br />
-                    {messages.contact_address_line3()}
-                    <br />
-                    {messages.contact_address_city()}
+                    {addressLines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
                   </address>
                 </div>
 
@@ -230,10 +235,10 @@ export default function ContactClient() {
                   </div>
                   <div className="pl-[52px]">
                     <a
-                      href="tel:+85223828380"
+                      href={contactPhoneHref}
                       className="contact-info-body transition-colors"
                     >
-                      +852 2382 8380
+                      {contactPhoneDisplay}
                     </a>
                   </div>
                 </div>
@@ -250,18 +255,40 @@ export default function ContactClient() {
                   </div>
                   <div className="pl-[52px]">
                     <a
-                      href="mailto:solution@isbim.com.hk"
+                      href={`mailto:${contactEmailDisplay}`}
                       className="contact-info-body transition-colors break-all"
                     >
-                      solution@isbim.com.hk
+                      {contactEmailDisplay}
                     </a>
+                  </div>
+                </div>
+
+                {/* WeCom */}
+                <div className="group">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="contact-info-icon">
+                      <QrCode size={20} strokeWidth={2} />
+                    </div>
+                    <h3 className="contact-info-heading">
+                      {messages.contact_wechat_title()}
+                    </h3>
+                  </div>
+                  <div className="pl-[52px]">
+                    <div className="contact-qr-image-shell">
+                      <Image
+                        src="/images/contact-us/企业微信.avif"
+                        alt={messages.contact_wechat_alt()}
+                        fill
+                        sizes="(max-width: 1024px) 120px, 160px"
+                        className="object-contain p-2"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Map Section */}
               <div className="pt-4 relative">
-                {/* Map corner brackets - top-left and bottom-right */}
                 <div className="absolute -top-2 -left-2 w-4 h-4 border-l border-t contact-corner-bracket" />
                 <div className="absolute -bottom-2 -right-2 w-4 h-4 border-r border-b contact-corner-bracket" />
 
@@ -276,7 +303,6 @@ export default function ContactClient() {
                     title={messages.contact_map_title()}
                   />
 
-                  {/* Overlay Button */}
                   <a
                     href={googleMapsLink}
                     target="_blank"
@@ -286,15 +312,6 @@ export default function ContactClient() {
                     <ExternalLink size={12} />
                     {messages.contact_map_cta()}
                   </a>
-                </div>
-
-                <div className="flex justify-between items-center mt-3 px-1">
-                  <p className="contact-coord contact-coord--wide uppercase">
-                    LAT: {displayLat} | LON: {displayLon}
-                  </p>
-                  <p className="contact-coord contact-coord--wide uppercase">
-                    STRATEGIC LOCATION
-                  </p>
                 </div>
               </div>
             </div>
