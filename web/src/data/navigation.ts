@@ -223,7 +223,7 @@ export const footerNavigation = {
   legal: {
     label: "Legal",
     items: [
-      { label: "Privacy & Cookie Policy", href: "/privacy-cookie-policy" },
+      { label: "privacy_cookie_title", href: "/privacy-cookie-policy" },
     ],
   },
 };

@@ -179,7 +179,7 @@ export function FooterDark() {
               prefetch
               className="hover:text-white transition-colors"
             >
-              Privacy & Cookie Policy
+              {messages.privacy_cookie_title()}
             </Link>
           </div>
         </div>

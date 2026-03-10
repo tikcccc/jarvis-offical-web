@@ -223,7 +223,7 @@ export function FooterBase({ variant = "default" }: { variant?: FooterVariant })
                 prefetch
                 className="footer-link inline-flex items-center gap-1"
               >
-                Privacy & Cookie Policy
+                {messages.privacy_cookie_title()}
               </Link>
             </m.div>
           </div>
