@@ -1,6 +1,6 @@
 {
   "doc_dir": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc",
-  "files_count": 8,
+  "files_count": 15,
   "files": [
     {
       "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/coding-archite.md",
@@ -83,72 +83,72 @@
           "text": "SEO & Sitemap"
         },
         {
-          "line": 224,
+          "line": 232,
           "level": 3,
           "text": "Environment Variables"
         },
         {
-          "line": 255,
+          "line": 263,
           "level": 3,
           "text": "UI Components"
         },
         {
-          "line": 262,
+          "line": 270,
           "level": 3,
           "text": "Data"
         },
         {
-          "line": 270,
+          "line": 278,
           "level": 3,
           "text": "Schemas"
         },
         {
-          "line": 276,
+          "line": 284,
           "level": 3,
           "text": "Styles"
         },
         {
-          "line": 295,
+          "line": 303,
           "level": 3,
           "text": "SEO & ISR"
         },
         {
-          "line": 315,
+          "line": 323,
           "level": 3,
           "text": "Strapi Data Layer"
         },
         {
-          "line": 325,
+          "line": 333,
           "level": 3,
           "text": "Strapi Content Types"
         },
         {
-          "line": 340,
+          "line": 348,
           "level": 4,
           "text": "Strapi SEO/Slug Fields (current)"
         },
         {
-          "line": 366,
+          "line": 374,
           "level": 3,
           "text": "Public Assets"
         },
         {
-          "line": 377,
+          "line": 385,
           "level": 2,
           "text": "Boundaries"
         },
         {
-          "line": 381,
+          "line": 389,
           "level": 2,
           "text": "Patterns & Rules (current)"
         },
         {
-          "line": 432,
+          "line": 440,
           "level": 3,
           "text": "Product Template - updated guardrails (2025-02)"
         },
         {
-          "line": 438,
+          "line": 446,
           "level": 2,
           "text": "Backlog / Placeholder"
         }
@@ -930,6 +930,700 @@
           "line": 60,
           "level": 2,
           "text": "2025-11-26 (v3.2)"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/huawei-mainland-deployment-requirements.md",
+      "title": "isBIM 内地华为云部署要求（服务器/数据库/前提条件）",
+      "heading_count": 19,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM 内地华为云部署要求（服务器/数据库/前提条件）"
+        },
+        {
+          "line": 10,
+          "level": 2,
+          "text": "1. 当前项目输入（用于参数基线）"
+        },
+        {
+          "line": 21,
+          "level": 2,
+          "text": "2. 服务器参数要求"
+        },
+        {
+          "line": 23,
+          "level": 3,
+          "text": "2.1 Web（Next.js）服务器要求"
+        },
+        {
+          "line": 36,
+          "level": 3,
+          "text": "2.2 CMS（Strapi）服务器要求"
+        },
+        {
+          "line": 49,
+          "level": 3,
+          "text": "2.3 小流量部署档位（100 并发）"
+        },
+        {
+          "line": 65,
+          "level": 2,
+          "text": "3. 数据库要求（华为云 RDS for MySQL）"
+        },
+        {
+          "line": 67,
+          "level": 3,
+          "text": "3.1 推荐参数"
+        },
+        {
+          "line": 81,
+          "level": 3,
+          "text": "3.2 与现有项目的对应关系"
+        },
+        {
+          "line": 88,
+          "level": 2,
+          "text": "4. 上线前提条件（内地部署必须确认）"
+        },
+        {
+          "line": 90,
+          "level": 3,
+          "text": "4.1 域名与备案"
+        },
+        {
+          "line": 98,
+          "level": 3,
+          "text": "4.2 网络与访问链路"
+        },
+        {
+          "line": 104,
+          "level": 3,
+          "text": "4.3 安全与运维"
+        },
+        {
+          "line": 113,
+          "level": 2,
+          "text": "5. 香港 OBS 视频在内地访问风险评估（重点）"
+        },
+        {
+          "line": 117,
+          "level": 3,
+          "text": "5.1 风险判断"
+        },
+        {
+          "line": 128,
+          "level": 3,
+          "text": "5.2 结论"
+        },
+        {
+          "line": 135,
+          "level": 2,
+          "text": "6. 部署前硬性检查清单"
+        },
+        {
+          "line": 147,
+          "level": 2,
+          "text": "7. ECS + Docker（不含 Redis）运行约束"
+        },
+        {
+          "line": 156,
+          "level": 2,
+          "text": "8. 参考资料（华为云官方）"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/huawei-mainland-deployment-solution.md",
+      "title": "isBIM 内地华为云部署方案（服务器+数据库均使用华为云）",
+      "heading_count": 35,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM 内地华为云部署方案（服务器+数据库均使用华为云）"
+        },
+        {
+          "line": 10,
+          "level": 2,
+          "text": "1. 推荐目标架构（内地生产）"
+        },
+        {
+          "line": 12,
+          "level": 3,
+          "text": "1.1 方案总览"
+        },
+        {
+          "line": 22,
+          "level": 3,
+          "text": "1.2 双域名策略（推荐）"
+        },
+        {
+          "line": 31,
+          "level": 2,
+          "text": "2. 资源选型与参数（建议）"
+        },
+        {
+          "line": 33,
+          "level": 3,
+          "text": "2.1 计算资源"
+        },
+        {
+          "line": 41,
+          "level": 3,
+          "text": "2.2 数据库资源"
+        },
+        {
+          "line": 48,
+          "level": 3,
+          "text": "2.3 小流量部署档位（100 并发）"
+        },
+        {
+          "line": 71,
+          "level": 2,
+          "text": "3. 媒体与视频方案（核心）"
+        },
+        {
+          "line": 73,
+          "level": 3,
+          "text": "3.1 目标状态"
+        },
+        {
+          "line": 81,
+          "level": 3,
+          "text": "3.2 配置原则"
+        },
+        {
+          "line": 87,
+          "level": 3,
+          "text": "3.3 数据存储职责"
+        },
+        {
+          "line": 94,
+          "level": 2,
+          "text": "4. 部署实施步骤（可执行）"
+        },
+        {
+          "line": 96,
+          "level": 3,
+          "text": "4.1 阶段 A：前置准备"
+        },
+        {
+          "line": 102,
+          "level": 3,
+          "text": "4.2 阶段 B：应用镜像与运行环境"
+        },
+        {
+          "line": 108,
+          "level": 3,
+          "text": "4.3 阶段 C：数据库与配置接入"
+        },
+        {
+          "line": 115,
+          "level": 3,
+          "text": "4.4 阶段 D：媒体迁移与 CDN 切换"
+        },
+        {
+          "line": 122,
+          "level": 3,
+          "text": "4.5 阶段 E：上线与验收"
+        },
+        {
+          "line": 130,
+          "level": 2,
+          "text": "5. 关键环境变量清单（上线必须）"
+        },
+        {
+          "line": 132,
+          "level": 3,
+          "text": "5.1 Web 侧"
+        },
+        {
+          "line": 143,
+          "level": 3,
+          "text": "5.2 CMS 侧"
+        },
+        {
+          "line": 156,
+          "level": 2,
+          "text": "6. ECS + Docker（不含 Redis）执行手册"
+        },
+        {
+          "line": 158,
+          "level": 3,
+          "text": "6.1 本地全栈测试"
+        },
+        {
+          "line": 161,
+          "level": 1,
+          "text": "repo root"
+        },
+        {
+          "line": 169,
+          "level": 3,
+          "text": "6.2 镜像构建与推送（SWR）"
+        },
+        {
+          "line": 172,
+          "level": 1,
+          "text": "web"
+        },
+        {
+          "line": 176,
+          "level": 1,
+          "text": "cms"
+        },
+        {
+          "line": 181,
+          "level": 3,
+          "text": "6.3 ECS 分离部署（web/cms）"
+        },
+        {
+          "line": 184,
+          "level": 1,
+          "text": "ECS-cms"
+        },
+        {
+          "line": 190,
+          "level": 1,
+          "text": "ECS-web"
+        },
+        {
+          "line": 201,
+          "level": 3,
+          "text": "6.4 回滚（镜像 tag 回退）"
+        },
+        {
+          "line": 204,
+          "level": 1,
+          "text": "在对应 ECS 的 .env 中将 WEB_IMAGE / CMS_IMAGE 改回旧 tag"
+        },
+        {
+          "line": 211,
+          "level": 2,
+          "text": "7. 验收标准（建议）"
+        },
+        {
+          "line": 221,
+          "level": 2,
+          "text": "8. 回滚策略"
+        },
+        {
+          "line": 230,
+          "level": 2,
+          "text": "9. 官方文档参考（华为云）"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/pm-100-concurrency-deployment-requirements.md",
+      "title": "JarvisDT 內地部署需求單",
+      "heading_count": 16,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "JarvisDT 內地部署需求單"
+        },
+        {
+          "line": 11,
+          "level": 2,
+          "text": "1. 一頁結論（可直接發採購）"
+        },
+        {
+          "line": 24,
+          "level": 2,
+          "text": "2. 資源規格明細（100 并發）"
+        },
+        {
+          "line": 26,
+          "level": 2,
+          "text": "2.1 計算資源（ECS）"
+        },
+        {
+          "line": 33,
+          "level": 2,
+          "text": "2.2 存儲與數據庫"
+        },
+        {
+          "line": 41,
+          "level": 2,
+          "text": "2.3 網路與入口"
+        },
+        {
+          "line": 51,
+          "level": 2,
+          "text": "3. OBS / 視頻參數建議（重點）"
+        },
+        {
+          "line": 53,
+          "level": 2,
+          "text": "3.1 Bucket 建議"
+        },
+        {
+          "line": 60,
+          "level": 2,
+          "text": "3.2 容量與帶寬估算（100 并發）"
+        },
+        {
+          "line": 66,
+          "level": 2,
+          "text": "3.3 當前風險與要求"
+        },
+        {
+          "line": 73,
+          "level": 2,
+          "text": "4. 環境變量（對 PM/運維必填）"
+        },
+        {
+          "line": 75,
+          "level": 2,
+          "text": "4.1 Web（ECS-web）"
+        },
+        {
+          "line": 84,
+          "level": 2,
+          "text": "4.2 CMS（ECS-cms）"
+        },
+        {
+          "line": 96,
+          "level": 2,
+          "text": "5. 帳號與權限前提（你可直接回 PM）"
+        },
+        {
+          "line": 111,
+          "level": 2,
+          "text": "6. 驗收標準（100 并發）"
+        },
+        {
+          "line": 121,
+          "level": 2,
+          "text": "7. 備註（本期邊界）"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/seo-deploy-baidu.md",
+      "title": "百度 SEO 部署手冊（生產）",
+      "heading_count": 16,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "百度 SEO 部署手冊（生產）"
+        },
+        {
+          "line": 9,
+          "level": 2,
+          "text": "1. 目標"
+        },
+        {
+          "line": 17,
+          "level": 2,
+          "text": "2. 前置條件"
+        },
+        {
+          "line": 28,
+          "level": 2,
+          "text": "3. 站點接入步驟"
+        },
+        {
+          "line": 30,
+          "level": 3,
+          "text": "3.1 添加站點"
+        },
+        {
+          "line": 36,
+          "level": 3,
+          "text": "3.2 驗證站點"
+        },
+        {
+          "line": 51,
+          "level": 2,
+          "text": "4. robots 與 sitemap"
+        },
+        {
+          "line": 53,
+          "level": 3,
+          "text": "4.1 robots 要求"
+        },
+        {
+          "line": 63,
+          "level": 3,
+          "text": "4.2 sitemap 要求"
+        },
+        {
+          "line": 75,
+          "level": 2,
+          "text": "5. 動態內容收錄（必做）"
+        },
+        {
+          "line": 77,
+          "level": 3,
+          "text": "5.1 發佈後流程"
+        },
+        {
+          "line": 83,
+          "level": 3,
+          "text": "5.2 建議接入點"
+        },
+        {
+          "line": 88,
+          "level": 3,
+          "text": "5.3 運維注意"
+        },
+        {
+          "line": 96,
+          "level": 2,
+          "text": "6. 常見風險與修正"
+        },
+        {
+          "line": 113,
+          "level": 2,
+          "text": "7. 上線檢查清單"
+        },
+        {
+          "line": 124,
+          "level": 2,
+          "text": "8. 參考"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/seo-deploy-bing.md",
+      "title": "Bing SEO 部署手冊（生產）",
+      "heading_count": 12,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "Bing SEO 部署手冊（生產）"
+        },
+        {
+          "line": 8,
+          "level": 2,
+          "text": "1. 你問的問題：內地 Bing 與外網 Bing 要分開申請嗎？"
+        },
+        {
+          "line": 18,
+          "level": 2,
+          "text": "2. 前置條件"
+        },
+        {
+          "line": 26,
+          "level": 2,
+          "text": "3. 部署步驟"
+        },
+        {
+          "line": 28,
+          "level": 3,
+          "text": "3.1 添加與驗證站點"
+        },
+        {
+          "line": 34,
+          "level": 3,
+          "text": "3.2 提交 sitemap"
+        },
+        {
+          "line": 40,
+          "level": 3,
+          "text": "3.3 開啟 IndexNow（建議 P0）"
+        },
+        {
+          "line": 50,
+          "level": 2,
+          "text": "4. 動態內容 SEO（Bing）"
+        },
+        {
+          "line": 52,
+          "level": 3,
+          "text": "4.1 現有基礎"
+        },
+        {
+          "line": 58,
+          "level": 3,
+          "text": "4.2 補強建議"
+        },
+        {
+          "line": 67,
+          "level": 2,
+          "text": "5. 監控與驗收"
+        },
+        {
+          "line": 83,
+          "level": 2,
+          "text": "6. 參考"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/seo-deploy-google.md",
+      "title": "Google SEO 部署手冊（生產）",
+      "heading_count": 13,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "Google SEO 部署手冊（生產）"
+        },
+        {
+          "line": 8,
+          "level": 2,
+          "text": "1. 目標"
+        },
+        {
+          "line": 16,
+          "level": 2,
+          "text": "2. 資產策略（重要）"
+        },
+        {
+          "line": 32,
+          "level": 2,
+          "text": "3. 部署步驟"
+        },
+        {
+          "line": 34,
+          "level": 3,
+          "text": "3.1 驗證站點"
+        },
+        {
+          "line": 40,
+          "level": 3,
+          "text": "3.2 提交 sitemap"
+        },
+        {
+          "line": 45,
+          "level": 3,
+          "text": "3.3 核查 robots 與可抓取性"
+        },
+        {
+          "line": 52,
+          "level": 2,
+          "text": "4. 動態內容 SEO（Google）"
+        },
+        {
+          "line": 54,
+          "level": 3,
+          "text": "4.1 現有基礎"
+        },
+        {
+          "line": 60,
+          "level": 3,
+          "text": "4.2 補強建議"
+        },
+        {
+          "line": 69,
+          "level": 2,
+          "text": "5. 性能與收錄質量"
+        },
+        {
+          "line": 79,
+          "level": 2,
+          "text": "6. 上線驗收清單"
+        },
+        {
+          "line": 89,
+          "level": 2,
+          "text": "7. 參考"
+        }
+      ]
+    },
+    {
+      "file": "/home/tikhong/Jarvis-offical-web/web/doc/coding-doc/seo-multi-engine-plan.md",
+      "title": "isBIM 多引擎 SEO 方案（Google + Bing + 百度）",
+      "heading_count": 18,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "text": "isBIM 多引擎 SEO 方案（Google + Bing + 百度）"
+        },
+        {
+          "line": 9,
+          "level": 2,
+          "text": "1. 目標與結論"
+        },
+        {
+          "line": 24,
+          "level": 2,
+          "text": "2. 當前 SEO 支持現況（基於現有代碼）"
+        },
+        {
+          "line": 26,
+          "level": 3,
+          "text": "2.1 已具備能力"
+        },
+        {
+          "line": 39,
+          "level": 3,
+          "text": "2.2 主要缺口（需要補強）"
+        },
+        {
+          "line": 50,
+          "level": 2,
+          "text": "3. 雙域名與跨引擎策略（內地 + 外網）"
+        },
+        {
+          "line": 52,
+          "level": 3,
+          "text": "3.1 域名策略"
+        },
+        {
+          "line": 64,
+          "level": 3,
+          "text": "3.2 硬性前提"
+        },
+        {
+          "line": 71,
+          "level": 2,
+          "text": "4. 動態內容 SEO 方案（核心）"
+        },
+        {
+          "line": 73,
+          "level": 3,
+          "text": "4.1 內容模型（Strapi）"
+        },
+        {
+          "line": 85,
+          "level": 3,
+          "text": "4.2 發佈流程（建議）"
+        },
+        {
+          "line": 95,
+          "level": 3,
+          "text": "4.3 技術改造要點"
+        },
+        {
+          "line": 104,
+          "level": 2,
+          "text": "5. 分階段落地"
+        },
+        {
+          "line": 106,
+          "level": 3,
+          "text": "P0（1 週）"
+        },
+        {
+          "line": 113,
+          "level": 3,
+          "text": "P1（1-2 週）"
+        },
+        {
+          "line": 119,
+          "level": 3,
+          "text": "P2（持續）"
+        },
+        {
+          "line": 127,
+          "level": 2,
+          "text": "6. 驗收標準（SEO 層）"
+        },
+        {
+          "line": 137,
+          "level": 2,
+          "text": "7. 外部參考（官方）"
         }
       ]
     }

@@ -83,7 +83,7 @@ export function generatePageMetadata(options: BaseMetadataOptions): Metadata {
     title,
     description,
     path = "/",
-    locale = "en",
+    locale = "zh",
     image,
     imageAlt,
     keywords = [],
@@ -114,6 +114,7 @@ export function generatePageMetadata(options: BaseMetadataOptions): Metadata {
         "en": `${siteUrl}/en${cleanPath}`,
         "zh": `${siteUrl}/zh${cleanPath}`,
         "zh-CN": `${siteUrl}/zh${cleanPath}`, // Baidu prefers zh-CN
+        "x-default": `${siteUrl}/zh${cleanPath}`,
       },
     },
     openGraph: {

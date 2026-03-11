@@ -4,12 +4,39 @@ import { sourceLanguageTag } from "@/paraglide/runtime";
 import { allianceMono, allianceNo1, allianceNo2, allianceZh } from "./fonts";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/json-ld";
 import { SITE_CONFIG } from "@/lib/constants";
-import { getSiteUrl } from "@/lib/env";
+import {
+  getBaiduSiteVerification,
+  getBingSiteVerification,
+  getGoogleSiteVerification,
+  getSiteUrl,
+} from "@/lib/env";
+
+const googleVerification = getGoogleSiteVerification();
+const bingVerification = getBingSiteVerification();
+const baiduVerification = getBaiduSiteVerification();
+const metadataOther: Record<string, string> = {
+  "applicable-device": "pc,mobile",
+  "format-detection": "telephone=no",
+};
+
+if (bingVerification) {
+  metadataOther["msvalidate.01"] = bingVerification;
+}
+
+if (baiduVerification) {
+  metadataOther["baidu-site-verification"] = baiduVerification;
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: "isBIM - Construction AI Platform",
   description: "Construction AI Powering the Backbone of Global Economies",
+  verification: googleVerification
+    ? {
+        google: googleVerification,
+      }
+    : undefined,
+  other: metadataOther,
 };
 
 export const viewport: Viewport = {

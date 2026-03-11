@@ -15,7 +15,14 @@ import { getSiteUrl } from "@/lib/env";
 
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = getSiteUrl();
-  const baseDisallow = ["/api/", "/admin/"];
+  const host = (() => {
+    try {
+      return new URL(siteUrl).host;
+    } catch {
+      return siteUrl.replace(/^https?:\/\//, "");
+    }
+  })();
+  const baseDisallow = ["/api/", "/admin/", "/studio/", "/_next/"];
 
   return {
     rules: [
@@ -54,7 +61,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: [`${siteUrl}/sitemap.xml`, `${siteUrl}/sitemap-news.xml`],
+    host,
   };
 }

@@ -22,7 +22,7 @@ ENV HOST=0.0.0.0
 ENV PORT=1337
 
 RUN groupadd --system --gid 1001 strapi \
-  && useradd --system --uid 1001 --gid 1001 strapi
+  && useradd --system --uid 1001 --gid 1001 --home-dir /home/strapi --create-home strapi
 
 COPY --from=builder /app ./
 

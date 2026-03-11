@@ -68,9 +68,9 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_SITE_URL: http://localhost:3000
-        NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
+        NEXT_PUBLIC_STRAPI_URL: http://cms:1337
         STRAPI_URL: http://cms:1337
-        NEXT_PUBLIC_MEDIA_URL: http://localhost:1337
+        NEXT_PUBLIC_MEDIA_URL: ""
         NEXT_PUBLIC_VIDEO_CDN_URL: ${NEXT_PUBLIC_VIDEO_CDN_URL:-}
         NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL: ${NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL:-}
     container_name: isbim-local-web
@@ -84,8 +84,8 @@ services:
       PORT: 3000
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       STRAPI_URL: http://cms:1337
-      NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
-      NEXT_PUBLIC_MEDIA_URL: http://localhost:1337
+      NEXT_PUBLIC_STRAPI_URL: http://cms:1337
+      NEXT_PUBLIC_MEDIA_URL: ""
       STRAPI_API_TOKEN: ${WEB_STRAPI_API_TOKEN:-}
       STRAPI_WEBHOOK_SECRET: ${WEB_STRAPI_WEBHOOK_SECRET:-local-webhook-secret}
       NEXT_PUBLIC_VIDEO_CDN_URL: ${NEXT_PUBLIC_VIDEO_CDN_URL:-}

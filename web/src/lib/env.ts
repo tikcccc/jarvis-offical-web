@@ -17,6 +17,12 @@ const serverEnv = {
   STRAPI_API_TOKEN: process.env.STRAPI_API_TOKEN,
   STRAPI_WEBHOOK_SECRET: process.env.STRAPI_WEBHOOK_SECRET,
 
+  // Search engine verification & push
+  GOOGLE_SITE_VERIFICATION: process.env.GOOGLE_SITE_VERIFICATION,
+  BING_SITE_VERIFICATION: process.env.BING_SITE_VERIFICATION,
+  BAIDU_SITE_VERIFICATION: process.env.BAIDU_SITE_VERIFICATION,
+  BAIDU_PUSH_TOKEN: process.env.BAIDU_PUSH_TOKEN,
+
   // Resend
   RESEND_API_KEY: process.env.RESEND_API_KEY,
 
@@ -168,8 +174,8 @@ export function getSiteUrl(): string {
     return "http://localhost:3000";
   }
 
-  // Fallback for production (update with actual domain)
-  return "https://isbim.com";
+  // Fallback for production (mainland domain)
+  return "https://www.jarvisdt.com";
 }
 
 export function getStrapiUrl(): string {
@@ -192,6 +198,22 @@ export function getStrapiApiToken(): string {
 
 export function getStrapiWebhookSecret(): string {
   return env.STRAPI_WEBHOOK_SECRET || "";
+}
+
+export function getGoogleSiteVerification(): string {
+  return env.GOOGLE_SITE_VERIFICATION || "";
+}
+
+export function getBingSiteVerification(): string {
+  return env.BING_SITE_VERIFICATION || "";
+}
+
+export function getBaiduSiteVerification(): string {
+  return env.BAIDU_SITE_VERIFICATION || "";
+}
+
+export function getBaiduPushToken(): string {
+  return env.BAIDU_PUSH_TOKEN || "";
 }
 
 /**

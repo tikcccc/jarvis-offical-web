@@ -7,7 +7,7 @@
 - 保持简洁,使用列表和代码块
 - 删除过时的架构信息
 
-**Last Updated**: 2026-03-09 (CMS slug policy updated to blank-by-default, auto-sequenced Strapi slugs with manual override)
+**Last Updated**: 2026-03-11 (added multi-engine SEO deployment docs + SEO readiness snapshot)
 
 ## Deployment Architecture
 - **Deployment Target**: Huawei Cloud (华为云)
@@ -218,8 +218,16 @@ next.config.ts            # images.qualities: [75, 85, 90, 100] for Next.js 15+ 
 ### SEO & Sitemap
 - `src/lib/seo.ts` + `src/lib/seo-generators.ts`: shared metadata helpers (OpenGraph/Twitter/hreflang) with locale-prefixed canonicals.
 - JSON-LD: Root `Organization` in `src/app/layout.tsx`; product pages add `SoftwareApplication` + `Breadcrumb`; home adds org + suite schema.
-- Sitemap: `src/app/(website)/sitemap.ts` emits locale-prefixed URLs; includes static pages + Sanity news/case-studies/careers slugs with `en`/`zh` alternates.
-- Robots: `src/app/(website)/robots.ts` disallows `/studio`, `/api`, `/_next`; exposes sitemap URL; blocks GPTBot/Google-Extended.
+- Sitemap: `src/app/(website)/sitemap.ts` emits locale-prefixed URLs; includes static pages + Strapi news/case-studies/careers slugs with `en`/`zh` alternates.
+- Robots: `src/app/(website)/robots.ts` currently disallows `/api/` + `/admin/`, declares sitemap URL, and includes crawler-specific rules for Baiduspider/Sogou/360/GPTBot/Google-Extended.
+- Search engine deployment docs:
+  - `web/doc/coding-doc/seo-multi-engine-plan.md`
+  - `web/doc/coding-doc/seo-deploy-baidu.md`
+  - `web/doc/coding-doc/seo-deploy-bing.md`
+  - `web/doc/coding-doc/seo-deploy-google.md`
+- SEO readiness snapshot (2026-03):
+  - Ready: metadata generators, dynamic sitemap, dynamic-detail metadata (`newsroom/case-studies/careers`), Strapi SEO fields, revalidate webhook.
+  - Gaps: search-console verification rollout, IndexNow/Baidu push automation, sitemap split strategy (news/image), and stricter dynamic-data SEO operations.
 
 ### Environment Variables
 Project uses three environment file layers:

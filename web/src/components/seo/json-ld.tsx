@@ -27,8 +27,6 @@
  * - Critical for e-commerce product listings
  */
 
-import Script from "next/script";
-
 export interface JsonLdProps {
   /** Schema.org structured data object */
   data: Record<string, unknown>;
@@ -95,14 +93,17 @@ export interface JsonLdProps {
  * ```
  */
 export function JsonLd({ data, id }: JsonLdProps) {
+  const jsonLd = JSON.stringify(
+    data,
+    null,
+    process.env.NODE_ENV === "development" ? 2 : 0
+  );
+
   return (
-    <Script
+    <script
       id={id || "json-ld"}
       type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data, null, process.env.NODE_ENV === "development" ? 2 : 0),
-      }}
-      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{ __html: jsonLd }}
     />
   );
 }
