@@ -18,13 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const siteUrl = getSiteUrl();
   const canonicalUrl = `${siteUrl}/${locale}/privacy-cookie-policy`;
+  const alternates = generateHreflangAlternates("/privacy-cookie-policy", locale);
 
   return {
     title,
     description,
     alternates: {
       canonical: canonicalUrl,
-      languages: generateHreflangAlternates("/privacy-cookie-policy"),
+      languages: alternates.languages,
     },
     openGraph: {
       title,

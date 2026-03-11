@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
       return siteUrl.replace(/^https?:\/\//, "");
     }
   })();
-  const baseDisallow = ["/api/", "/admin/", "/studio/", "/_next/"];
+  const baseDisallow = ["/api/", "/admin/", "/studio/"];
 
   return {
     rules: [
