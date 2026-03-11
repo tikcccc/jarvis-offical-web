@@ -2,6 +2,13 @@ import path from 'path';
 
 export default ({ env }) => {
   const client = env('DATABASE_CLIENT', 'sqlite');
+  const nodeEnv = env('NODE_ENV', 'development');
+
+  if (nodeEnv === 'production' && client !== 'mysql') {
+    throw new Error(
+      `Production requires DATABASE_CLIENT=mysql, received "${client}".`
+    );
+  }
 
   const connections = {
     mysql: {

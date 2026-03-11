@@ -1,0 +1,20 @@
+services:
+  web:
+    image: ${WEB_IMAGE:?WEB_IMAGE is required}
+    container_name: isbim-web
+    restart: unless-stopped
+    pull_policy: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1));\""]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s

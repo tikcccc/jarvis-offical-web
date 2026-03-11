@@ -34,5 +34,11 @@ Next.js 15 app for isBIM’s marketing site. Uses Paraglide i18n, GSAP/Framer Mo
 3) Lint: `npm run lint`
 4) Analyze bundles: `npm run analyze` and open `.next/analyze/client.html`
 
+## Docker (Local Full Stack)
+- From repo root: `docker compose -f deploy/docker/docker-compose.local.yml up --build`
+- Web: `http://localhost:3000`
+- CMS Admin: `http://localhost:1337/admin`
+- If Strapi APIs are private, export `WEB_STRAPI_API_TOKEN` before startup.
+
 ## Notes
 - Remember to run `npm run paraglide:compile` when message catalog changes.

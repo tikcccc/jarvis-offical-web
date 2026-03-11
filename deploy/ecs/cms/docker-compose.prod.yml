@@ -1,0 +1,23 @@
+services:
+  cms:
+    image: ${CMS_IMAGE:?CMS_IMAGE is required}
+    container_name: isbim-cms
+    restart: unless-stopped
+    pull_policy: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
+      DATABASE_CLIENT: mysql
+    ports:
+      - "1337:1337"
+    volumes:
+      - /data/cms/uploads:/app/public/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:1337/_health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1));\""]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s

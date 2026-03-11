@@ -32,6 +32,15 @@ npm run build
 yarn build
 ```
 
+### Docker (local stack)
+
+Use the root compose file to start MySQL + CMS + Web together:
+
+```bash
+# from repo root
+docker compose -f deploy/docker/docker-compose.local.yml up --build
+```
+
 ## ⚙️ Deployment
 
 Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.

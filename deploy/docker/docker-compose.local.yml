@@ -1,0 +1,110 @@
+name: isbim-local-stack
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: isbim-local-mysql
+    restart: unless-stopped
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-isbim_cms}
+      MYSQL_USER: ${MYSQL_USER:-isbim}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  cms:
+    build:
+      context: ../../cms
+      dockerfile: Dockerfile
+    container_name: isbim-local-cms
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
+      APP_KEYS: ${CMS_APP_KEYS:-localKey1,localKey2,localKey3,localKey4}
+      API_TOKEN_SALT: ${CMS_API_TOKEN_SALT:-local-api-token-salt}
+      ADMIN_JWT_SECRET: ${CMS_ADMIN_JWT_SECRET:-local-admin-jwt-secret}
+      TRANSFER_TOKEN_SALT: ${CMS_TRANSFER_TOKEN_SALT:-local-transfer-token-salt}
+      ENCRYPTION_KEY: ${CMS_ENCRYPTION_KEY:-local-encryption-key-32-char}
+      JWT_SECRET: ${CMS_JWT_SECRET:-local-jwt-secret}
+      DATABASE_CLIENT: mysql
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_NAME: ${MYSQL_DATABASE:-isbim_cms}
+      DATABASE_USERNAME: ${MYSQL_USER:-isbim}
+      DATABASE_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      DATABASE_SSL: "false"
+    ports:
+      - "1337:1337"
+    volumes:
+      - cms_uploads:/app/public/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:1337/_health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1));\""]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+
+  web:
+    build:
+      context: ../../web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
+        STRAPI_URL: http://cms:1337
+        NEXT_PUBLIC_MEDIA_URL: http://localhost:1337
+        NEXT_PUBLIC_VIDEO_CDN_URL: ${NEXT_PUBLIC_VIDEO_CDN_URL:-}
+        NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL: ${NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL:-}
+    container_name: isbim-local-web
+    restart: unless-stopped
+    depends_on:
+      cms:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      STRAPI_URL: http://cms:1337
+      NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
+      NEXT_PUBLIC_MEDIA_URL: http://localhost:1337
+      STRAPI_API_TOKEN: ${WEB_STRAPI_API_TOKEN:-}
+      STRAPI_WEBHOOK_SECRET: ${WEB_STRAPI_WEBHOOK_SECRET:-local-webhook-secret}
+      NEXT_PUBLIC_VIDEO_CDN_URL: ${NEXT_PUBLIC_VIDEO_CDN_URL:-}
+      NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL: ${NEXT_PUBLIC_FEATURE_VIDEO_CDN_URL:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      BREVO_API_KEY: ${BREVO_API_KEY:-}
+      EMAIL_PROVIDER: ${EMAIL_PROVIDER:-resend}
+      CONTACT_EMAIL_TO: ${CONTACT_EMAIL_TO:-solution@isbim.com.hk}
+      EMAIL_FROM_INTERNAL: ${EMAIL_FROM_INTERNAL:-isBIM Contact Form <noreply@example.com>}
+      EMAIL_FROM_USER: ${EMAIL_FROM_USER:-isBIM <noreply@example.com>}
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1));\""]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql_data:
+  cms_uploads:

@@ -1,0 +1,11 @@
+.git
+.gitignore
+node_modules
+dist
+build
+npm-debug.log
+Dockerfile*
+README.md
+.strapi
+database/migrations
+doc
