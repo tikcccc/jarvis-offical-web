@@ -26,12 +26,73 @@ import { ROUTES } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/env";
 import { sourceLanguageTag } from "@/paraglide/runtime";
 
+// Last commit timestamps of static page templates.
+// Update this map when a static page's content/template changes significantly.
+const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
+  [ROUTES.HOME]: "2026-03-11T10:23:49+08:00",
+  [ROUTES.ABOUT]: "2026-03-11T10:23:49+08:00",
+  [ROUTES.SERVICES_PRODUCTS]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.CONTACT]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.NEWSROOM]: "2026-03-09T14:03:13+08:00",
+  [ROUTES.CASE_STUDIES]: "2026-03-09T14:03:13+08:00",
+  [ROUTES.CAREERS]: "2026-03-10T16:26:35+08:00",
+  "/privacy-cookie-policy": "2026-03-11T12:43:46+08:00",
+  "/privacy": "2026-03-11T12:43:46+08:00",
+  "/terms": "2026-03-11T12:43:46+08:00",
+  "/cookies": "2026-03-11T12:43:46+08:00",
+  [ROUTES.JARVIS.AGENT]: "2026-03-11T12:43:46+08:00",
+  [ROUTES.JARVIS.PAY]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.AIR]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.EAGLE_EYE]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.SSSS]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.DWSS]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.CDCP]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.JARVIS.ASSETS]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.BIM_CONSULTANCY]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.PROJECT_FINANCE]: "2026-02-25T18:43:26+08:00",
+  [ROUTES.VENTURE_INVESTMENTS]: "2026-02-25T18:43:26+08:00",
+};
+
+const DEFAULT_STATIC_LAST_MODIFIED = "2026-03-11T00:00:00+08:00";
+
+function getStaticLastModified(route: string): Date {
+  return new Date(STATIC_ROUTE_LAST_MODIFIED[route] || DEFAULT_STATIC_LAST_MODIFIED);
+}
+
+function getLatestDynamicLastModified(
+  entries: Array<{ _updatedAt: string }>
+): Date | null {
+  if (entries.length === 0) return null;
+
+  return entries.reduce<Date | null>((latest, entry) => {
+    const current = new Date(entry._updatedAt);
+    if (Number.isNaN(current.getTime())) return latest;
+    if (!latest || current > latest) return current;
+    return latest;
+  }, null);
+}
+
+function getListingLastModified(
+  route: string,
+  entries: Array<{ _updatedAt: string }>
+): Date {
+  const templateLastModified = getStaticLastModified(route);
+  const latestContentLastModified = getLatestDynamicLastModified(entries);
+
+  if (!latestContentLastModified) {
+    return templateLastModified;
+  }
+
+  return latestContentLastModified > templateLastModified
+    ? latestContentLastModified
+    : templateLastModified;
+}
+
 /**
  * Generate sitemap with static pages and dynamic Sanity content
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = getSiteUrl();
-  const now = new Date();
   const defaultLocale = sourceLanguageTag;
   const withLocale = (route: string, locale: string) =>
     `${siteUrl}/${locale}${route === "/" ? "" : route}`;
@@ -47,7 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: withLocale(ROUTES.HOME, defaultLocale),
-      lastModified: now,
+      lastModified: getStaticLastModified(ROUTES.HOME),
       changeFrequency: "daily",
       priority: 1.0,
       alternates: {
@@ -59,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: withLocale(ROUTES.ABOUT, defaultLocale),
-      lastModified: now,
+      lastModified: getStaticLastModified(ROUTES.ABOUT),
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
@@ -71,7 +132,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: withLocale(ROUTES.SERVICES_PRODUCTS, defaultLocale),
-      lastModified: now,
+      lastModified: getStaticLastModified(ROUTES.SERVICES_PRODUCTS),
       changeFrequency: "weekly",
       priority: 0.9,
       alternates: {
@@ -83,7 +144,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: withLocale(ROUTES.NEWSROOM, defaultLocale),
-      lastModified: now,
+      lastModified: getListingLastModified(ROUTES.NEWSROOM, news),
       changeFrequency: "daily",
       priority: 0.8,
       alternates: {
@@ -95,7 +156,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: withLocale(ROUTES.CASE_STUDIES, defaultLocale),
-      lastModified: now,
+      lastModified: getListingLastModified(ROUTES.CASE_STUDIES, caseStudies),
       changeFrequency: "weekly",
       priority: 0.8,
       alternates: {
@@ -107,7 +168,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: withLocale(ROUTES.CAREERS, defaultLocale),
-      lastModified: now,
+      lastModified: getListingLastModified(ROUTES.CAREERS, careers),
       changeFrequency: "weekly",
       priority: 0.7,
       alternates: {
@@ -120,7 +181,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Note: Contact page included but under redesign (lower priority)
     {
       url: withLocale(ROUTES.CONTACT, defaultLocale),
-      lastModified: now,
+      lastModified: getStaticLastModified(ROUTES.CONTACT),
       changeFrequency: "monthly",
       priority: 0.5, // Lower priority - page under redesign
       alternates: {
@@ -142,7 +203,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const legalPages: MetadataRoute.Sitemap = legalRoutes.map((route) => ({
     url: withLocale(route, defaultLocale),
-    lastModified: now,
+    lastModified: getStaticLastModified(route),
     changeFrequency: "yearly" as const,
     priority: 0.3,
     alternates: {
@@ -158,7 +219,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((route) => route !== ROUTES.JARVIS.SUITE) // Exclude /jarvis-ai-suite
     .map((route) => ({
       url: withLocale(route, defaultLocale),
-      lastModified: now,
+      lastModified: getStaticLastModified(route),
       changeFrequency: "weekly" as const,
       priority: 0.9,
       alternates: {
@@ -176,7 +237,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ROUTES.VENTURE_INVESTMENTS,
   ].map((route) => ({
     url: withLocale(route, defaultLocale),
-    lastModified: now,
+    lastModified: getStaticLastModified(route),
     changeFrequency: "weekly" as const,
     priority: 0.8,
     alternates: {

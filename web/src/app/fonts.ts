@@ -1,43 +1,104 @@
-import { Inter, Noto_Sans_SC, Playfair_Display, Roboto_Mono, Space_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 
-export const allianceNo1 = Inter({
+export const allianceNo1 = localFont({
+  src: [
+    {
+      path: "../../fonts/google/Inter-Variable.ttf",
+      weight: "400 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-alliance-1",
   display: "swap",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    "Arial",
+    "sans-serif",
+  ],
 });
 
-export const allianceNo2 = Space_Grotesk({
+export const allianceNo2 = localFont({
+  src: [
+    {
+      path: "../../fonts/google/SpaceGrotesk-Variable.ttf",
+      weight: "300 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-alliance-2",
   display: "swap",
-  subsets: ["latin"],
-  weight: ["300","400","500","600","700"],
-  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    "Arial",
+    "sans-serif",
+  ],
 });
 
-export const allianceZh = Noto_Sans_SC({
+export const allianceZh = localFont({
+  src: [
+    {
+      path: "../../fonts/google/NotoSansSC-Variable.ttf",
+      weight: "400 900",
+      style: "normal",
+    },
+  ],
   variable: "--font-alliance-zh",
   display: "swap",
-  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
-  subsets: ["latin"],
-  weight: ["400","500","600","700","800","900"],
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    "Arial",
+    "sans-serif",
+  ],
 });
 
 // Artistic / display font (Playfair Display)
-export const allianceArt = Playfair_Display({
+export const allianceArt = localFont({
+  src: [
+    {
+      path: "../../fonts/google/PlayfairDisplay-Variable.ttf",
+      weight: "400 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-art",
   display: "swap",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    "Arial",
+    "sans-serif",
+  ],
 });
 
 // Monospace font (Roboto Mono with system fallbacks)
-export const allianceMono = Roboto_Mono({
+export const allianceMono = localFont({
+  src: [
+    {
+      path: "../../fonts/google/RobotoMono-Variable.ttf",
+      weight: "400 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-mono",
   display: "swap",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   fallback: ["ui-monospace", "monospace"],
 });
