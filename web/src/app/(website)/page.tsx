@@ -54,7 +54,7 @@ export default function Home() {
     ],
     contactPoint: {
       email: "info@isbim.com.hk",
-      telephone: "+852-xxxx-xxxx",
+      telephone: "+86-20-3114-2419",
       contactType: "Customer Service",
     },
   });

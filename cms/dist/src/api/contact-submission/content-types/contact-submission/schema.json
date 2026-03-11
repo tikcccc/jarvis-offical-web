@@ -22,6 +22,16 @@
             "searchable": true,
             "relationOpenMode": "modal"
         },
+        "layouts": {
+            "list": [
+                "firstName",
+                "lastName",
+                "companyName",
+                "email",
+                "service",
+                "submittedAt"
+            ]
+        },
         "metadatas": {
             "firstName": {
                 "edit": {

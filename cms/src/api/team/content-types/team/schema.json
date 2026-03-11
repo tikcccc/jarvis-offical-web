@@ -22,6 +22,14 @@
       "searchable": true,
       "relationOpenMode": "modal"
     },
+    "layouts": {
+      "list": [
+        "title",
+        "pillar",
+        "sortOrder",
+        "slug"
+      ]
+    },
     "metadatas": {
       "title": {
         "edit": {

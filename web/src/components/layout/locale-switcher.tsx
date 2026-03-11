@@ -11,7 +11,7 @@ import { m } from "@/components/motion/lazy-motion";
 /**
  * LocaleSwitcher Component
  *
- * Toggle switch design for EN/ZH language switching
+ * Toggle switch design for ZH/EN language switching
  * - Clear visual metaphor for binary state selection
  * - Larger touch targets for better mobile UX
  * - Enhanced hover effects for desktop interaction
@@ -85,7 +85,7 @@ export function LocaleSwitcher() {
         style={{ width: "calc(50% - 4px)" }}
         initial={false}
         animate={{
-          x: currentLocale === "en" ? 0 : "100%",
+          x: currentLocale === "zh" ? 0 : "100%",
         }}
         transition={{
           type: "spring",
@@ -93,27 +93,6 @@ export function LocaleSwitcher() {
           damping: 35,
         }}
       />
-
-      {/* EN Button */}
-      <m.button
-        onClick={() => switchLocale("en")}
-        whileHover={{}}
-        whileTap={{ scale: 0.95 }}
-        className={`
-          relative z-10 w-1/2 h-full flex items-center justify-center
-          text-xs font-medium rounded-md
-          transition-all duration-300
-          ${
-            currentLocale === "en"
-              ? "text-white font-bold"
-              : "text-white/50 hover:text-white"
-          }
-        `}
-        aria-label="Switch to English"
-        aria-pressed={currentLocale === "en"}
-      >
-        {localeLabels.en}
-      </m.button>
 
       {/* ZH Button */}
       <m.button
@@ -134,6 +113,27 @@ export function LocaleSwitcher() {
         aria-pressed={currentLocale === "zh"}
       >
         {localeLabels.zh}
+      </m.button>
+
+      {/* EN Button */}
+      <m.button
+        onClick={() => switchLocale("en")}
+        whileHover={{}}
+        whileTap={{ scale: 0.95 }}
+        className={`
+          relative z-10 w-1/2 h-full flex items-center justify-center
+          text-xs font-medium rounded-md
+          transition-all duration-300
+          ${
+            currentLocale === "en"
+              ? "text-white font-bold"
+              : "text-white/50 hover:text-white"
+          }
+        `}
+        aria-label="Switch to English"
+        aria-pressed={currentLocale === "en"}
+      >
+        {localeLabels.en}
       </m.button>
     </div>
   );

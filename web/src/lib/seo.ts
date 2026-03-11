@@ -313,7 +313,7 @@ export const COMMON_KEYWORDS = [
  * // Returns proper canonical and language alternates for Google/Baidu
  * ```
  */
-export function generateAlternates(path: string, currentLocale: string = "en") {
+export function generateAlternates(path: string, currentLocale: string = "zh") {
   const siteUrl = getSiteUrl();
 
   // Ensure path starts with /
@@ -327,7 +327,7 @@ export function generateAlternates(path: string, currentLocale: string = "en") {
       "zh": `${siteUrl}/zh${cleanPath}`,
       "zh-CN": `${siteUrl}/zh${cleanPath}`, // Baidu prefers zh-CN
       "zh-HK": `${siteUrl}/zh${cleanPath}`, // Hong Kong variant
-      "x-default": `${siteUrl}/en${cleanPath}`, // Default fallback for unknown locales
+      "x-default": `${siteUrl}/zh${cleanPath}`, // Default fallback for unknown locales
     },
   };
 }
@@ -342,7 +342,7 @@ export function generateAlternates(path: string, currentLocale: string = "en") {
  */
 export function generateHreflangAlternates(
   path: string,
-  currentLocale: string = "en"
+  currentLocale: string = "zh"
 ) {
   const siteUrl = getSiteUrl();
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
@@ -369,7 +369,7 @@ export function generateHreflangAlternates(
   });
 
   // Add x-default for unknown locales (best practice)
-  languages["x-default"] = `${siteUrl}/en${cleanPath}`;
+  languages["x-default"] = `${siteUrl}/zh${cleanPath}`;
 
   return {
     canonical: `${siteUrl}/${currentLocale}${cleanPath}`,

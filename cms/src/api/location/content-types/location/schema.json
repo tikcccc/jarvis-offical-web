@@ -22,6 +22,13 @@
       "searchable": true,
       "relationOpenMode": "modal"
     },
+    "layouts": {
+      "list": [
+        "title",
+        "address",
+        "slug"
+      ]
+    },
     "metadatas": {
       "title": {
         "edit": {

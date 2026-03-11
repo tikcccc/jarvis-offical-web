@@ -291,7 +291,7 @@ export function generateUserConfirmationEmail(
       <div style="background-color: #f8fafc; padding: 24px; border-radius: 8px; margin-bottom: 32px;">
         <p style="margin: 0 0 12px 0; font-size: 13px; color: #64748b;">${contactInfoText}:</p>
         <p style="margin: 0; font-size: 18px; font-weight: 600; color: #0ea5e9;">
-          <a href="tel:+85223828380" style="color: #0ea5e9; text-decoration: none;">+852 2382 8380</a>
+          <a href="tel:+862031142419" style="color: #0ea5e9; text-decoration: none;">+86 20 3114 2419</a>
         </p>
         <p style="margin: 12px 0 0 0; font-size: 13px; color: #64748b;">
           <a href="mailto:solution@isbim.com.hk" style="color: #0ea5e9; text-decoration: none;">solution@isbim.com.hk</a>
@@ -330,7 +330,7 @@ ${submissionDetailsTitle}
 ${"-".repeat(submissionDetailsTitle.length)}
 ${serviceLabel}: ${data.service}
 
-${contactInfoText}: +852 2382 8380
+${contactInfoText}: +86 20 3114 2419
 Email: solution@isbim.com.hk
 
 ${footerText.replace("<br>", "\n")}

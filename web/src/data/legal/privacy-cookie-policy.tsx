@@ -23,7 +23,7 @@ export function getPrivacyCookiePolicyData(_locale: "en" | "zh"): LegalPageData 
             <p>{m.privacy_cookie_disclaimer_p2()}</p>
             <p>
               {m.privacy_cookie_disclaimer_p3_prefix()}
-              <a href="tel:+85223828380" className="cookies-email-link">
+              <a href="tel:+862031142419" className="cookies-email-link">
                 {m.privacy_cookie_disclaimer_phone()}
               </a>
               {m.privacy_cookie_disclaimer_p3_suffix()}

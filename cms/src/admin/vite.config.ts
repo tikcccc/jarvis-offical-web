@@ -1,4 +1,4 @@
-import { mergeConfig, type UserConfig } from 'vite';
+import type { UserConfig } from 'vite';
 
 const DEFAULT_ADMIN_VITE_PORT = 5180;
 
@@ -12,12 +12,15 @@ function resolveAdminVitePort() {
 export default (config: UserConfig) => {
   const port = resolveAdminVitePort();
 
-  return mergeConfig(config, {
+  return {
+    ...config,
     server: {
+      ...(config.server ?? {}),
       port,
     },
     preview: {
+      ...(config.preview ?? {}),
       port,
     },
-  });
+  };
 };
